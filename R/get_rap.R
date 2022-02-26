@@ -1,41 +1,116 @@
 #' Get Rangeland Analysis Platform (RAP) Grids
 #'
-#' @param x Target extent. Derived from an sf, terra or sp object or numeric vector containing xmin, ymax, xmax, ymin in WGS84 latitude/longitude decimal degrees.
+#' @param x Target extent. Derived from an sf, terra, raster or sp object or numeric vector containing xmin, ymax, xmax, ymin in WGS84 longitude/latitude decimal degrees (EPSG:4326).
 #' @param years integer. Year(s) to query
+#' @param product Target data: `"vegetation-biomass"` and/or `"vegetation-cover"`
+#' @param version Target version: `"v3"` and/or `"v2"`
 #' @param filename Output filename
-#' @param dataset Target data: either `"vegetation-biomass"` or `"vegetation-cover"`
-#' @param version Target version: either `"v3"` or `"v2"`
-#' @importFrom terra rast
+#' @param progress logical. Show progress bar? Default: missing (`NULL`) will use progress bar when three or more layers are requested.
+#' @details You can query annual biomass and cover (versions 2 and 3) from 1986 to present
+#'   
+#'   - `product = "vegetation-biomass"` returns two layers per year: 
+#'     - `"annual forb and grass"`, `"perennial forb and grass"` (in lbs / acre)
+#'     
+#'   - `product = "vegetation-cover"` returns six layers per year: 
+#'     - `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (% cover)
+#' 
+#' @importFrom terra rast writeRaster sources
+#' @importFrom sf st_bbox st_transform st_crs st_as_sf st_as_sfc
+#' @importFrom utils txtProgressBar setTxtProgressBar
 #' @export
 get_rap <- function(x,
-                    years = 1986:2021,
-                    filename,
-                    dataset = c("vegetation-biomass", "vegetation-cover"),
-                    version = c("v3", "v2")) {
-  terra::rast(
-    lapply(years, function (y)
-      .get_rap_year(
-        x = x,
-        year = y,
-        dataset = dataset,
-        version = version
-      ))
-  )
+                    years = 1986,
+                    filename = NULL,
+                    product = c("vegetation-biomass", "vegetation-cover"),
+                    version = "v3",
+                    progress = NULL) {
+  
+  version <- match.arg(version, several.ok = TRUE)
+  product <- match.arg(product, several.ok = TRUE)
+  
+  if (inherits(x, 'Spatial')){
+    x <- sf::st_as_sf(x)
+  }
+  
+  if (!is.numeric(x) && 
+      (inherits(x, 'sf') ||
+       inherits(x, 'sfc') || 
+       inherits(x, 'wk_rcrd') ||
+       inherits(x, 'SpatRaster') ||
+       inherits(x, 'SpatVector') || 
+       inherits(x, 'RasterLayer') ||
+       inherits(x, 'RasterStack') ||
+       inherits(x, 'RasterBrick') )) {
+    
+    if (requireNamespace("sf")) {
+      x <- as.numeric(sf::st_bbox(sf::st_transform(sf::st_as_sf(
+          data.frame(geometry = sf::st_as_sfc(st_bbox(x)))
+        ), crs = 'EPSG:4326')))[c(1, 4, 3, 2)]
+    }
+    
+  }
+  
+  mat <- expand.grid(year = years,
+                     product = product,
+                     version = version)
+  
+  if (missing(progress) || is.null(progress)) {
+    if (nrow(mat) > 2) {
+      progress <- TRUE
+    } else progress <- FALSE
+  }
+  
+  if (progress) {
+    pb <- utils::txtProgressBar(style = 3)
+  }
+  
+  res <- terra::rast(lapply(1:nrow(mat), function (i){
+    if (progress) {
+      utils::setTxtProgressBar(pb, value = i / nrow(mat))
+    }
+    .get_rap_year(
+      x       = x,
+      year    = mat[i, ]$year,
+      product = mat[i, ]$product,
+      version = mat[i, ]$version
+    )
+    }))
+  
+  if (progress) {
+    close(pb)
+  }
+  
+  if (!missing(filename) && length(filename) > 0) {
+    terra::writeRaster(res, filename = filename)
+    unlink(terra::sources(res))
+    res <- terra::rast(filename)
+  }
+  
+  res
 }
 
-.gdal_utils_opts <- function(lst) do.call('c', lapply(names(lst), function(y) c(y, lst[[y]])))
+#' gdal_utils options
+#'
+#' @param x named list of GDAL options with format `list("-flag" = "value")`
+#' @return character vector of option flags and values
+#' @keywords internal
+#' @noRd
+.gdal_utils_opts <- function(x) {
+  do.call('c', lapply(names(x), function(y) c(y, x[[y]])))
+}
 
 #' @importFrom sf gdal_utils
 #' @importFrom terra rast
-.get_rap_year <- function(x,
-                          year,
-                          filename = tempfile(fileext = '.tif'),
-                          dataset,
-                          version = c("v3", "v2")) {
+.get_rap_year <- function(x, year, product, version,
+                          filename = tempfile(pattern = paste0(year, product, version, sep = "_"), 
+                                              fileext = '.tif')) {
+  
   uri <- sprintf("/vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-%s/%s/%s-%s-%s.tif",
-                 dataset, version, dataset, version, year)
+                 product, version, product, version, year)
+  # print(uri)
+  
   sf::gdal_utils("translate",
-                 source = uri,
+                 source  = uri,
                  options = .gdal_utils_opts(list(
                    "-co" = "compress=lzw",
                    "-co" = "tiled=yes",
@@ -43,5 +118,15 @@ get_rap <- function(x,
                    "-projwin" = x
                  )),
                  destination = filename)
-  terra::rast(filename)
+  
+  r <- terra::rast(filename)
+  
+  band_names <- switch(as.character(product),
+                       "vegetation-biomass" = c("annual forb and grass", "perennial forb and grass"),
+                       "vegetation-cover"   = c("annual forb and grass", "bare ground", "litter",
+                                                "perennial forb and grass", "shrub", "tree"))
+  names(r) <- paste(gsub(" ", "_", band_names),
+                    sub("vegetation-", "", product),
+                    year, version, sep = "_")
+  r
 }

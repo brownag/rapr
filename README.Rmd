@@ -1,0 +1,80 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.retina = 3,
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# rapr
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of {rapr} is to provide a simple R interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products. See https://rangelands.app/products and `citation("rapr")` for more information on these products.
+
+You can query annual biomass and cover (versions 2 and 3) for the years 1986 to present. 
+
+ - `product = "vegetation-biomass"` returns two layers for each yar: 
+ 
+   - `"annual forb and grass"`, `"perennial forb and grass"` (in lbs / acre).
+   
+ - `product = "vegetation-cover"` returns six layers for each year:
+ 
+   - `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (% cover)
+
+## Installation
+
+You can install the development version of rapr from [GitHub](https://github.com/brownag/rapr) with:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("brownag/rapr")
+```
+
+## Example
+
+This example shows how to use a [terra](https://github.com/rspatial/terra) SpatVector containing a rectangular polygon with `rapr::get_rap()` to obtain RAP grids for the corresponding extent. 
+
+[terra](https://cran.r-project.org/package=terra), [raster](https://cran.r-project.org/package=raster), [sf](https://cran.r-project.org/package=sf) and [sp](https://cran.r-project.org/package=sp) objects are all supported input types. Any spatial object used should have its Coordinate Reference System defined, as the input coordinates will be projected to the source data Coordinate Reference System of the RAP grids (WGS84 decimal degrees).
+
+```{r example}
+library(rapr)
+library(terra)
+
+res <- get_rap(
+  vect("POLYGON ((-120 36.99, -119.99 36.99, -119.99 37, -120 37, -120 36.99))",
+       crs = "EPSG:4326"),
+  version = "v3",
+  year = 2020:2021
+)
+
+res
+
+plot(res)
+```
+
+In lieu of a spatial object from {terra}, {raster}, {sf} or {sp} packages you may specify a bounding box using a numeric vector containing `xmin`, `ymax`, `xmax`, `ymin` in WGS84 longitude/latitude decimal degrees (corresponding to order used in `gdal_translate` `-projwin` option). e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
+
+```
+(1: xmin, 2: ymax)--------------------------|
+        |                                   |
+        |         TARGET EXTENT             |
+        |  x = c(xmin, ymax, xmax, ymin)    |
+        |                                   |
+        |---------------------------(3: xmax, 4: ymin)
+```
+
+## Citation
+
+```{r, echo=FALSE}
+citation("rapr")
+```

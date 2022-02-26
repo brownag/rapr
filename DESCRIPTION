@@ -4,11 +4,15 @@ Title: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cov
 Version: 0.1.0
 Author: Andrew Brown
 Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
-Description: Provides access to Rangeland Analysis Platform (RAP) products <https://rangelands.app/products> for arbitrary extents via GDAL virtual file system.
+Description: Provides access to Rangeland Analysis Platform (RAP) products <https://rangelands.app/products> for arbitrary extents via GDAL virtual file system. 
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
     sf,
     terra
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

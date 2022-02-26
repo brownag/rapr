@@ -6,23 +6,39 @@
 \usage{
 get_rap(
   x,
-  years = 1986:2021,
-  filename,
-  dataset = c("vegetation-biomass", "vegetation-cover"),
-  version = c("v3", "v2")
+  years = 1986,
+  filename = NULL,
+  product = c("vegetation-biomass", "vegetation-cover"),
+  version = c("v3", "v2"),
+  progress = NULL
 )
 }
 \arguments{
-\item{x}{Target extent. Derived from an sf, terra or sp object or numeric vector containing xmin, ymax, xmax, ymin in WGS84 latitude/longitude decimal degrees.}
+\item{x}{Target extent. Derived from an sf, terra, raster or sp object or numeric vector containing xmin, ymax, xmax, ymin in WGS84 longitude/latitude decimal degrees (EPSG:4326).}
 
 \item{years}{integer. Year(s) to query}
 
 \item{filename}{Output filename}
 
-\item{dataset}{Target data: either `"vegetation-biomass"` or `"vegetation-cover"`}
+\item{product}{Target data: \code{"vegetation-biomass"} and/or \code{"vegetation-cover"}}
 
-\item{version}{Target version: either `"v3"` or `"v2"`}
+\item{version}{Target version: \code{"v3"} and/or \code{"v2"}}
+
+\item{progress}{logical. Show progress bar? Default: missing (\code{NULL}) will use progress bar when three or more layers are requested.}
 }
 \description{
 Get Rangeland Analysis Platform (RAP) Grids
+}
+\details{
+You can query annual biomass and cover (versions 2 and 3) from 1986 to present
+\itemize{
+\item \code{product = "vegetation-biomass"} returns two layers per year:
+\itemize{
+\item \code{"annual forb and grass"}, \code{"perennial forb and grass"} (in lbs / acre)
+}
+\item \code{product = "vegetation-cover"} returns six layers per year:
+\itemize{
+\item \code{"annual forb and grass"}, \code{"bare ground"}, \code{"litter"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"} (\% cover)
+}
+}
 }
