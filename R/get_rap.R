@@ -4,7 +4,7 @@
 #' @param years integer. Year(s) to query
 #' @param product Target data: `"vegetation-biomass"` and/or `"vegetation-cover"`
 #' @param version Target version: `"v3"` and/or `"v2"`
-#' @param filename Output filename
+#' @param filename Output filename (optional; default stores in temporary files, see `terra::sources()`)
 #' @param progress logical. Show progress bar? Default: missing (`NULL`) will use progress bar when three or more layers are requested.
 #' @details You can query annual biomass and cover (versions 2 and 3) from 1986 to present
 #'   
@@ -14,6 +14,20 @@
 #'   - `product = "vegetation-cover"` returns six layers per year: 
 #'     - `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (% cover)
 #' 
+#' When a `filename` argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with `unlink(terra::sources(<SpatRaster))`.
+#' 
+#' When a `filename` _is_ specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.
+#' 
+#' In lieu of a spatial object from {terra}, {raster}, {sf} or {sp} packages you may specify a bounding box using a numeric vector containing `xmin`, `ymax`, `xmax`, `ymin` in WGS84 longitude/latitude decimal degrees (corresponding to order used in `gdal_translate` `-projwin` option). e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
+#' 
+#' ```
+#' (1: xmin, 2: ymax)--------------------------|
+#'         |                                   |
+#'         |         TARGET EXTENT             |
+#'         |  x = c(xmin, ymax, xmax, ymin)    |
+#'         |                                   |
+#'         |---------------------------(3: xmax, 4: ymin)
+#' ```
 #' @importFrom terra rast writeRaster sources
 #' @importFrom sf st_bbox st_transform st_crs st_as_sf st_as_sfc
 #' @importFrom utils txtProgressBar setTxtProgressBar

@@ -9,7 +9,7 @@ get_rap(
   years = 1986,
   filename = NULL,
   product = c("vegetation-biomass", "vegetation-cover"),
-  version = c("v3", "v2"),
+  version = "v3",
   progress = NULL
 )
 }
@@ -18,7 +18,7 @@ get_rap(
 
 \item{years}{integer. Year(s) to query}
 
-\item{filename}{Output filename}
+\item{filename}{Output filename (optional; default stores in temporary files, see \code{terra::sources()})}
 
 \item{product}{Target data: \code{"vegetation-biomass"} and/or \code{"vegetation-cover"}}
 
@@ -40,5 +40,17 @@ You can query annual biomass and cover (versions 2 and 3) from 1986 to present
 \itemize{
 \item \code{"annual forb and grass"}, \code{"bare ground"}, \code{"litter"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"} (\% cover)
 }
+}
+
+When a \code{filename} argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with \verb{unlink(terra::sources(<SpatRaster))}.
+
+When a \code{filename} \emph{is} specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.
+
+In lieu of a spatial object from {terra}, {raster}, {sf} or {sp} packages you may specify a bounding box using a numeric vector containing \code{xmin}, \code{ymax}, \code{xmax}, \code{ymin} in WGS84 longitude/latitude decimal degrees (corresponding to order used in \code{gdal_translate} \code{-projwin} option). e.g. \code{get_rap(x = c(-120, 37, -119.99, 36.99), ...)}.\preformatted{(1: xmin, 2: ymax)--------------------------|
+        |                                   |
+        |         TARGET EXTENT             |
+        |  x = c(xmin, ymax, xmax, ymin)    |
+        |                                   |
+        |---------------------------(3: xmax, 4: ymin)
 }
 }

@@ -48,7 +48,7 @@ corresponding extent.
 input types. Any spatial object used should have its Coordinate
 Reference System defined, as the input coordinates will be projected to
 the source data Coordinate Reference System of the RAP grids (WGS84
-decimal degrees).
+decimal degrees / `"EPSG:4326"`).
 
 ``` r
 library(rapr)
@@ -59,9 +59,9 @@ res <- get_rap(
   vect("POLYGON ((-120 36.99, -119.99 36.99, -119.99 37, -120 37, -120 36.99))",
        crs = "EPSG:4326"),
   version = "v3",
-  year = 2020:2021
+  year = 2020:2021,
+  progress = FALSE
 )
-#>   |                                                                              |                                                                      |   0%  |                                                                              |==================                                                    |  25%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================================| 100%
 
 res
 #> class       : SpatRaster 
@@ -69,9 +69,9 @@ res
 #> resolution  : 0.0002694946, 0.0002694946  (x, y)
 #> extent      : -120, -119.99, 36.99029, 37.00026  (xmin, xmax, ymin, ymax)
 #> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
-#> sources     : 2020vegetation-biomassv3_1e4d62d1de2f3.tif  (2 layers) 
-#>               2021vegetation-biomassv3_1e4d65b9fd183.tif  (2 layers) 
-#>               2020vegetation-coverv3_1e4d6d68222d.tif  (6 layers) 
+#> sources     : 2020vegetation-biomassv3_1e8b71c2ba6a2.tif  (2 layers) 
+#>               2021vegetation-biomassv3_1e8b73af3a8f8.tif  (2 layers) 
+#>               2020vegetation-coverv3_1e8b76bdbb5dc.tif  (6 layers) 
 #>               ... and 1 more source(s)
 #> names       : annua~20_v3, peren~20_v3, annua~21_v3, peren~21_v3, annua~20_v3, bare_~20_v3, ...
 
@@ -79,6 +79,15 @@ plot(res)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
+
+When a `filename` argument is not specified, unique temporary files will
+be generated. The resulting SpatRaster object will retain reference to
+these files, and you can remove them manually with
+`unlink(terra::sources(<SpatRaster))`.
+
+When a `filename` *is* specified, temporary files will be removed after
+the result (often a multi- year/layer/product) SpatRaster is written to
+new file.
 
 In lieu of a spatial object from {terra}, {raster}, {sf} or {sp}
 packages you may specify a bounding box using a numeric vector
