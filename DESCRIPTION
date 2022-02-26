@@ -1,0 +1,14 @@
+Package: rapr
+Type: Package
+Title: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products
+Version: 0.1.0
+Author: Andrew Brown
+Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
+Description: Provides access to Rangeland Analysis Platform (RAP) products <https://rangelands.app/products> for arbitrary extents via GDAL virtual file system.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
+Imports: 
+    sf,
+    terra

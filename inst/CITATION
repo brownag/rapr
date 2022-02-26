@@ -1,0 +1,72 @@
+citHeader("To cite rapr in publications use:")
+
+
+citEntry(
+  entry    = "Manual",
+  title    = "rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products",
+  author   = "Andrew Brown",
+  url      = "http://github.com/brownag/rapr",
+  textVersion = paste(
+  "Andrew Brown (2022). rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products. R package version 0.1.0. http://github.com/brownag/rapr"
+  )
+)
+
+
+citEntry(
+  entry    = "Article",
+  title    = "Annual and 16-Day Rangeland Production Estimates for the Western United States.",
+  author   = "Jones, M.O., N.P. Robinson, D.E. Naugle, J.D. Maestas, M.C. Reeves, R.W.
+Lankston, and B.W. Allred.",
+  journal  = "Rangeland Ecology & Management",
+  year     = "2021",
+  volume   = 77,
+  pages    = "112-117",
+  url      = "http://dx.doi.org/10.1016/j.rama.2021.04.003",
+  textVersion = paste(
+"Jones, M.O., N.P. Robinson, D.E. Naugle, J.D. Maestas, M.C. Reeves, R.W.
+Lankston, and B.W. Allred. 2021. Annual and 16-Day Rangeland Production
+Estimates for the Western United States. Rangeland Ecology & Management
+77:112-117. http://dx.doi.org/10.1016/j.rama.2021.04.003"
+  )
+)
+
+
+citEntry(
+  entry    = "Article",
+  title    = "Rangeland productivity partitioned to sub-pixel plant functional
+types.",
+  author   = "Robinson, N. P., M. O. Jones, A. Moreno, T. A. Erickson, D. E. Naugle, and B. W.
+Allred.",
+  journal  = "Remote Sensing",
+  year     = "2019",
+  volume   = "11",
+  number   = "1427",
+  url      = "http://dx.doi.org/10.3390/rs11121427",
+  textVersion = paste(
+"Robinson, N. P., M. O. Jones, A. Moreno, T. A. Erickson, D. E. Naugle, and B. W.
+Allred. 2019. Rangeland productivity partitioned to sub-pixel plant functional
+types. Remote Sensing 11:1427. http://dx.doi.org/10.3390/rs11121427"
+  )
+)
+
+
+citEntry(
+  entry    = "Article",
+  title    = "Improving Landsat predictions of
+rangeland fractional cover with multitask learning and uncertainty.
+Methods in Ecology and Evolution.",
+  author   = "Allred, B. W., B. T. Bestelmeyer, C. S. Boyd, C. Brown, K. W. Davies, L. M.
+Ellsworth, T. A. Erickson, S. D. Fuhlendorf, T. V. Griffiths, V. Jansen, M. O.
+Jones, J. Karl, J. D. Maestas, J. J. Maynard, S. E. McCord, D. E. Naugle, H. D.
+Starns, D. Twidwell, and D. R. Uden.",
+  journal  = "Methods in Ecology and Evolution.",
+  year     = "2021",
+  url      = "http://dx.doi.org/10.1111/2041-210x.13564",
+  textVersion = paste("Allred, B. W., B. T. Bestelmeyer, C. S. Boyd, C. Brown, K. W. Davies, L. M.
+Ellsworth, T. A. Erickson, S. D. Fuhlendorf, T. V. Griffiths, V. Jansen, M. O.
+Jones, J. Karl, J. D. Maestas, J. J. Maynard, S. E. McCord, D. E. Naugle, H. D.
+Starns, D. Twidwell, and D. R. Uden. 2021. Improving Landsat predictions of
+rangeland fractional cover with multitask learning and uncertainty.
+Methods in Ecology and Evolution. http://dx.doi.org/10.1111/2041-210x.13564")
+)
+
