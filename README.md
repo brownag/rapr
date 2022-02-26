@@ -4,6 +4,10 @@
 # rapr
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/brownag/rapr/workflows/R-CMD-check/badge.svg)](https://github.com/brownag/rapr/actions)
+[![Codecov-test-coverage](https://codecov.io/gh/brownag/rapr/branch/main/graph/badge.svg)](https://codecov.io/gh/brownag/rapr?branch=main)
+[![html-docs](https://camo.githubusercontent.com/f7ba98e46ecd14313e0e8a05bec3f92ca125b8f36302a5b1679d4a949bccbe31/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f63732d48544d4c2d696e666f726d6174696f6e616c)](https://humus.rocks/rapr/)
 <!-- badges: end -->
 
 The goal of {rapr} is to provide a simple R interface to Rangeland
@@ -69,9 +73,9 @@ res
 #> resolution  : 0.0002694946, 0.0002694946  (x, y)
 #> extent      : -120, -119.99, 36.99029, 37.00026  (xmin, xmax, ymin, ymax)
 #> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
-#> sources     : 2020vegetation-biomassv3_1f68d421f639b.tif  (2 layers) 
-#>               2021vegetation-biomassv3_1f68d1a3da04.tif  (2 layers) 
-#>               2020vegetation-coverv3_1f68de9e2e0a.tif  (6 layers) 
+#> sources     : 2020vegetation-biomassv3_1fedc6c33de38.tif  (2 layers) 
+#>               2021vegetation-biomassv3_1fedc361f658c.tif  (2 layers) 
+#>               2020vegetation-coverv3_1fedc29fb81ec.tif  (6 layers) 
 #>               ... and 1 more source(s)
 #> names       : annua~20_v3, peren~20_v3, annua~21_v3, peren~21_v3, annua~20_v3, bare_~20_v3, ...
 
