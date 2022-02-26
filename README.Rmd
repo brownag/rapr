@@ -23,17 +23,17 @@ The goal of {rapr} is to provide a simple R interface to Rangeland Analysis Plat
 
 You can query annual biomass and cover (versions 2 and 3) for the years 1986 to present. 
 
- - `product = "vegetation-biomass"` returns two layers for each yar: 
+ - `product = "vegetation-biomass"` returns two layers for each year: 
  
-   - `"annual forb and grass"`, `"perennial forb and grass"` (in lbs / acre).
+   - `"annual forb and grass"`, `"perennial forb and grass"` (**lbs / acre**).
    
  - `product = "vegetation-cover"` returns six layers for each year:
  
-   - `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (% cover)
+   - `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
 
 ## Installation
 
-You can install the development version of rapr from [GitHub](https://github.com/brownag/rapr) with:
+You can install the development version of {rapr} from [GitHub](https://github.com/brownag/rapr) with:
 
 ``` r
 # install.packages("remotes")
@@ -42,9 +42,9 @@ remotes::install_github("brownag/rapr")
 
 ## Example
 
-This example shows how to use a [terra](https://github.com/rspatial/terra) SpatVector containing a rectangular polygon with `rapr::get_rap()` to obtain RAP grids for the corresponding extent. 
+This example shows how to use a {[terra](https://github.com/rspatial/terra)} SpatVector containing a rectangular polygon with `rapr::get_rap()` to obtain RAP grids for the corresponding extent. 
 
-[terra](https://cran.r-project.org/package=terra), [raster](https://cran.r-project.org/package=raster), [sf](https://cran.r-project.org/package=sf) and [sp](https://cran.r-project.org/package=sp) objects are all supported input types. Any spatial object used should have its Coordinate Reference System defined, as the input coordinates will be projected to the source data Coordinate Reference System of the RAP grids (WGS84 decimal degrees / `"EPSG:4326"`).
+{[terra](https://cran.r-project.org/package=terra)}, {[raster](https://cran.r-project.org/package=raster)}, {[sf](https://cran.r-project.org/package=sf)} and {[sp](https://cran.r-project.org/package=sp)} objects are all supported input types. Any spatial object used should have its Coordinate Reference System defined, as the input coordinates will be projected to the source data Coordinate Reference System of the RAP grids (WGS84 decimal degrees / `"EPSG:4326"`).
 
 ```{r example}
 library(rapr)
@@ -63,7 +63,7 @@ res
 plot(res)
 ```
 
-When a `filename` argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with `unlink(terra::sources(<SpatRaster))`.
+When a `filename` argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with `unlink(terra::sources(<SpatRaster>))`.
  
 When a `filename` _is_ specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.
 

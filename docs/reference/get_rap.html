@@ -71,9 +71,9 @@
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>You can query annual biomass and cover (versions 2 and 3) from 1986 to present</p><ul><li><p><code>product = "vegetation-biomass"</code> returns two layers per year:</p><ul><li><p><code>"annual forb and grass"</code>, <code>"perennial forb and grass"</code> (in lbs / acre)</p></li>
+    <p>You can query annual biomass and cover (versions 2 and 3) from 1986 to present</p><ul><li><p><code>product = "vegetation-biomass"</code> returns two layers per year:</p><ul><li><p><code>"annual forb and grass"</code>, <code>"perennial forb and grass"</code> (<strong>lbs / acre</strong>)</p></li>
 </ul></li>
-<li><p><code>product = "vegetation-cover"</code> returns six layers per year:</p><ul><li><p><code>"annual forb and grass"</code>, <code>"bare ground"</code>, <code>"litter"</code>, <code>"perennial forb and grass"</code>, <code>"shrub"</code>, <code>"tree"</code> (% cover)</p></li>
+<li><p><code>product = "vegetation-cover"</code> returns six layers per year:</p><ul><li><p><code>"annual forb and grass"</code>, <code>"bare ground"</code>, <code>"litter"</code>, <code>"perennial forb and grass"</code>, <code>"shrub"</code>, <code>"tree"</code> (<strong>% cover</strong>)</p></li>
 </ul></li>
 </ul><p>When a <code>filename</code> argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with <code>unlink(terra::sources(&lt;SpatRaster))</code>.</p>
 <p>When a <code>filename</code> <em>is</em> specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.</p>

@@ -14,19 +14,19 @@ information on these products.
 You can query annual biomass and cover (versions 2 and 3) for the years
 1986 to present.
 
--   `product = "vegetation-biomass"` returns two layers for each yar:
+-   `product = "vegetation-biomass"` returns two layers for each year:
 
-    -   `"annual forb and grass"`, `"perennial forb and grass"` (in lbs
-        / acre).
+    -   `"annual forb and grass"`, `"perennial forb and grass"` (**lbs /
+        acre**).
 
 -   `product = "vegetation-cover"` returns six layers for each year:
 
     -   `"annual forb and grass"`, `"bare ground"`, `"litter"`,
-        `"perennial forb and grass"`, `"shrub"`, `"tree"` (% cover)
+        `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
 
 ## Installation
 
-You can install the development version of rapr from
+You can install the development version of {rapr} from
 [GitHub](https://github.com/brownag/rapr) with:
 
 ``` r
@@ -37,14 +37,14 @@ remotes::install_github("brownag/rapr")
 ## Example
 
 This example shows how to use a
-[terra](https://github.com/rspatial/terra) SpatVector containing a
+{[terra](https://github.com/rspatial/terra)} SpatVector containing a
 rectangular polygon with `rapr::get_rap()` to obtain RAP grids for the
 corresponding extent.
 
-[terra](https://cran.r-project.org/package=terra),
-[raster](https://cran.r-project.org/package=raster),
-[sf](https://cran.r-project.org/package=sf) and
-[sp](https://cran.r-project.org/package=sp) objects are all supported
+{[terra](https://cran.r-project.org/package=terra)},
+{[raster](https://cran.r-project.org/package=raster)},
+{[sf](https://cran.r-project.org/package=sf)} and
+{[sp](https://cran.r-project.org/package=sp)} objects are all supported
 input types. Any spatial object used should have its Coordinate
 Reference System defined, as the input coordinates will be projected to
 the source data Coordinate Reference System of the RAP grids (WGS84
@@ -53,7 +53,7 @@ decimal degrees / `"EPSG:4326"`).
 ``` r
 library(rapr)
 library(terra)
-#> terra 1.5.21
+#> terra 1.5.23
 
 res <- get_rap(
   vect("POLYGON ((-120 36.99, -119.99 36.99, -119.99 37, -120 37, -120 36.99))",
@@ -69,9 +69,9 @@ res
 #> resolution  : 0.0002694946, 0.0002694946  (x, y)
 #> extent      : -120, -119.99, 36.99029, 37.00026  (xmin, xmax, ymin, ymax)
 #> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
-#> sources     : 2020vegetation-biomassv3_1e8b71c2ba6a2.tif  (2 layers) 
-#>               2021vegetation-biomassv3_1e8b73af3a8f8.tif  (2 layers) 
-#>               2020vegetation-coverv3_1e8b76bdbb5dc.tif  (6 layers) 
+#> sources     : 2020vegetation-biomassv3_1f68d421f639b.tif  (2 layers) 
+#>               2021vegetation-biomassv3_1f68d1a3da04.tif  (2 layers) 
+#>               2020vegetation-coverv3_1f68de9e2e0a.tif  (6 layers) 
 #>               ... and 1 more source(s)
 #> names       : annua~20_v3, peren~20_v3, annua~21_v3, peren~21_v3, annua~20_v3, bare_~20_v3, ...
 
@@ -83,7 +83,7 @@ plot(res)
 When a `filename` argument is not specified, unique temporary files will
 be generated. The resulting SpatRaster object will retain reference to
 these files, and you can remove them manually with
-`unlink(terra::sources(<SpatRaster))`.
+`unlink(terra::sources(<SpatRaster>))`.
 
 When a `filename` *is* specified, temporary files will be removed after
 the result (often a multi- year/layer/product) SpatRaster is written to

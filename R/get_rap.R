@@ -9,10 +9,10 @@
 #' @details You can query annual biomass and cover (versions 2 and 3) from 1986 to present
 #'   
 #'   - `product = "vegetation-biomass"` returns two layers per year: 
-#'     - `"annual forb and grass"`, `"perennial forb and grass"` (in lbs / acre)
+#'     - `"annual forb and grass"`, `"perennial forb and grass"` (**lbs / acre**)
 #'     
 #'   - `product = "vegetation-cover"` returns six layers per year: 
-#'     - `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (% cover)
+#'     - `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
 #' 
 #' When a `filename` argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with `unlink(terra::sources(<SpatRaster))`.
 #' 

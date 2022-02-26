@@ -69,11 +69,12 @@ years 1986 to present.</p>
 <ul>
 <li>
 <p><code>product = "vegetation-biomass"</code> returns two layers
-for each yar:</p>
+for each year:</p>
 <ul>
 <li>
 <code>"annual forb and grass"</code>,
-<code>"perennial forb and grass"</code> (in lbs / acre).</li>
+<code>"perennial forb and grass"</code> (<strong>lbs /
+acre</strong>).</li>
 </ul>
 </li>
 <li>
@@ -83,14 +84,15 @@ each year:</p>
 <li>
 <code>"annual forb and grass"</code>, <code>"bare ground"</code>,
 <code>"litter"</code>, <code>"perennial forb and grass"</code>,
-<code>"shrub"</code>, <code>"tree"</code> (% cover)</li>
+<code>"shrub"</code>, <code>"tree"</code> (<strong>%
+cover</strong>)</li>
 </ul>
 </li>
 </ul>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of rapr from <a href="https://github.com/brownag/rapr" class="external-link">GitHub</a> with:</p>
+<p>You can install the development version of {rapr} from <a href="https://github.com/brownag/rapr" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"brownag/rapr"</span><span class="op">)</span></code></pre></div>
@@ -98,10 +100,10 @@ each year:</p>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This example shows how to use a <a href="https://github.com/rspatial/terra" class="external-link">terra</a> SpatVector containing
-a rectangular polygon with <code><a href="reference/get_rap.html">rapr::get_rap()</a></code> to obtain RAP
-grids for the corresponding extent.</p>
-<p><a href="https://cran.r-project.org/package=terra" class="external-link">terra</a>, <a href="https://cran.r-project.org/package=raster" class="external-link">raster</a>, <a href="https://cran.r-project.org/package=sf" class="external-link">sf</a> and <a href="https://cran.r-project.org/package=sp" class="external-link">sp</a> objects are all
+<p>This example shows how to use a {<a href="https://github.com/rspatial/terra" class="external-link">terra</a>} SpatVector
+containing a rectangular polygon with <code><a href="reference/get_rap.html">rapr::get_rap()</a></code> to
+obtain RAP grids for the corresponding extent.</p>
+<p>{<a href="https://cran.r-project.org/package=terra" class="external-link">terra</a>}, {<a href="https://cran.r-project.org/package=raster" class="external-link">raster</a>}, {<a href="https://cran.r-project.org/package=sf" class="external-link">sf</a>} and {<a href="https://cran.r-project.org/package=sp" class="external-link">sp</a>} objects are all
 supported input types. Any spatial object used should have its
 Coordinate Reference System defined, as the input coordinates will be
 projected to the source data Coordinate Reference System of the RAP
@@ -109,7 +111,7 @@ grids (WGS84 decimal degrees / <code>"EPSG:4326"</code>).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rapr</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/terra/" class="external-link">terra</a></span><span class="op">)</span>
-<span class="co">#&gt; terra 1.5.21</span>
+<span class="co">#&gt; terra 1.5.23</span>
 
 <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_rap.html">get_rap</a></span><span class="op">(</span>
   <span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="st">"POLYGON ((-120 36.99, -119.99 36.99, -119.99 37, -120 37, -120 36.99))"</span>,
@@ -125,9 +127,9 @@ grids (WGS84 decimal degrees / <code>"EPSG:4326"</code>).</p>
 <span class="co">#&gt; resolution  : 0.0002694946, 0.0002694946  (x, y)</span>
 <span class="co">#&gt; extent      : -120, -119.99, 36.99029, 37.00026  (xmin, xmax, ymin, ymax)</span>
 <span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span>
-<span class="co">#&gt; sources     : 2020vegetation-biomassv3_1e8b71c2ba6a2.tif  (2 layers) </span>
-<span class="co">#&gt;               2021vegetation-biomassv3_1e8b73af3a8f8.tif  (2 layers) </span>
-<span class="co">#&gt;               2020vegetation-coverv3_1e8b76bdbb5dc.tif  (6 layers) </span>
+<span class="co">#&gt; sources     : 2020vegetation-biomassv3_1f68d421f639b.tif  (2 layers) </span>
+<span class="co">#&gt;               2021vegetation-biomassv3_1f68d1a3da04.tif  (2 layers) </span>
+<span class="co">#&gt;               2020vegetation-coverv3_1f68de9e2e0a.tif  (6 layers) </span>
 <span class="co">#&gt;               ... and 1 more source(s)</span>
 <span class="co">#&gt; names       : annua~20_v3, peren~20_v3, annua~21_v3, peren~21_v3, annua~20_v3, bare_~20_v3, ...</span>
 
@@ -136,7 +138,7 @@ grids (WGS84 decimal degrees / <code>"EPSG:4326"</code>).</p>
 <p>When a <code>filename</code> argument is not specified, unique
 temporary files will be generated. The resulting SpatRaster object will
 retain reference to these files, and you can remove them manually with
-<code>unlink(terra::sources(&lt;SpatRaster))</code>.</p>
+<code>unlink(terra::sources(&lt;SpatRaster&gt;))</code>.</p>
 <p>When a <code>filename</code> <em>is</em> specified, temporary files
 will be removed after the result (often a multi- year/layer/product)
 SpatRaster is written to new file.</p>

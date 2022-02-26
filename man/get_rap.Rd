@@ -34,11 +34,11 @@ You can query annual biomass and cover (versions 2 and 3) from 1986 to present
 \itemize{
 \item \code{product = "vegetation-biomass"} returns two layers per year:
 \itemize{
-\item \code{"annual forb and grass"}, \code{"perennial forb and grass"} (in lbs / acre)
+\item \code{"annual forb and grass"}, \code{"perennial forb and grass"} (\strong{lbs / acre})
 }
 \item \code{product = "vegetation-cover"} returns six layers per year:
 \itemize{
-\item \code{"annual forb and grass"}, \code{"bare ground"}, \code{"litter"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"} (\% cover)
+\item \code{"annual forb and grass"}, \code{"bare ground"}, \code{"litter"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"} (\strong{\% cover})
 }
 }
 
