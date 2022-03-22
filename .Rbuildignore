@@ -3,4 +3,5 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^docs$
+^.github$
 ^.gitattributes$

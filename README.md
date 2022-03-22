@@ -55,29 +55,29 @@ the source data Coordinate Reference System of the RAP grids (WGS84
 decimal degrees / `"EPSG:4326"`).
 
 ``` r
-library(rapr)
 library(terra)
 #> terra 1.5.23
+library(rapr)
 
 res <- get_rap(
-  vect("POLYGON ((-120 36.99, -119.99 36.99, -119.99 37, -120 37, -120 36.99))",
-       crs = "EPSG:4326"),
+  vect("POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))",
+       crs = "EPSG:4326"), 
   version = "v3",
-  year = 2020:2021,
+  year = c(1986, 1996, 2006, 2016),
   progress = FALSE
 )
 
 res
 #> class       : SpatRaster 
-#> dimensions  : 37, 37, 16  (nrow, ncol, nlyr)
+#> dimensions  : 37, 37, 32  (nrow, ncol, nlyr)
 #> resolution  : 0.0002694946, 0.0002694946  (x, y)
 #> extent      : -120, -119.99, 36.99029, 37.00026  (xmin, xmax, ymin, ymax)
 #> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
-#> sources     : 2020vegetation-biomassv3_1fedc6c33de38.tif  (2 layers) 
-#>               2021vegetation-biomassv3_1fedc361f658c.tif  (2 layers) 
-#>               2020vegetation-coverv3_1fedc29fb81ec.tif  (6 layers) 
-#>               ... and 1 more source(s)
-#> names       : annua~20_v3, peren~20_v3, annua~21_v3, peren~21_v3, annua~20_v3, bare_~20_v3, ...
+#> sources     : 1986vegetation-biomassv3_7b575bb6cea7.tif  (2 layers) 
+#>               1996vegetation-biomassv3_7b5711fff153.tif  (2 layers) 
+#>               2006vegetation-biomassv3_7b575a764c95.tif  (2 layers) 
+#>               ... and 5 more source(s)
+#> names       : annua~86_v3, peren~86_v3, annua~96_v3, peren~96_v3, annua~06_v3, peren~06_v3, ...
 
 plot(res)
 ```

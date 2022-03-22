@@ -6,7 +6,7 @@
 \usage{
 get_rap(
   x,
-  years = 1986,
+  years = c(1986, 1996, 2006, 2016),
   filename = NULL,
   product = c("vegetation-biomass", "vegetation-cover"),
   version = "v3",

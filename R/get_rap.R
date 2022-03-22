@@ -33,14 +33,14 @@
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @export
 get_rap <- function(x,
-                    years = 1986,
+                    years = c(1986, 1996, 2006, 2016),
                     filename = NULL,
                     product = c("vegetation-biomass", "vegetation-cover"),
                     version = "v3",
                     progress = NULL) {
   
-  version <- match.arg(version, several.ok = TRUE)
-  product <- match.arg(product, several.ok = TRUE)
+  version <- match.arg(version, choices = c("v3", "v2"), several.ok = TRUE)
+  product <- match.arg(product, choices = c("vegetation-biomass", "vegetation-cover"), several.ok = TRUE)
   
   if (inherits(x, 'Spatial')){
     x <- sf::st_as_sf(x)
@@ -58,7 +58,7 @@ get_rap <- function(x,
     
     if (requireNamespace("sf")) {
       x <- as.numeric(sf::st_bbox(sf::st_transform(sf::st_as_sf(
-          data.frame(geometry = sf::st_as_sfc(st_bbox(x)))
+          data.frame(geometry = sf::st_as_sfc(sf::st_bbox(x)))
         ), crs = 'EPSG:4326')))[c(1, 4, 3, 2)]
     }
     
