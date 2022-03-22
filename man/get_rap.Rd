@@ -26,6 +26,9 @@ get_rap(
 
 \item{progress}{logical. Show progress bar? Default: missing (\code{NULL}) will use progress bar when three or more layers are requested.}
 }
+\value{
+a SpatRaster containing the requested vegetation-biomass and/or vegetation-cover layers by year. Native cell resolution is ~30m x 30m in WGS84 decimal degrees.
+}
 \description{
 Get Rangeland Analysis Platform (RAP) Grids
 }

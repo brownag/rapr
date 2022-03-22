@@ -28,6 +28,7 @@
 #'         |                                   |
 #'         |---------------------------(3: xmax, 4: ymin)
 #' ```
+#' @return a SpatRaster containing the requested vegetation-biomass and/or vegetation-cover layers by year. Native cell resolution is ~30m x 30m in WGS84 decimal degrees.
 #' @importFrom terra rast writeRaster sources
 #' @importFrom sf st_bbox st_transform st_crs st_as_sf st_as_sfc
 #' @importFrom utils txtProgressBar setTxtProgressBar

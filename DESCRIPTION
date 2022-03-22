@@ -14,5 +14,13 @@ Imports:
     sf,
     terra
 Suggests: 
+    soilDB,
+    gifski,
+    mapview (>= 2.10.0),
+    httr,
+    jsonlite,
+    rmarkdown,
+    knitr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+VignetteBuilder: knitr
