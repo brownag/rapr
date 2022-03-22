@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">rapr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
       </span>
     </div>
 
@@ -41,6 +41,21 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/demo.html">Accessing Rangeland Analysis Platform (RAP) Gridded Products with R</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -92,29 +107,29 @@
 <p>This example shows how to use a {<a href="https://github.com/rspatial/terra" class="external-link">terra</a>} SpatVector containing a rectangular polygon with <code><a href="reference/get_rap.html">rapr::get_rap()</a></code> to obtain RAP grids for the corresponding extent.</p>
 <p>{<a href="https://cran.r-project.org/package=terra" class="external-link">terra</a>}, {<a href="https://cran.r-project.org/package=raster" class="external-link">raster</a>}, {<a href="https://cran.r-project.org/package=sf" class="external-link">sf</a>} and {<a href="https://cran.r-project.org/package=sp" class="external-link">sp</a>} objects are all supported input types. Any spatial object used should have its Coordinate Reference System defined, as the input coordinates will be projected to the source data Coordinate Reference System of the RAP grids (WGS84 decimal degrees / <code>"EPSG:4326"</code>).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rapr</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/terra/" class="external-link">terra</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/terra/" class="external-link">terra</a></span><span class="op">)</span>
 <span class="co">#&gt; terra 1.5.23</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rapr</span><span class="op">)</span>
 
 <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_rap.html">get_rap</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="st">"POLYGON ((-120 36.99, -119.99 36.99, -119.99 37, -120 37, -120 36.99))"</span>,
-       crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="st">"POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))"</span>,
+       crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>, 
   version <span class="op">=</span> <span class="st">"v3"</span>,
-  year <span class="op">=</span> <span class="fl">2020</span><span class="op">:</span><span class="fl">2021</span>,
+  year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1986</span>, <span class="fl">1996</span>, <span class="fl">2006</span>, <span class="fl">2016</span><span class="op">)</span>,
   progress <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span>
 
 <span class="va">res</span>
 <span class="co">#&gt; class       : SpatRaster </span>
-<span class="co">#&gt; dimensions  : 37, 37, 16  (nrow, ncol, nlyr)</span>
+<span class="co">#&gt; dimensions  : 37, 37, 32  (nrow, ncol, nlyr)</span>
 <span class="co">#&gt; resolution  : 0.0002694946, 0.0002694946  (x, y)</span>
 <span class="co">#&gt; extent      : -120, -119.99, 36.99029, 37.00026  (xmin, xmax, ymin, ymax)</span>
 <span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span>
-<span class="co">#&gt; sources     : 2020vegetation-biomassv3_1fedc6c33de38.tif  (2 layers) </span>
-<span class="co">#&gt;               2021vegetation-biomassv3_1fedc361f658c.tif  (2 layers) </span>
-<span class="co">#&gt;               2020vegetation-coverv3_1fedc29fb81ec.tif  (6 layers) </span>
-<span class="co">#&gt;               ... and 1 more source(s)</span>
-<span class="co">#&gt; names       : annua~20_v3, peren~20_v3, annua~21_v3, peren~21_v3, annua~20_v3, bare_~20_v3, ...</span>
+<span class="co">#&gt; sources     : 1986vegetation-biomassv3_7b575bb6cea7.tif  (2 layers) </span>
+<span class="co">#&gt;               1996vegetation-biomassv3_7b5711fff153.tif  (2 layers) </span>
+<span class="co">#&gt;               2006vegetation-biomassv3_7b575a764c95.tif  (2 layers) </span>
+<span class="co">#&gt;               ... and 5 more source(s)</span>
+<span class="co">#&gt; names       : annua~86_v3, peren~86_v3, annua~96_v3, peren~96_v3, annua~06_v3, peren~06_v3, ...</span>
 
 <span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
