@@ -8,8 +8,10 @@ Description: Provides access to Rangeland Analysis Platform (RAP) products <http
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+URL: https://github.com/brownag/rapr, https://humus.rocks/rapr
+BugReports: https://github.com/brownag/rapr/issues
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.1
 Imports: 
     sf,
     terra
