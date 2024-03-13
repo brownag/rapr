@@ -7,7 +7,8 @@
 
 [![R-CMD-check](https://github.com/brownag/rapr/workflows/R-CMD-check/badge.svg)](https://github.com/brownag/rapr/actions)
 [![Codecov-test-coverage](https://codecov.io/gh/brownag/rapr/branch/main/graph/badge.svg)](https://codecov.io/gh/brownag/rapr?branch=main)
-[![html-docs](https://camo.githubusercontent.com/f7ba98e46ecd14313e0e8a05bec3f92ca125b8f36302a5b1679d4a949bccbe31/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f63732d48544d4c2d696e666f726d6174696f6e616c)](https://humus.rocks/rapr/)
+[![html-docs](https://img.shields.io/badge/docs-HTML-informational)](https://humus.rocks/rapr/)
+[![R-CMD-check](https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of {rapr} is to provide a simple R interface to Rangeland
@@ -18,15 +19,15 @@ information on these products.
 You can query annual biomass and cover (versions 2 and 3) for the years
 1986 to present.
 
--   `product = "vegetation-biomass"` returns two layers for each year:
+- `product = "vegetation-biomass"` returns two layers for each year:
 
-    -   `"annual forb and grass"`, `"perennial forb and grass"` (**lbs /
-        acre**).
+  - `"annual forb and grass"`, `"perennial forb and grass"` (**lbs /
+    acre**).
 
--   `product = "vegetation-cover"` returns six layers for each year:
+- `product = "vegetation-cover"` returns six layers for each year:
 
-    -   `"annual forb and grass"`, `"bare ground"`, `"litter"`,
-        `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
+  - `"annual forb and grass"`, `"bare ground"`, `"litter"`,
+    `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
 
 ## Installation
 
@@ -56,7 +57,7 @@ decimal degrees / `"EPSG:4326"`).
 
 ``` r
 library(terra)
-#> terra 1.5.23
+#> terra 1.7.73
 library(rapr)
 
 res <- get_rap(
@@ -73,9 +74,9 @@ res
 #> resolution  : 0.0002694946, 0.0002694946  (x, y)
 #> extent      : -120, -119.99, 36.99029, 37.00026  (xmin, xmax, ymin, ymax)
 #> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
-#> sources     : 1986vegetation-biomassv3_7b575bb6cea7.tif  (2 layers) 
-#>               1996vegetation-biomassv3_7b5711fff153.tif  (2 layers) 
-#>               2006vegetation-biomassv3_7b575a764c95.tif  (2 layers) 
+#> sources     : 1986vegetation-biomassv3_13188415c6d40.tif  (2 layers) 
+#>               1996vegetation-biomassv3_131885cd47a6.tif  (2 layers) 
+#>               2006vegetation-biomassv3_131887f0843ce.tif  (2 layers) 
 #>               ... and 5 more source(s)
 #> names       : annua~86_v3, peren~86_v3, annua~96_v3, peren~96_v3, annua~06_v3, peren~06_v3, ...
 
@@ -109,7 +110,6 @@ e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
 
 ## Citation
 
-    #> 
     #> To cite rapr in publications use:
     #> 
     #>   Andrew Brown (2022). rapr: Interface to Rangeland Analysis Platform
