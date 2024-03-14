@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 [![Codecov-test-coverage](https://codecov.io/gh/brownag/rapr/branch/main/graph/badge.svg)](https://codecov.io/gh/brownag/rapr?branch=main)
 [![html-docs](https://img.shields.io/badge/docs-HTML-informational)](https://humus.rocks/rapr/)
 [![R-CMD-check](https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/brownag/rapr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/brownag/rapr?branch=main)
 <!-- badges: end -->
 
 The goal of {rapr} is to provide a simple R interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products. See https://rangelands.app/products and `citation("rapr")` for more information on these products.
