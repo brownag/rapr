@@ -4,73 +4,69 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Provides access to Rangeland Analysis Platform (RAP) products &lt;https://rangelands.app/products&gt; for arbitrary extents via GDAL virtual file system. ">
 <title>Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products • rapr</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products">
 <meta property="og:description" content="Provides access to Rangeland Analysis Platform (RAP) products &lt;https://rangelands.app/products&gt; for arbitrary extents via GDAL virtual file system. ">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <div class="container template-home">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">rapr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1</span>
-      </span>
-    </div>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    
+    <a class="navbar-brand me-2" href="index.html">rapr</a>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="reference/index.html">Reference</a>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="articles/demo.html">Accessing Rangeland Analysis Platform (RAP) Gridded Products with R</a>
-    </li>
-  </ul>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/demo.html">Accessing Rangeland Analysis Platform (RAP) Gridded Products with R</a>
+  </div>
 </li>
-<li>
-  <a href="news/index.html">Changelog</a>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/brownag/rapr/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
-
-      
-
-      </header><div class="row">
-  <div class="contents col-md-9">
-<div class="section level1">
+</nav><div class="container template-home">
+<div class="row">
+  <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="rapr">rapr<a class="anchor" aria-label="anchor" href="#rapr"></a>
 </h1></div>
 <!-- badges: start -->
@@ -98,8 +94,8 @@
 </h2>
 <p>You can install the development version of {rapr} from <a href="https://github.com/brownag/rapr" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"brownag/rapr"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"brownag/rapr"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
@@ -107,79 +103,83 @@
 <p>This example shows how to use a {<a href="https://github.com/rspatial/terra" class="external-link">terra</a>} SpatVector containing a rectangular polygon with <code><a href="reference/get_rap.html">rapr::get_rap()</a></code> to obtain RAP grids for the corresponding extent.</p>
 <p>{<a href="https://cran.r-project.org/package=terra" class="external-link">terra</a>}, {<a href="https://cran.r-project.org/package=raster" class="external-link">raster</a>}, {<a href="https://cran.r-project.org/package=sf" class="external-link">sf</a>} and {<a href="https://cran.r-project.org/package=sp" class="external-link">sp</a>} objects are all supported input types. Any spatial object used should have its Coordinate Reference System defined, as the input coordinates will be projected to the source data Coordinate Reference System of the RAP grids (WGS84 decimal degrees / <code>"EPSG:4326"</code>).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/terra/" class="external-link">terra</a></span><span class="op">)</span>
-<span class="co">#&gt; terra 1.5.23</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">rapr</span><span class="op">)</span>
-
-<span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_rap.html">get_rap</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/terra/man/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="st">"POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))"</span>,
-       crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>, 
-  version <span class="op">=</span> <span class="st">"v3"</span>,
-  year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/terra/man/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1986</span>, <span class="fl">1996</span>, <span class="fl">2006</span>, <span class="fl">2016</span><span class="op">)</span>,
-  progress <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span>
-
-<span class="va">res</span>
-<span class="co">#&gt; class       : SpatRaster </span>
-<span class="co">#&gt; dimensions  : 37, 37, 32  (nrow, ncol, nlyr)</span>
-<span class="co">#&gt; resolution  : 0.0002694946, 0.0002694946  (x, y)</span>
-<span class="co">#&gt; extent      : -120, -119.99, 36.99029, 37.00026  (xmin, xmax, ymin, ymax)</span>
-<span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span>
-<span class="co">#&gt; sources     : 1986vegetation-biomassv3_7b575bb6cea7.tif  (2 layers) </span>
-<span class="co">#&gt;               1996vegetation-biomassv3_7b5711fff153.tif  (2 layers) </span>
-<span class="co">#&gt;               2006vegetation-biomassv3_7b575a764c95.tif  (2 layers) </span>
-<span class="co">#&gt;               ... and 5 more source(s)</span>
-<span class="co">#&gt; names       : annua~86_v3, peren~86_v3, annua~96_v3, peren~96_v3, annua~06_v3, peren~06_v3, ...</span>
-
-<span class="fu"><a href="https://rdrr.io/pkg/terra/man/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; terra 1.7.73</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/brownag/rapr" class="external-link">rapr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_rap.html">get_rap</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="st">"POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))"</span>,</span>
+<span>       crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>, </span>
+<span>  version <span class="op">=</span> <span class="st">"v3"</span>,</span>
+<span>  year <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1986</span>, <span class="fl">1996</span>, <span class="fl">2006</span>, <span class="fl">2016</span><span class="op">)</span>,</span>
+<span>  progress <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res</span></span>
+<span><span class="co">#&gt; class       : SpatRaster </span></span>
+<span><span class="co">#&gt; dimensions  : 37, 37, 32  (nrow, ncol, nlyr)</span></span>
+<span><span class="co">#&gt; resolution  : 0.0002694946, 0.0002694946  (x, y)</span></span>
+<span><span class="co">#&gt; extent      : -120, -119.99, 36.99029, 37.00026  (xmin, xmax, ymin, ymax)</span></span>
+<span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span></span>
+<span><span class="co">#&gt; sources     : 1986vegetation-biomassv3_9134597a43b6.tif  (2 layers) </span></span>
+<span><span class="co">#&gt;               1996vegetation-biomassv3_913468b723c8.tif  (2 layers) </span></span>
+<span><span class="co">#&gt;               2006vegetation-biomassv3_913434c539ef.tif  (2 layers) </span></span>
+<span><span class="co">#&gt;               ... and 5 more source(s)</span></span>
+<span><span class="co">#&gt; names       : annua~86_v3, peren~86_v3, annua~96_v3, peren~96_v3, annua~06_v3, peren~06_v3, ...</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
 <p>When a <code>filename</code> argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with <code>unlink(terra::sources(&lt;SpatRaster&gt;))</code>.</p>
 <p>When a <code>filename</code> <em>is</em> specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.</p>
 <p>In lieu of a spatial object from {terra}, {raster}, {sf} or {sp} packages you may specify a bounding box using a numeric vector containing <code>xmin</code>, <code>ymax</code>, <code>xmax</code>, <code>ymin</code> in WGS84 longitude/latitude decimal degrees (corresponding to order used in <code>gdal_translate</code> <code>-projwin</code> option). e.g. <code>get_rap(x = c(-120, 37, -119.99, 36.99), ...)</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>(<span class="dv">1</span><span class="op">:</span><span class="st"> </span>xmin, <span class="dv">2</span><span class="op">:</span><span class="st"> </span>ymax)<span class="op">--------------------------</span><span class="er">|</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="st">        </span><span class="er">|</span><span class="st">                                   </span><span class="er">|</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="st">        </span><span class="er">|</span><span class="st">         </span>TARGET EXTENT             <span class="op">|</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="st">        </span><span class="er">|</span><span class="st">  </span>x =<span class="st"> </span><span class="kw">c</span>(xmin, ymax, xmax, ymin)    <span class="op">|</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="st">        </span><span class="er">|</span><span class="st">                                   </span><span class="er">|</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="st">        </span><span class="er">|</span><span class="op">---------------------------</span>(<span class="dv">3</span><span class="op">:</span><span class="st"> </span>xmax, <span class="dv">4</span><span class="op">:</span><span class="st"> </span>ymin)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>(<span class="dv">1</span><span class="sc">:</span> xmin, <span class="dv">2</span><span class="sc">:</span> ymax)<span class="sc">--------------------------</span><span class="er">|</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>        <span class="er">|</span>                                   <span class="er">|</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>        <span class="er">|</span>         TARGET EXTENT             <span class="sc">|</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>        <span class="er">|</span>  x <span class="ot">=</span> <span class="fu">c</span>(xmin, ymax, xmax, ymin)    <span class="sc">|</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>        <span class="er">|</span>                                   <span class="er">|</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>        <span class="er">|</span><span class="sc">---------------------------</span>(<span class="dv">3</span><span class="sc">:</span> xmax, <span class="dv">4</span><span class="sc">:</span> ymin)</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">#&gt; </span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; To cite rapr in publications use:</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; </span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt;   Andrew Brown (2022). rapr: Interface to Rangeland Analysis Platform</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt;   (RAP) Vegetation Biomass and Cover Products. R package version 0.1.0.</span></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt;   http://github.com/brownag/rapr</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt; </span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt;   Jones, M.O., N.P. Robinson, D.E. Naugle, J.D. Maestas, M.C. Reeves,</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt;   R.W. Lankston, and B.W. Allred. 2021. Annual and 16-Day Rangeland</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt;   Production Estimates for the Western United States. Rangeland Ecology</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt;   &amp; Management 77:112-117. http://dx.doi.org/10.1016/j.rama.2021.04.003</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; </span></span>
-<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt;   Robinson, N. P., M. O. Jones, A. Moreno, T. A. Erickson, D. E.</span></span>
-<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt;   Naugle, and B. W. Allred. 2019. Rangeland productivity partitioned to</span></span>
-<span id="cb4-15"><a href="#cb4-15"></a><span class="co">#&gt;   sub-pixel plant functional types. Remote Sensing 11:1427.</span></span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="co">#&gt;   http://dx.doi.org/10.3390/rs11121427</span></span>
-<span id="cb4-17"><a href="#cb4-17"></a><span class="co">#&gt; </span></span>
-<span id="cb4-18"><a href="#cb4-18"></a><span class="co">#&gt;   Allred, B. W., B. T. Bestelmeyer, C. S. Boyd, C. Brown, K. W. Davies,</span></span>
-<span id="cb4-19"><a href="#cb4-19"></a><span class="co">#&gt;   L. M. Ellsworth, T. A. Erickson, S. D. Fuhlendorf, T. V. Griffiths,</span></span>
-<span id="cb4-20"><a href="#cb4-20"></a><span class="co">#&gt;   V. Jansen, M. O. Jones, J. Karl, J. D. Maestas, J. J. Maynard, S. E.</span></span>
-<span id="cb4-21"><a href="#cb4-21"></a><span class="co">#&gt;   McCord, D. E. Naugle, H. D. Starns, D. Twidwell, and D. R. Uden.</span></span>
-<span id="cb4-22"><a href="#cb4-22"></a><span class="co">#&gt;   2021. Improving Landsat predictions of rangeland fractional cover</span></span>
-<span id="cb4-23"><a href="#cb4-23"></a><span class="co">#&gt;   with multitask learning and uncertainty. Methods in Ecology and</span></span>
-<span id="cb4-24"><a href="#cb4-24"></a><span class="co">#&gt;   Evolution. http://dx.doi.org/10.1111/2041-210x.13564</span></span>
-<span id="cb4-25"><a href="#cb4-25"></a><span class="co">#&gt; </span></span>
-<span id="cb4-26"><a href="#cb4-26"></a><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
-<span id="cb4-27"><a href="#cb4-27"></a><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
-<span id="cb4-28"><a href="#cb4-28"></a><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co">#&gt; To cite rapr in publications use:</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;   Andrew Brown (2022). rapr: Interface to Rangeland Analysis Platform</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;   (RAP) Vegetation Biomass and Cover Products. R package version 0.1.0.</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;   http://github.com/brownag/rapr</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;   Jones, M.O., N.P. Robinson, D.E. Naugle, J.D. Maestas, M.C. Reeves,</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;   R.W. Lankston, and B.W. Allred. 2021. Annual and 16-Day Rangeland</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;   Production Estimates for the Western United States. Rangeland Ecology</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt;   &amp; Management 77:112-117. http://dx.doi.org/10.1016/j.rama.2021.04.003</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;   Robinson, N. P., M. O. Jones, A. Moreno, T. A. Erickson, D. E.</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;   Naugle, and B. W. Allred. 2019. Rangeland productivity partitioned to</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;   sub-pixel plant functional types. Remote Sensing 11:1427.</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt;   http://dx.doi.org/10.3390/rs11121427</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt;   Allred, B. W., B. T. Bestelmeyer, C. S. Boyd, C. Brown, K. W. Davies,</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt;   L. M. Ellsworth, T. A. Erickson, S. D. Fuhlendorf, T. V. Griffiths,</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt;   V. Jansen, M. O. Jones, J. Karl, J. D. Maestas, J. J. Maynard, S. E.</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt;   McCord, D. E. Naugle, H. D. Starns, D. Twidwell, and D. R. Uden.</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt;   2021. Improving Landsat predictions of rangeland fractional cover</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt;   with multitask learning and uncertainty. Methods in Ecology and</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt;   Evolution. http://dx.doi.org/10.1111/2041-210x.13564</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span></code></pre></div>
 </div>
 </div>
-  </div>
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/brownag/rapr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/brownag/rapr/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
@@ -205,31 +205,31 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/brownag/rapr/actions" class="external-link"><img src="https://github.com/brownag/rapr/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://codecov.io/gh/brownag/rapr?branch=main" class="external-link"><img src="https://codecov.io/gh/brownag/rapr/branch/main/graph/badge.svg" alt="Codecov-test-coverage"></a></li>
-<li><a href="https://humus.rocks/rapr/" class="external-link"><img src="https://camo.githubusercontent.com/f7ba98e46ecd14313e0e8a05bec3f92ca125b8f36302a5b1679d4a949bccbe31/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f646f63732d48544d4c2d696e666f726d6174696f6e616c" alt="html-docs"></a></li>
+<li><a href="https://humus.rocks/rapr/" class="external-link"><img src="https://img.shields.io/badge/docs-HTML-informational" alt="html-docs"></a></li>
+<li><a href="https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/brownag/rapr?branch=main" class="external-link"><img src="https://codecov.io/gh/brownag/rapr/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
-  </div>
+  </aside>
 </div>
 
 
-      <footer><div class="copyright">
+    <footer><div class="pkgdown-footer-left">
   <p></p>
 <p>Developed by Andrew Brown.</p>
 </div>
 
-<div class="pkgdown">
+<div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-
 
   
 
