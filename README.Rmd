@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 # rapr
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/brownag/rapr/workflows/R-CMD-check/badge.svg)](https://github.com/brownag/rapr/actions)
 [![Codecov-test-coverage](https://codecov.io/gh/brownag/rapr/branch/main/graph/badge.svg)](https://codecov.io/gh/brownag/rapr?branch=main)
 [![html-docs](https://img.shields.io/badge/docs-HTML-informational)](https://humus.rocks/rapr/)
 [![R-CMD-check](https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml)
