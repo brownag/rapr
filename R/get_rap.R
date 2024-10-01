@@ -96,6 +96,11 @@ get_rap <- function(x,
   }
 
   if (!missing(filename) && length(filename) > 0) {
+
+    if (!dir.exists(dirname(filename))) {
+      dir.create(dirname(filename), showWarnings = FALSE, recursive = TRUE)
+    }
+
     terra::writeRaster(res, filename = filename)
     unlink(terra::sources(res))
     res <- terra::rast(filename)
