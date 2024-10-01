@@ -49,7 +49,7 @@ When a \code{filename} argument is not specified, unique temporary files will be
 
 When a \code{filename} \emph{is} specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.
 
-In lieu of a spatial object from {terra}, {raster}, {sf} or {sp} packages you may specify a bounding box using a numeric vector containing \code{xmin}, \code{ymax}, \code{xmax}, \code{ymin} in WGS84 longitude/latitude decimal degrees (corresponding to order used in \code{gdal_translate} \code{-projwin} option). e.g. \code{get_rap(x = c(-120, 37, -119.99, 36.99), ...)}.
+In lieu of a spatial object from \{terra\}, \{raster\}, \{sf\} or \{sp\}  packages you may specify a bounding box using a numeric vector containing \code{xmin}, \code{ymax}, \code{xmax}, \code{ymin} in WGS84 longitude/latitude decimal degrees (corresponding to order used in \code{gdal_translate} \code{-projwin} option). e.g. \code{get_rap(x = c(-120, 37, -119.99, 36.99), ...)}.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{(1: xmin, 2: ymax)--------------------------|
         |                                   |
