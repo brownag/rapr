@@ -18,7 +18,7 @@
 #'
 #' When a `filename` _is_ specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.
 #'
-#' In lieu of a spatial object from {terra}, {raster}, {sf} or {sp} packages you may specify a bounding box using a numeric vector containing `xmin`, `ymax`, `xmax`, `ymin` in WGS84 longitude/latitude decimal degrees (corresponding to order used in `gdal_translate` `-projwin` option). e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
+#' In lieu of a spatial object from \{terra\}, \{raster\}, \{sf\} or \{sp\}  packages you may specify a bounding box using a numeric vector containing `xmin`, `ymax`, `xmax`, `ymin` in WGS84 longitude/latitude decimal degrees (corresponding to order used in `gdal_translate` `-projwin` option). e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
 #'
 #' ```
 #' (1: xmin, 2: ymax)--------------------------|
