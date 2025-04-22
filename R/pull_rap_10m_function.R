@@ -32,8 +32,7 @@
 ########################################################################################
 
 # Main function to fetch and process RAP S2 data for a given ROI, groups, and years
-get_rap_10m <- function(roi, groups, years) {
-  message("Starting RAP S2 data retrieval...")
+get_rap_10m <- function(roi, groups, years, verbose = TRUE) {
 
   # Step 0: Validate inputs
   current_year <- as.integer(format(Sys.Date(), "%Y"))
@@ -59,96 +58,73 @@ get_rap_10m <- function(roi, groups, years) {
 
   # Step 2: Determine UTM zone from ROI
   roi_utm_zone <- get_utm_zone(roi)
-  message(paste("UTM Zone:", roi_utm_zone))
-
+  if (verbose) {
+    message(paste("UTM Zone:", roi_utm_zone))
+  }
   # Step 3: Collect tile metadata using the first group (tile locations are shared across groups)
   message(paste("Fetching tile metadata from group:", groups[1]))
   base_url <- paste0("http://rangeland.ntsg.umt.edu/data/rangeland-s2/", groups[1], "/")
   all_tiles_df <- fetch_tiles_metadata(base_url, years)
 
   # Step 4: Filter metadata to match ROI's UTM zone
-  tiles_filtered <- subset(all_tiles_df, utm_zone == roi_utm_zone)
+  tiles_filtered <- subset(all_tiles_df, all_tiles_df$utm_zone == roi_utm_zone)
 
   # Step 5: Build tile bounding boxes (75x75km with 250m overlap)
   tile_size <- 75000
   tile_overlap <- 250
-  tiles_filtered <-  dplyr::mutate(
-    tiles_filtered,
-    geometry = purrr::pmap(list(lower_left_x, lower_left_y),
-      function(x, y) {
-        x_min <- x - tile_overlap
-        y_min <- y - tile_overlap
-        x_max <- x + tile_size + tile_overlap
-        y_max <- y + tile_size + tile_overlap
-        sf::st_polygon(list(matrix(
-          c(
-            x_min,
-            y_min,
-            x_max,
-            y_min,
-            x_max,
-            y_max,
-            x_min,
-            y_max,
-            x_min,
-            y_min
-          ),
-          ncol = 2,
-          byrow = TRUE
-        )))
-      })
-  )
 
-  tiles_grid <- sf::st_as_sf(tiles_filtered, crs = 32600 + roi_utm_zone)
+  tiles_grid <- sf::st_as_sf(cbind(
+    tiles_filtered,
+    geometry = wk::rct(
+      xmin = tiles_filtered$lower_left_x - tile_overlap,
+      ymin = tiles_filtered$lower_left_y - tile_overlap,
+      xmax = tiles_filtered$lower_left_x + tile_size + tile_overlap,
+      ymax = tiles_filtered$lower_left_y + tile_size + tile_overlap,
+      crs = 32600 + roi_utm_zone
+    )
+  ))
 
   # Step 6: Reproject ROI and find overlapping tiles
   roi <- sf::st_transform(roi, sf::st_crs(tiles_grid))
   overlapping_tiles <- tiles_grid[sf::st_intersects(tiles_grid, roi, sparse = FALSE), ]
-  overlapping_tiles <- transform(
+
+  overlapping_tiles2 <- transform(
     overlapping_tiles,
-    tile_x = as.numeric(stringr::str_extract(file_name, "\\d{6}(?=-\\d{7}\\.tif)")),
-    tile_y = as.numeric(stringr::str_extract(file_name, "\\d{7}(?=\\.tif)"))
+    tile_x = as.numeric(gsub(".*(\\d{6})-\\d{7}\\.tif", "\\1", overlapping_tiles$file_name)),
+    tile_y = as.numeric(gsub(".*\\d{6}-(\\d{7})\\.tif", "\\1", overlapping_tiles$file_name))
   )
-  message("Found overlapping tiles:")
-  print(dplyr::distinct(overlapping_tiles, tile_x, tile_y))
+
+  grd <- unique(
+    expand.grid(
+      group = groups,
+      tile_x = overlapping_tiles2$tile_x,
+      tile_y = overlapping_tiles2$tile_y,
+      year = years
+    )
+  )
 
   # Step 7: Construct download URLs for each group/tile/year combo
   urls <- transform(
-    unique(
-      expand.grid(
-        group = groups,
-        tile_x = overlapping_tiles$tile_x,
-        tile_y = overlapping_tiles$tile_y,
-        year = years
-      ),
-    ),
+    grd,
     url = paste0(
       "http://rangeland.ntsg.umt.edu/data/rangeland-s2/",
-      group,
-      "/",
-      group,
-      "-",
-      year,
-      "-",
-      roi_utm_zone,
-      "-",
-      sprintf("%06d", tile_x),
-      "-",
-      sprintf("%07d", tile_y),
+      grd$group, "/", grd$group, "-",
+      grd$year, "-",
+      roi_utm_zone, "-",
+      sprintf("%06d", grd$tile_x), "-",
+      sprintf("%07d", grd$tile_y),
       ".tif"
     )
   )
 
-  message("Generated download URLs:")
-  print(urls)
-
   # Step 8: Download and crop rasters to ROI
-  message("Downloading and processing rasters...")
   raster_list <- list()
   roi_proj <- sf::st_transform(roi, crs = 32600 + roi_utm_zone)
 
   for (i in seq_len(nrow(urls))) {
-    message(paste("Processing:", urls$url[i]))
+    if (verbose) {
+     message("Processing: ", urls$url[i])
+    }
     raster_data <- terra::rast(paste0("/vsicurl/", urls$url[i]))
     raster_cropped <- terra::crop(raster_data, roi_proj)
     name <- paste0(urls$group[i], "_", urls$year[i], "_", urls$tile_x[i], "_", urls$tile_y[i])
@@ -173,22 +149,20 @@ get_rap_10m <- function(roi, groups, years) {
 # Helper function to fetch and parse tile metadata from the server
 fetch_tiles_metadata <- function(base_url, years) {
   response <- httr::GET(base_url)
-  content <- httr::content(response, "text")
-  file_names <- stringr::str_extract_all(content, "\\w+-\\d{4}-\\d{2}-\\d{6}-\\d{7}\\.tif")[[1]]
-  coords <- stringr::str_match(file_names,
-                               "(\\w+)-(\\d{4})-(\\d{2})-(\\d{6})-(\\d{7})\\.tif")
-  subset(
-    data.frame(
-      file_name = file_names,
-      group = coords[, 2],
-      year = as.numeric(coords[, 3]),
-      utm_zone = as.numeric(coords[, 4]),
-      lower_left_x = as.numeric(coords[, 5]),
-      lower_left_y = as.numeric(coords[, 6]),
-      stringsAsFactors = FALSE
-    ),
-    year %in% years
+  content <- strsplit(httr::content(response, "text"), "\n")[[1]]
+  file_names <- gsub(".*>(\\w+-\\d{4}-\\d{2}-\\d{6}-\\d{7}\\.tif)<.*|.*", "\\1", content)
+  m <- regexec("(\\w+)-(\\d{4})-(\\d{2})-(\\d{6})-(\\d{7})\\.tif", file_names)
+  coords <- t(sapply(regmatches(file_names, m), `[`, 2:6))
+  res <- data.frame(
+    file_name = file_names,
+    group = coords[, 1],
+    year = as.numeric(coords[, 2]),
+    utm_zone = as.numeric(coords[, 3]),
+    lower_left_x = as.numeric(coords[, 4]),
+    lower_left_y = as.numeric(coords[, 5]),
+    stringsAsFactors = FALSE
   )
+  subset(res, res$year %in% years)
 }
 
 # Helper function to determine the UTM zone of an ROI
