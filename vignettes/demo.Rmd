@@ -17,33 +17,19 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(rapr)
+library(terra)   # spatial data handling
 ```
 
-```{r additional-packages}
-library(soilDB)  # get soil mapunit polygons
-library(sf)      # spatial data handling
-library(mapview, warn.conflicts = FALSE) # interactive maps
-library(gifski)  # create GIF from results
-```
+First we buffer 100m around a longitude/latitude coordinate (WGS84 decimal degrees) using the {terra} package.
 
-First we buffer 100m around a longitude/latitude coordinate (WGS84 decimal degrees) using the {sf} package.
+You could change the coordinates to where you live or your favorite range spot! Change the buffering distance to include larger areas around a specified longitude/latitude point.
 
-You could change the coordinates to where you live or your favorite range spot! 
-
-You can change the buffering distance to include larger areas or remove it altogether to make sure you get just a single polygon.
-
-```{r}
-x <- st_buffer(st_as_sf(
-  data.frame(x = -120.26021, y = 37.99765),
-  coords = c("x", "y"),
-  crs = 4326
-), 100)
-```
-
-We use {soilDB} to retrieve SSURGO mapunit polygons for our area of interest. 
-
-```{r}
-p <- SDA_spatialQuery(x, what = "mupolygon")
+```{r} 
+p <- buffer(terra::vect(
+  data.frame(x = -105.97133, y = 32.73437),
+  geom = c("x", "y"),
+  crs = "OGC:CRS84"
+), width = 1000)
 ```
 
 In this example the target polygon has a significant Urban land component associated with the highway and adjacent development. How much of the polygon is reflecting inter-annual variation in plant cover? 
@@ -51,35 +37,50 @@ In this example the target polygon has a significant Urban land component associ
 There are several housing developments and some areas have been cleared for grazing. The natural condition is closed canopy mixed oak/conifer woodland.
 
 ```{r, fig.width = 7}
-mapview(p, map.types = c("Esri.WorldImagery", "OpenStreetMap"))
+terra::plet(p, tiles = c("Esri.WorldImagery", "OpenTopoMap"))
 ```
 
 Use {rapr} to download the Rangeland Analysis Platform "vegetation-biomass" product for 1986 to 2021 using the mapunit polygon `p` to define the target extent.
 
 ```{r}
-rap <- rapr::get_rap(p, product = "vegetation-biomass", 1986:2021, progress = FALSE)
+rap <- get_rap(
+  p,
+  product = "vegetation-biomass",
+  years = 1986:2024,
+  progress = FALSE
+)
 ```
 
-Now we will select just the `"annual forb and grass biomass"` layers, iterate over them and plot symbolizing with a common range `[0,5000]` pounds per acre.
+Let's look at the first layer:
+
+```{r}
+plot(rap[[1]], main = names(rap)[1])
+```
+
+## Animated Plots
+
+Now we will select just the `"annual forb and grass biomass"` layers, iterate over them and plot symbolizing with a common range `[0,500]` pounds per acre.
+
+Using the {gifski} package `save_gif()` function we can easily create an animated graphic of the RAP predictions. 
 
 We write this iteration into a function called `makeplot()` and use {gifski} to render an animated GIF file from the R plot graphics output in each year for a total of 36 layers.
-
-Pass the function `makeplot()` as the first argument to `gifski::save_gif()` and then specify the output file name with `gif_file` argument.
 
 ```{r}
 makeplot <- function() {
   lapply(grep("annual_forb_and_grass_biomass", names(rap)), function(i) {
     terra::plot(rap[[i]], 
-                main = gsub(".*_(\\d+)_v3$", "\\1", names(rap)[i]), 
-                range = c(0, 5000), 
+                main = names(rap)[i], 
+                range = c(0, 500), 
                 cex.main = TRUE)
-    terra::plot(terra::vect(p), add = TRUE)
+    terra::plot(p, type ="continuous", add = TRUE)
   })
 }
 ```
 
-```{r}
-gifski::save_gif(makeplot(), gif_file = "annual_forb_and_grass_biomass.gif", delay = 0.5)
-```
+```{r, eval=as.logical(Sys.getenv("R_RAPR_EXTENDED_EXAMPLES", unset=FALSE))}
+library(gifski)  # create GIF from results
 
-![](annual_forb_and_grass_biomass.gif)
+gifski::save_gif(makeplot(), 
+                 gif_file = "annual_forb_and_grass_biomass.gif", 
+                 delay = 0.5)
+```

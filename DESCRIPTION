@@ -18,12 +18,8 @@ Imports:
     wk,
     terra
 Suggests: 
-    soilDB,
-    xml2,
-    gifski,
-    mapview (>= 2.10.0),
     httr,
-    jsonlite,
+    leaflet,
     rmarkdown,
     knitr,
     testthat (>= 3.0.0)
