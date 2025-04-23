@@ -69,57 +69,51 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/brownag/rapr" class="external-link">rapr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span>   <span class="co"># spatial data handling</span></span>
-<span><span class="co">#&gt; terra 1.8.42</span></span></code></pre></div>
-<p>First we buffer 100m around a longitude/latitude coordinate (WGS84
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/brownag/rapr" class="external-link">rapr</a></span><span class="op">)</span>    <span class="co"># access RAP products</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span>   <span class="co"># spatial data handling</span></span></code></pre></div>
+<pre><code><span><span class="co">## terra 1.8.42</span></span></code></pre>
+<p>First, we buffer 1000m around a longitude/latitude coordinate (WGS84
 decimal degrees) using the {terra} package.</p>
-<p>You could change the coordinates to where you live or your favorite
-range spot! Change the buffering distance to include larger areas around
-a specified longitude/latitude point.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>Change the buffering distance to include different extents around a
+point.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/buffer.html" class="external-link">buffer</a></span><span class="op">(</span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">-</span><span class="fl">105.97133</span>, y <span class="op">=</span> <span class="fl">32.73437</span><span class="op">)</span>,</span>
 <span>  geom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>,</span>
 <span>  crs <span class="op">=</span> <span class="st">"OGC:CRS84"</span></span>
 <span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
-<p>In this example the target polygon has a significant Urban land
-component associated with the highway and adjacent development. How much
-of the polygon is reflecting inter-annual variation in plant cover?</p>
-<p>There are several housing developments and some areas have been
-cleared for grazing. The natural condition is closed canopy mixed
-oak/conifer woodland.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<p>You can change the coordinates to where you live or your favorite
+range spot!</p>
+<p>We can interactively inspect the area of interest, for example using
+<code><a href="https://rspatial.github.io/terra/reference/plet.html" class="external-link">terra::plet()</a></code> {leaflet} map:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plet.html" class="external-link">plet</a></span><span class="op">(</span><span class="va">p</span>, tiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Esri.WorldImagery"</span>, <span class="st">"OpenTopoMap"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="leaflet html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:672px;height:432.632880098888px;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Esri.WorldImagery",null,"Esri.WorldImagery",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false}]},{"method":"addProviderTiles","args":["OpenTopoMap",null,"OpenTopoMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false}]},{"method":"addPolygons","args":[[[[{"lng":[-105.97133,-105.9696608835917,-105.968032878534,-105.966486082688,-105.9650585920086,-105.9637855616427,-105.9626983397463,-105.9618236954001,-105.9611831596562,-105.9607924959202,-105.9606613126565,-105.9607928278713,-105.9611837910649,-105.9618245644596,-105.962699361387,-105.9637866358594,-105.9650596136493,-105.9664869517475,-105.9680335099427,-105.9696612155429,-105.97133,-105.972998784457,-105.9746264900573,-105.9761730482524,-105.9776003863507,-105.9788733641406,-105.979960638613,-105.9808354355404,-105.9814762089351,-105.9818671721286,-105.9819986873435,-105.9818675040798,-105.9814768403438,-105.9808363045999,-105.9799616602537,-105.9788744383573,-105.9776014079914,-105.976173917312,-105.974627121466,-105.9729991164082,-105.97133],"lat":[32.74338714711428,32.74327612003793,32.74294577346669,32.74240424395897,32.74166486939652,32.74074586020618,32.73966985051108,32.73846334030727,32.7371560424497,32.73578015057594,32.73436954603711,32.73295896339893,32.73158313508336,32.73027593621997,32.72906955075611,32.72799367933631,32.72707480842128,32.72633555859877,32.72579412808523,32.72546384507218,32.7253528398965,32.72546384507218,32.72579412808523,32.72633555859877,32.72707480842128,32.72799367933631,32.72906955075611,32.73027593621997,32.73158313508336,32.73295896339893,32.73436954603711,32.73578015057594,32.7371560424497,32.73846334030727,32.73966985051108,32.74074586020618,32.74166486939652,32.74240424395897,32.74294577346669,32.74327612003793,32.74338714711428]}]]],null,"polygons",{"interactive":true,"className":"","stroke":true,"color":"black","weight":2,"opacity":1,"fill":true,"fillColor":"#CCFF00","fillOpacity":0.2,"smoothFactor":1,"noClip":false},"geom_1",null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["Esri.WorldImagery","OpenTopoMap"],"polygons",{"collapsed":false,"autoZIndex":true,"position":"topright"}]}],"limits":{"lat":[32.7253528398965,32.74338714711428],"lng":[-105.9819986873435,-105.9606613126565]}},"evals":[],"jsHooks":[]}</script><p>Use {rapr} to download the Rangeland Analysis Platform
-“vegetation-biomass” product for 1986 to 2021 using the mapunit polygon
-<code>p</code> to define the target extent.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Esri.WorldImagery",null,"Esri.WorldImagery",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false}]},{"method":"addProviderTiles","args":["OpenTopoMap",null,"OpenTopoMap",{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false}]},{"method":"addPolygons","args":[[[[{"lng":[-105.97133,-105.9696608835917,-105.968032878534,-105.966486082688,-105.9650585920086,-105.9637855616427,-105.9626983397463,-105.9618236954001,-105.9611831596562,-105.9607924959202,-105.9606613126565,-105.9607928278713,-105.9611837910649,-105.9618245644596,-105.962699361387,-105.9637866358594,-105.9650596136493,-105.9664869517475,-105.9680335099427,-105.9696612155429,-105.97133,-105.972998784457,-105.9746264900573,-105.9761730482524,-105.9776003863507,-105.9788733641406,-105.979960638613,-105.9808354355404,-105.9814762089351,-105.9818671721286,-105.9819986873435,-105.9818675040798,-105.9814768403438,-105.9808363045999,-105.9799616602537,-105.9788744383573,-105.9776014079914,-105.976173917312,-105.974627121466,-105.9729991164082,-105.97133],"lat":[32.74338714711428,32.74327612003793,32.74294577346669,32.74240424395897,32.74166486939652,32.74074586020618,32.73966985051108,32.73846334030727,32.7371560424497,32.73578015057594,32.73436954603711,32.73295896339893,32.73158313508336,32.73027593621997,32.72906955075611,32.72799367933631,32.72707480842128,32.72633555859877,32.72579412808523,32.72546384507218,32.7253528398965,32.72546384507218,32.72579412808523,32.72633555859877,32.72707480842128,32.72799367933631,32.72906955075611,32.73027593621997,32.73158313508336,32.73295896339893,32.73436954603711,32.73578015057594,32.7371560424497,32.73846334030727,32.73966985051108,32.74074586020618,32.74166486939652,32.74240424395897,32.74294577346669,32.74327612003793,32.74338714711428]}]]],null,"polygons",{"interactive":true,"className":"","stroke":true,"color":"black","weight":2,"opacity":1,"fill":true,"fillColor":"#CCFF00","fillOpacity":0.2,"smoothFactor":1,"noClip":false},"geom_1",null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]},{"method":"addLayersControl","args":[["Esri.WorldImagery","OpenTopoMap"],"polygons",{"collapsed":false,"autoZIndex":true,"position":"topright"}]}],"limits":{"lat":[32.7253528398965,32.74338714711428],"lng":[-105.9819986873435,-105.9606613126565]}},"evals":[],"jsHooks":[]}</script><p>Then we use {rapr} to download the ‘Rangeland Analysis Platform’
+“vegetation-biomass” product for 1986 to 2024 using the polygon
+<code>p</code> to define the area of interest.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_rap.html">get_rap</a></span><span class="op">(</span></span>
 <span>  <span class="va">p</span>,</span>
 <span>  product <span class="op">=</span> <span class="st">"vegetation-biomass"</span>,</span>
 <span>  years <span class="op">=</span> <span class="fl">1986</span><span class="op">:</span><span class="fl">2024</span>,</span>
 <span>  progress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Let’s look at the first layer:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>Once that’s done, let’s look at the first layer:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rap</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, main <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">rap</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p><img src="demo_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 <div class="section level2">
 <h2 id="animated-plots">Animated Plots<a class="anchor" aria-label="anchor" href="#animated-plots"></a>
 </h2>
 <p>Now we will select just the
-<code>"annual forb and grass biomass"</code> layers, iterate over them
-and plot symbolizing with a common range <code>[0,500]</code> pounds per
-acre.</p>
-<p>Using the {gifski} package <code><a href="https://r-rust.r-universe.dev/gifski/reference/gifski.html" class="external-link">save_gif()</a></code> function we can
-easily create an animated graphic of the RAP predictions.</p>
-<p>We write this iteration into a function called
-<code>makeplot()</code> and use {gifski} to render an animated GIF file
-from the R plot graphics output in each year for a total of 36
-layers.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code>"annual forb and grass biomass"</code> layers, iterate over them,
+and plot. We are symbolizing with a common range of <code>[0,500]</code>
+pounds per acre so the color scheme is consistent from year to year. We
+write this iteration into a function called <code>makeplot()</code> and
+use {gifski} to render an animated GIF file from the R plot graphics
+output in each year for a total of 39 layers.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">makeplot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grep</a></span><span class="op">(</span><span class="st">"annual_forb_and_grass_biomass"</span>, <span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">rap</span><span class="op">)</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">rap</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, </span>
@@ -129,13 +123,15 @@ layers.</p>
 <span>    <span class="fu">terra</span><span class="fu">::</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span>, type <span class="op">=</span><span class="st">"continuous"</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="op">}</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-rust.r-universe.dev/gifski" class="external-link">gifski</a></span><span class="op">)</span>  <span class="co"># create GIF from results</span></span>
-<span></span>
+<p>Using the {gifski} package <code><a href="https://r-rust.r-universe.dev/gifski/reference/gifski.html" class="external-link">save_gif()</a></code> function we can
+easily create an animated graphic of the RAP predictions:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-rust.r-universe.dev/gifski" class="external-link">gifski</a></span><span class="op">)</span> </span>
 <span><span class="fu">gifski</span><span class="fu">::</span><span class="fu"><a href="https://r-rust.r-universe.dev/gifski/reference/gifski.html" class="external-link">save_gif</a></span><span class="op">(</span><span class="fu">makeplot</span><span class="op">(</span><span class="op">)</span>, </span>
 <span>                 gif_file <span class="op">=</span> <span class="st">"annual_forb_and_grass_biomass.gif"</span>, </span>
-<span>                 delay <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "annual_forb_and_grass_biomass.gif"</span></span></code></pre></div>
+<span>                 delay <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "annual_forb_and_grass_biomass.gif"</span></span></code></pre>
+<p><img src="annual_forb_and_grass_biomass.gif"></p>
 </div>
   </main>
 </div>
