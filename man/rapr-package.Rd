@@ -6,7 +6,7 @@
 \alias{rapr-package}
 \title{rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products}
 \description{
-Provides access to Rangeland Analysis Platform (RAP) products \url{https://rangelands.app/products} for arbitrary extents via GDAL virtual file system.
+Provides access to 'Rangeland Analysis Platform' (RAP) products \url{https://rangelands.app/products} for arbitrary extents via 'GDAL' virtual file system.
 }
 \seealso{
 Useful links:
@@ -15,6 +15,15 @@ Useful links:
   \item \url{https://humus.rocks/rapr}
   \item \url{http://humus.rocks/rapr/}
   \item Report bugs at \url{https://github.com/brownag/rapr/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Andrew Brown \email{andrew.g.brown@usda.gov} (\href{https://orcid.org/0000-0002-4565-533X}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Georgia Harrison (\href{https://orcid.org/0000-0003-0544-4471}{ORCID}) [contributor]
 }
 
 }

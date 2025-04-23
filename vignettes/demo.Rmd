@@ -1,28 +1,31 @@
 ---
 title: "Accessing Rangeland Analysis Platform (RAP) Gridded Products with R"
-
-output: rmarkdown::html_vignette
+knit: litedown:::knit
 vignette: >
   %\VignetteIndexEntry{Accessing Rangeland Analysis Platform (RAP) Gridded Products with R}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{litedown::vignette}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(
+EVAL <- as.logical(Sys.getenv("R_RAPR_EXTENDED_EXAMPLES", unset=FALSE))
+litedown::reactor(
+  eval = EVAL,
   collapse = TRUE,
-  comment = "#>"
+  fig.width = 6,
+  fig.align = 'center'
 )
 ```
 
 ```{r setup}
-library(rapr)
+library(rapr)    # access RAP products
 library(terra)   # spatial data handling
 ```
 
-First we buffer 100m around a longitude/latitude coordinate (WGS84 decimal degrees) using the {terra} package.
+First, we buffer 1000m around a longitude/latitude coordinate (WGS84 decimal
+degrees) using the {terra} package.
 
-You could change the coordinates to where you live or your favorite range spot! Change the buffering distance to include larger areas around a specified longitude/latitude point.
+Change the buffering distance to include different extents around a point.
 
 ```{r} 
 p <- buffer(terra::vect(
@@ -32,15 +35,18 @@ p <- buffer(terra::vect(
 ), width = 1000)
 ```
 
-In this example the target polygon has a significant Urban land component associated with the highway and adjacent development. How much of the polygon is reflecting inter-annual variation in plant cover? 
+You can change the coordinates to where you live or your favorite range spot!
 
-There are several housing developments and some areas have been cleared for grazing. The natural condition is closed canopy mixed oak/conifer woodland.
+We can interactively inspect the area of interest, for example using
+`terra::plet()` {leaflet} map:
 
 ```{r, fig.width = 7}
 terra::plet(p, tiles = c("Esri.WorldImagery", "OpenTopoMap"))
 ```
 
-Use {rapr} to download the Rangeland Analysis Platform "vegetation-biomass" product for 1986 to 2021 using the mapunit polygon `p` to define the target extent.
+Then we use {rapr} to download the 'Rangeland Analysis Platform'
+"vegetation-biomass" product for 1986 to 2024 using the polygon `p` to
+define the area of interest.
 
 ```{r}
 rap <- get_rap(
@@ -51,7 +57,7 @@ rap <- get_rap(
 )
 ```
 
-Let's look at the first layer:
+Once that's done, let's look at the first layer:
 
 ```{r}
 plot(rap[[1]], main = names(rap)[1])
@@ -59,11 +65,12 @@ plot(rap[[1]], main = names(rap)[1])
 
 ## Animated Plots
 
-Now we will select just the `"annual forb and grass biomass"` layers, iterate over them and plot symbolizing with a common range `[0,500]` pounds per acre.
-
-Using the {gifski} package `save_gif()` function we can easily create an animated graphic of the RAP predictions. 
-
-We write this iteration into a function called `makeplot()` and use {gifski} to render an animated GIF file from the R plot graphics output in each year for a total of 36 layers.
+Now we will select just the `"annual forb and grass biomass"` layers, iterate
+over them, and plot. We are symbolizing with a common range of `[0,500]` pounds
+per acre so the color scheme is consistent from year to year.
+We write this iteration into a function called `makeplot()` and use {gifski} to
+render an animated GIF file from the R plot graphics output in each year for a
+total of 39 layers.
 
 ```{r}
 makeplot <- function() {
@@ -77,10 +84,17 @@ makeplot <- function() {
 }
 ```
 
-```{r, eval=as.logical(Sys.getenv("R_RAPR_EXTENDED_EXAMPLES", unset=FALSE))}
-library(gifski)  # create GIF from results
+Using the {gifski} package `save_gif()` function we can easily create an animated graphic of the RAP predictions:
 
+```{r, eval=(EVAL && requireNamespace("gifski", quietly=FALSE))}
+library(gifski) 
 gifski::save_gif(makeplot(), 
                  gif_file = "annual_forb_and_grass_biomass.gif", 
                  delay = 0.5)
+```
+
+```{r, echo=FALSE, results='asis'}
+if (file.exists("annual_forb_and_grass_biomass.gif")) {
+  cat("![](annual_forb_and_grass_biomass.gif)")
+}
 ```
