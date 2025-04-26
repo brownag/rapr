@@ -10,30 +10,42 @@ get_rap(
   filename = NULL,
   product = c("vegetation-biomass", "vegetation-cover"),
   version = "v3",
+  sources = "rap-30m",
   progress = NULL
 )
 }
 \arguments{
-\item{x}{Target extent. Derived from an sf, terra, raster or sp object or numeric vector containing xmin, ymax, xmax, ymin in WGS84 longitude/latitude decimal degrees (EPSG:4326).}
+\item{x}{Target extent. Derived from an sf, terra, raster or sp object or
+numeric vector containing xmin, ymax, xmax, ymin in WGS84
+longitude/latitude decimal degrees (EPSG:4326).}
 
 \item{years}{integer. Year(s) to query}
 
-\item{filename}{Output filename (optional; default stores in temporary files, see \code{terra::sources()})}
+\item{filename}{Output filename (optional; default stores in temporary files,
+see \code{terra::sources()})}
 
-\item{product}{Target data: \code{"vegetation-biomass"} and/or \code{"vegetation-cover"}}
+\item{product}{Target data: \code{"vegetation-biomass"} and/or
+\code{"vegetation-cover"}}
 
 \item{version}{Target version: \code{"v3"} and/or \code{"v2"}}
 
-\item{progress}{logical. Show progress bar? Default: missing (\code{NULL}) will use progress bar when three or more layers are requested.}
+\item{sources}{Grid sources. Options include "rap-30m" (default; Landsat) and
+"rap-10m" (Sentinel 2).}
+
+\item{progress}{logical. Show progress bar? Default: missing (\code{NULL}) will
+use progress bar when three or more layers are requested.}
 }
 \value{
-a SpatRaster containing the requested vegetation-biomass and/or vegetation-cover layers by year. Native cell resolution is ~30m x 30m in WGS84 decimal degrees.
+a SpatRaster containing the requested vegetation-biomass and/or
+vegetation-cover layers by year. Native cell resolution is ~30m x 30m in
+WGS84 decimal degrees.
 }
 \description{
 Get Rangeland Analysis Platform (RAP) Grids
 }
 \details{
-You can query annual biomass and cover (versions 2 and 3) from 1986 to present
+You can query annual biomass and cover (versions 2 and 3) from 1986
+to present
 \itemize{
 \item \code{product = "vegetation-biomass"} returns two layers per year:
 \itemize{
@@ -45,11 +57,20 @@ You can query annual biomass and cover (versions 2 and 3) from 1986 to present
 }
 }
 
-When a \code{filename} argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with \verb{unlink(terra::sources(<SpatRaster))}.
+When a \code{filename} argument is not specified, unique temporary files will be
+generated. The resulting SpatRaster object will retain reference to these
+files, and you can remove them manually with
+\verb{unlink(terra::sources(<SpatRaster))}.
 
-When a \code{filename} \emph{is} specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.
+When a \code{filename} \emph{is} specified, temporary files will be removed after the
+result (often a multi- year/layer/product) SpatRaster is written to new
+file.
 
-In lieu of a spatial object from \{terra\}, \{raster\}, \{sf\} or \{sp\}  packages you may specify a bounding box using a numeric vector containing \code{xmin}, \code{ymax}, \code{xmax}, \code{ymin} in WGS84 longitude/latitude decimal degrees (corresponding to order used in \code{gdal_translate} \code{-projwin} option). e.g. \code{get_rap(x = c(-120, 37, -119.99, 36.99), ...)}.
+In lieu of a spatial object from \{terra\}, \{raster\}, \{sf\} or \{sp\}
+packages you may specify a bounding box using a numeric vector containing
+\code{xmin}, \code{ymax}, \code{xmax}, \code{ymin} in WGS84 longitude/latitude decimal degrees
+(corresponding to order used in \code{gdal_translate} \code{-projwin} option). e.g.
+\code{get_rap(x = c(-120, 37, -119.99, 36.99), ...)}.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{(1: xmin, 2: ymax)--------------------------|
         |                                   |

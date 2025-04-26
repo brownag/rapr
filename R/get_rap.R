@@ -1,12 +1,20 @@
 #' Get Rangeland Analysis Platform (RAP) Grids
 #'
-#' @param x Target extent. Derived from an sf, terra, raster or sp object or numeric vector containing xmin, ymax, xmax, ymin in WGS84 longitude/latitude decimal degrees (EPSG:4326).
+#' @param x Target extent. Derived from an sf, terra, raster or sp object or
+#'   numeric vector containing xmin, ymax, xmax, ymin in WGS84
+#'   longitude/latitude decimal degrees (EPSG:4326).
 #' @param years integer. Year(s) to query
-#' @param product Target data: `"vegetation-biomass"` and/or `"vegetation-cover"`
+#' @param product Target data: `"vegetation-biomass"` and/or
+#'   `"vegetation-cover"`
 #' @param version Target version: `"v3"` and/or `"v2"`
-#' @param filename Output filename (optional; default stores in temporary files, see `terra::sources()`)
-#' @param progress logical. Show progress bar? Default: missing (`NULL`) will use progress bar when three or more layers are requested.
-#' @details You can query annual biomass and cover (versions 2 and 3) from 1986 to present
+#' @param sources Grid sources. Options include "rap-30m" (default; Landsat) and
+#'   "rap-10m" (Sentinel 2).
+#' @param filename Output filename (optional; default stores in temporary files,
+#'   see `terra::sources()`)
+#' @param progress logical. Show progress bar? Default: missing (`NULL`) will
+#'   use progress bar when three or more layers are requested.
+#' @details You can query annual biomass and cover (versions 2 and 3) from 1986
+#'   to present
 #'
 #'   - `product = "vegetation-biomass"` returns two layers per year:
 #'     - `"annual forb and grass"`, `"perennial forb and grass"` (**lbs / acre**)
@@ -14,11 +22,20 @@
 #'   - `product = "vegetation-cover"` returns six layers per year:
 #'     - `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
 #'
-#' When a `filename` argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with `unlink(terra::sources(<SpatRaster))`.
+#'   When a `filename` argument is not specified, unique temporary files will be
+#'   generated. The resulting SpatRaster object will retain reference to these
+#'   files, and you can remove them manually with
+#'   `unlink(terra::sources(<SpatRaster))`.
 #'
-#' When a `filename` _is_ specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.
+#'   When a `filename` _is_ specified, temporary files will be removed after the
+#'   result (often a multi- year/layer/product) SpatRaster is written to new
+#'   file.
 #'
-#' In lieu of a spatial object from \{terra\}, \{raster\}, \{sf\} or \{sp\}  packages you may specify a bounding box using a numeric vector containing `xmin`, `ymax`, `xmax`, `ymin` in WGS84 longitude/latitude decimal degrees (corresponding to order used in `gdal_translate` `-projwin` option). e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
+#'   In lieu of a spatial object from \{terra\}, \{raster\}, \{sf\} or \{sp\}
+#'   packages you may specify a bounding box using a numeric vector containing
+#'   `xmin`, `ymax`, `xmax`, `ymin` in WGS84 longitude/latitude decimal degrees
+#'   (corresponding to order used in `gdal_translate` `-projwin` option). e.g.
+#'   `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
 #'
 #' ```
 #' (1: xmin, 2: ymax)--------------------------|
@@ -28,7 +45,9 @@
 #'         |                                   |
 #'         |---------------------------(3: xmax, 4: ymin)
 #' ```
-#' @return a SpatRaster containing the requested vegetation-biomass and/or vegetation-cover layers by year. Native cell resolution is ~30m x 30m in WGS84 decimal degrees.
+#' @return a SpatRaster containing the requested vegetation-biomass and/or
+#'   vegetation-cover layers by year. Native cell resolution is ~30m x 30m in
+#'   WGS84 decimal degrees.
 #' @importFrom terra rast writeRaster sources
 #' @importFrom sf st_bbox st_transform st_crs st_as_sf st_as_sfc
 #' @importFrom utils txtProgressBar setTxtProgressBar
@@ -38,31 +57,29 @@ get_rap <- function(x,
                     filename = NULL,
                     product = c("vegetation-biomass", "vegetation-cover"),
                     version = "v3",
+                    sources = "rap-30m",
                     progress = NULL) {
 
-  version <- match.arg(version, choices = c("v3", "v2"), several.ok = TRUE)
-  product <- match.arg(product, choices = c("vegetation-biomass", "vegetation-cover"), several.ok = TRUE)
+  sources <- match.arg(tolower(sources), choices = c("rap-30m", "rap-10m"))
+  if (sources == "rap-10m") {
+    stop("rap-10m data source is not yet implemented", call. = FALSE)
+  }
+  version <- match.arg(tolower(version), choices = c("v3", "v2"), several.ok = TRUE)
+  product <- match.arg(tolower(product), choices = c("vegetation-biomass", "vegetation-cover"), several.ok = TRUE)
 
-  if (inherits(x, 'Spatial')){
+  if (inherits(x, 'Spatial')) {
     x <- sf::st_as_sf(x)
   }
 
-  if (!is.numeric(x) &&
-      (inherits(x, 'sf') ||
-       inherits(x, 'sfc') ||
-       inherits(x, 'wk_rcrd') ||
-       inherits(x, 'SpatRaster') ||
-       inherits(x, 'SpatVector') ||
-       inherits(x, 'RasterLayer') ||
-       inherits(x, 'RasterStack') ||
-       inherits(x, 'RasterBrick') )) {
-
+  # TODO: handle raster inputs as a grid template, not just an extent
+  if (!is.numeric(x) && inherits(x, c('sf', 'sfc', 'wk_rcrd','SpatVector', 
+                                      'SpatRaster', 'RasterLayer',
+                                      'RasterStack', 'RasterBrick'))) {
     if (requireNamespace("sf")) {
       x <- as.numeric(sf::st_bbox(sf::st_transform(sf::st_as_sf(
           data.frame(geometry = sf::st_as_sfc(sf::st_bbox(x)))
         ), crs = 'EPSG:4326')))[c(1, 4, 3, 2)]
     }
-
   }
 
   mat <- expand.grid(year = years,
