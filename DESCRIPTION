@@ -1,7 +1,7 @@
 Package: rapr
 Type: Package
 Title: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products
-Version: 0.1.3
+Version: 0.1.3.9001
 Authors@R: c(person(given="Andrew", family="Brown", role = c("aut", "cre"), email = "andrew.g.brown@usda.gov", comment = c(ORCID="0000-0002-4565-533X")),
              person(given="Georgia", family="Harrison", role = c("ctb"), comment = c(ORCID="0000-0003-0544-4471")))
 Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
@@ -16,7 +16,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
     sf,
-    wk,
     terra
 Suggests: 
     httr,

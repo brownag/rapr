@@ -5,12 +5,19 @@
 #'   longitude/latitude decimal degrees (EPSG:4326).
 #' @param years integer. Year(s) to query
 #' @param product Target data: `"vegetation-biomass"` and/or
-#'   `"vegetation-cover"`
-#' @param version Target version: `"v3"` and/or `"v2"`
-#' @param sources Grid sources. Options include "rap-30m" (default; Landsat) and
-#'   "rap-10m" (Sentinel 2).
+#'   `"vegetation-cover"` (for `"rap-30m"`) and `"pft"` (plant functional type
+#'   cover), `"gap"` (canopy gap), `"arte"` (Artemisia spp. cover), `"iag"`
+#'   (invasive annual grass cover), `"pj"` (pinyon juniper cover))
 #' @param filename Output filename (optional; default stores in temporary files,
 #'   see `terra::sources()`)
+#' @param ... Additional arguments passed to internal RAP query function and
+#'   `[terra::writeRaster()]`
+#' @param source Grid sources. Options include `"rap-30m"` (default; Landsat)
+#'   and `"rap-10m"` (Sentinel 2).
+#' @param version Target version: `"v3"` and/or `"v2"` (for `"rap-30m`). Ignored
+#'   for `"rap-10m"`.
+#' @param legacy _logical_. Use legacy (gdal_translate) method? Default: `TRUE`
+#'   (applies only to `source="rap-30m"`).
 #' @param progress logical. Show progress bar? Default: missing (`NULL`) will
 #'   use progress bar when three or more layers are requested.
 #' @details You can query annual biomass and cover (versions 2 and 3) from 1986
@@ -45,125 +52,54 @@
 #'         |                                   |
 #'         |---------------------------(3: xmax, 4: ymin)
 #' ```
-#' @return a SpatRaster containing the requested vegetation-biomass and/or
-#'   vegetation-cover layers by year. Native cell resolution is ~30m x 30m in
-#'   WGS84 decimal degrees.
-#' @importFrom terra rast writeRaster sources
-#' @importFrom sf st_bbox st_transform st_crs st_as_sf st_as_sfc
-#' @importFrom utils txtProgressBar setTxtProgressBar
+#' @return a SpatRaster containing the requested product layers by year.
+#'   Native cell resolution of `"rap-30m"` is ~30m x 30m in WGS84 geographic coordinate system.
+#'   Native cell resolution of `"rap-10m"` is 10m x 10m in WGS84 Universal Transverse Mercator (UTM) zone.
+
 #' @export
 get_rap <- function(x,
-                    years = c(1986, 1996, 2006, 2016),
+                    years,
+                    product,
                     filename = NULL,
-                    product = c("vegetation-biomass", "vegetation-cover"),
+                    ...,
+                    source = "rap-30m",
                     version = "v3",
-                    sources = "rap-30m",
+                    legacy = TRUE,
                     progress = NULL) {
 
-  sources <- match.arg(tolower(sources), choices = c("rap-30m", "rap-10m"))
-  if (sources == "rap-10m") {
-    stop("rap-10m data source is not yet implemented", call. = FALSE)
-  }
-  version <- match.arg(tolower(version), choices = c("v3", "v2"), several.ok = TRUE)
-  product <- match.arg(tolower(product), choices = c("vegetation-biomass", "vegetation-cover"), several.ok = TRUE)
-
-  if (inherits(x, 'Spatial')) {
-    x <- sf::st_as_sf(x)
-  }
-
-  # TODO: handle raster inputs as a grid template, not just an extent
-  if (!is.numeric(x) && inherits(x, c('sf', 'sfc', 'wk_rcrd','SpatVector', 
-                                      'SpatRaster', 'RasterLayer',
-                                      'RasterStack', 'RasterBrick'))) {
-    if (requireNamespace("sf")) {
-      x <- as.numeric(sf::st_bbox(sf::st_transform(sf::st_as_sf(
-          data.frame(geometry = sf::st_as_sfc(sf::st_bbox(x)))
-        ), crs = 'EPSG:4326')))[c(1, 4, 3, 2)]
-    }
-  }
-
-  mat <- expand.grid(year = years,
-                     product = product,
-                     version = version)
-
-  if (missing(progress) || is.null(progress)) {
-    if (nrow(mat) > 2) {
-      progress <- TRUE
-    } else progress <- FALSE
-  }
-
-  if (progress) {
-    pb <- utils::txtProgressBar(style = 3)
-  }
-
-  res <- terra::rast(lapply(1:nrow(mat), function (i){
-    if (progress) {
-      utils::setTxtProgressBar(pb, value = i / nrow(mat))
-    }
-    .get_rap_year(
-      x       = x,
-      year    = mat[i, ]$year,
-      product = mat[i, ]$product,
-      version = mat[i, ]$version
+  source <- match.arg(tolower(source), choices = c("rap-30m", "rap-10m"))
+  
+  if (source == "rap-10m") {
+    # RAP 10m through new interface
+    
+    # version currently ignored for RAP 10m data
+    product <- match.arg(tolower(product), choices = c("pft", "gap", "arte", "iag", "pj"), several.ok = TRUE)
+    
+    # TODO: implement progress bar? verbose argument is similar but provides more info
+    .get_rap_internal(
+      x, 
+      years = years, 
+      product = product, 
+      filename = filename, 
+      ...
     )
-    }))
-
-  if (progress) {
-    close(pb)
+  } else if (source == "rap-30m" && isTRUE(legacy)) {
+    # RAP 30m through old interface
+    version <- match.arg(tolower(version), choices = c("v3", "v2"), several.ok = TRUE)
+    
+    product <- match.arg(tolower(product), choices = c("vegetation-biomass", "vegetation-cover"), several.ok = TRUE)
+    
+    .get_rap_30m_legacy(
+      x,
+      years = years,
+      product = product,
+      filename = filename,
+      version = version,
+      progress = progress
+    )
+  } else {
+    # RAP 30m through new interface
+    stop("RAP 30m data can only be accessed through the legacy interface at this time. Please set `legacy=TRUE`", call. = FALSE)
   }
-
-  if (!missing(filename) && length(filename) > 0) {
-
-    if (!dir.exists(dirname(filename))) {
-      dir.create(dirname(filename), showWarnings = FALSE, recursive = TRUE)
-    }
-
-    terra::writeRaster(res, filename = filename)
-    unlink(terra::sources(res))
-    res <- terra::rast(filename)
-  }
-
-  res
-}
-
-#' gdal_utils options
-#'
-#' @param x named list of GDAL options with format `list("-flag" = "value")`
-#' @return character vector of option flags and values
-#' @keywords internal
-#' @noRd
-.gdal_utils_opts <- function(x) {
-  do.call('c', lapply(names(x), function(y) c(y, x[[y]])))
-}
-
-#' @importFrom sf gdal_utils
-#' @importFrom terra rast
-.get_rap_year <- function(x, year, product, version,
-                          filename = tempfile(pattern = paste0(year, product, version, sep = "_"),
-                                              fileext = '.tif')) {
-
-  uri <- sprintf("/vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-%s/%s/%s-%s-%s.tif",
-                 product, version, product, version, year)
-  # print(uri)
-
-  sf::gdal_utils("translate",
-                 source  = uri,
-                 options = .gdal_utils_opts(list(
-                   "-co" = "compress=lzw",
-                   "-co" = "tiled=yes",
-                   "-co" = "bigtiff=yes",
-                   "-projwin" = x
-                 )),
-                 destination = filename)
-
-  r <- terra::rast(filename)
-
-  band_names <- switch(as.character(product),
-                       "vegetation-biomass" = c("annual forb and grass", "perennial forb and grass"),
-                       "vegetation-cover"   = c("annual forb and grass", "bare ground", "litter",
-                                                "perennial forb and grass", "shrub", "tree"))
-  names(r) <- paste(gsub(" ", "_", band_names),
-                    sub("vegetation-", "", product),
-                    year, version, sep = "_")
-  r
+  
 }

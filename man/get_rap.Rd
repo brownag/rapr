@@ -6,11 +6,13 @@
 \usage{
 get_rap(
   x,
-  years = c(1986, 1996, 2006, 2016),
+  years,
+  product,
   filename = NULL,
-  product = c("vegetation-biomass", "vegetation-cover"),
+  ...,
+  source = "rap-30m",
   version = "v3",
-  sources = "rap-30m",
+  legacy = TRUE,
   progress = NULL
 )
 }
@@ -21,24 +23,33 @@ longitude/latitude decimal degrees (EPSG:4326).}
 
 \item{years}{integer. Year(s) to query}
 
+\item{product}{Target data: \code{"vegetation-biomass"} and/or
+\code{"vegetation-cover"} (for \code{"rap-30m"}) and \code{"pft"} (plant functional type
+cover), \code{"gap"} (canopy gap), \code{"arte"} (Artemisia spp. cover), \code{"iag"}
+(invasive annual grass cover), \code{"pj"} (pinyon juniper cover))}
+
 \item{filename}{Output filename (optional; default stores in temporary files,
 see \code{terra::sources()})}
 
-\item{product}{Target data: \code{"vegetation-biomass"} and/or
-\code{"vegetation-cover"}}
+\item{...}{Additional arguments passed to internal RAP query function and
+\verb{[terra::writeRaster()]}}
 
-\item{version}{Target version: \code{"v3"} and/or \code{"v2"}}
+\item{source}{Grid sources. Options include \code{"rap-30m"} (default; Landsat)
+and \code{"rap-10m"} (Sentinel 2).}
 
-\item{sources}{Grid sources. Options include "rap-30m" (default; Landsat) and
-"rap-10m" (Sentinel 2).}
+\item{version}{Target version: \code{"v3"} and/or \code{"v2"} (for \verb{"rap-30m}). Ignored
+for \code{"rap-10m"}.}
+
+\item{legacy}{\emph{logical}. Use legacy (gdal_translate) method? Default: \code{TRUE}
+(applies only to \code{source="rap-30m"}).}
 
 \item{progress}{logical. Show progress bar? Default: missing (\code{NULL}) will
 use progress bar when three or more layers are requested.}
 }
 \value{
-a SpatRaster containing the requested vegetation-biomass and/or
-vegetation-cover layers by year. Native cell resolution is ~30m x 30m in
-WGS84 decimal degrees.
+a SpatRaster containing the requested product layers by year.
+Native cell resolution of \code{"rap-30m"} is ~30m x 30m in WGS84 geographic coordinate system.
+Native cell resolution of \code{"rap-10m"} is 10m x 10m in WGS84 Universal Transverse Mercator (UTM) zone.
 }
 \description{
 Get Rangeland Analysis Platform (RAP) Grids
