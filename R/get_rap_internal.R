@@ -16,42 +16,49 @@
                               mask = TRUE,
                               verbose = TRUE,
                               base_url = "http://rangeland.ntsg.umt.edu/data/rangeland-s2/") {
-  
-  current_year <- as.integer(format(Sys.Date(), "%Y"))
-  valid_years <- 2018:(current_year - 1)
+
+  valid_years <- 2018:(as.integer(format(Sys.Date(), "%Y")) - 1)
   valid_groups <- c("pft", "gap", "arte", "iag", "pj")
 
   if (any(!years %in% valid_years)) {
-    stop("Invalid years provided. Acceptable years are from 2018 to ", current_year - 1)
+    stop("Invalid years provided. Acceptable years are from 2018 to ",
+         current_year - 1)
   }
 
   if (any(!product %in% valid_groups)) {
-    stop("Invalid groups provided. Acceptable groups are: ", paste(valid_groups, collapse = ", "))
+    stop(
+      "Invalid groups provided. Acceptable groups are: ",
+      paste(valid_groups, collapse = ", ")
+    )
   }
 
   if (inherits(x, "sf")) {
     x <- terra::vect(x)
-  } 
-  
-  if (inherits(x, c('RasterLayer', 'RasterBrick', 'RasterStack'))) {
+  } else if (inherits(x, c('RasterLayer', 'RasterBrick', 'RasterStack'))) {
     x <- terra::rast(x)
   }
-  
+
   if (inherits(x, 'SpatRaster') && is.null(template)) {
     template <- terra::rast(x)
   }
-  
-  x <- terra::as.polygons(x, ext = TRUE)
+
+  if (is.numeric(x)) {
+    x <- terra::as.polygons(terra::ext(x[1], x[3], x[4], x[2]), crs = "EPSG:4326")
+  } else {
+    x <- terra::as.polygons(x, ext = TRUE)
+  }
+
   zones <- get_utm_zones(x)
-  
+
   # default grid system for CONUS Albers Equal Area
   # extent limits rounded to units of 5/10/30
+  # TODO: helper function for selecting reasonable grid systems
   default_grid <- terra::rast(
     res = 10,
     crs =  "EPSG:5070",
     extent = terra::ext(-2356155, 2263815, 270015, 3172635)
   )
-  
+
   if (isTRUE(template)) {
     .grid <- default_grid
   } else if (is.null(template) || isFALSE(template)) {
@@ -73,20 +80,20 @@
     }
     .grid <- template
   }
-  
+
   all_tiles_df <- fetch_tiles_metadata(paste0(base_url, product[1], "/"), years)
-  
+
   # Step 5: Build tile bounding boxes (75x75km with 250m overlap)
   tile_size <- 75000
   tile_overlap <- 250
-  
+
   tiles_grid <- terra::vect(lapply(zones, function(utm) {
     tf <- subset(all_tiles_df, all_tiles_df$utm_zone == utm)
     tf$xmin <- tf$lower_left_x - tile_overlap
     tf$ymin <- tf$lower_left_y - tile_overlap
     tf$xmax <- tf$lower_left_x + tile_size + tile_overlap
     tf$ymax <- tf$lower_left_y + tile_size + tile_overlap
-    
+
     xm <- apply(tf[c("xmin", "xmax", "ymin", "ymax")], MARGIN = 1, function(x) {
       terra::as.polygons(terra::ext(x), crs = paste0("EPSG:326", utm))
     })
@@ -95,7 +102,7 @@
   }))
 
   x <- terra::project(x, terra::crs(tiles_grid))
-  
+
   overlapping_tiles <- terra::intersect(tiles_grid, x)
   overlapping_tiles$tile_x = as.integer(gsub(
     ".*(\\d{6})-\\d{7}\\.tif",
@@ -107,23 +114,23 @@
     "\\1",
     overlapping_tiles$file_name
   ))
-  
+
   lgrd <- vector("list", length(product))
   for (i in seq_along(product)) {
     lgrd[[i]] <- overlapping_tiles
-    lgrd[[i]]$group <- product[i] 
+    lgrd[[i]]$group <- product[i]
   }
   grd <- do.call('rbind', lgrd)
 
   # Step 7: Construct download URLs for each group/tile/year combo
   grd$url <- paste0(
-      base_url,
-      grd$group, "/", grd$group, "-",
-      grd$year, "-",
-      grd$utm_zone, "-",
-      sprintf("%06d", grd$tile_x), "-",
-      sprintf("%07d", grd$tile_y), ".tif"
-    )
+    base_url,
+    grd$group, "/", grd$group, "-",
+    grd$year, "-",
+    grd$utm_zone, "-",
+    sprintf("%06d", grd$tile_x), "-",
+    sprintf("%07d", grd$tile_y), ".tif"
+   )
 
   # Step 8: Download and crop rasters to ROI
   raster_list <- list()
@@ -132,14 +139,14 @@
     if (verbose) {
      message("Processing: ", grd$url[i])
     }
-    
+
     raster_data <- terra::rast(paste0("/vsicurl/", grd$url[i]))
 
     name <- paste0(grd$group[i], "_",
                    grd$year[i], "_",
                    grd$tile_x[i], "_",
                    grd$tile_y[i])
-    
+
     # crop tile to AOI
     raster_crp <- terra::crop(
       raster_data,
@@ -149,8 +156,8 @@
         fileext = ".tif"
       )
     )
-    
-    # for multizone AOI or user-specified grid, project and align to target grid system 
+
+    # for multizone AOI or user-specified grid, project and align to target grid system
     if (length(zones) > 1 || !is.null(template)) {
       raster_prj <- terra::project(
         x = raster_crp,
@@ -182,7 +189,7 @@
   merged_rasters <- list()
   combo_df <- unique(data.frame(group = grd$group, year = grd$year))
   combo_keys <- paste(combo_df$group, combo_df$year, sep = "_")
-  
+
   for (i in seq_len(nrow(combo_df))) {
     key <- combo_keys[i]
     if (verbose) {
@@ -191,7 +198,7 @@
     matched_rasters <- raster_list[grepl(paste0("^", key, "_"), names(raster_list))]
     if (length(matched_rasters) > 1) {
       merged_rasters[[key]] <- terra::merge(terra::sprc(matched_rasters),
-                                            ..., 
+                                            ...,
                                             datatype = datatype,
                                             filename = tempfile(
                                               pattern = paste0("spat_rapr_mrg_", key, "_"),
@@ -200,7 +207,7 @@
     } else {
       merged_rasters[[key]] <- matched_rasters[[1]]
     }
-    
+
     # set time metadata
     # TODO: units
     nband <- terra::nlyr(merged_rasters[[key]])
@@ -209,7 +216,7 @@
   }
 
   res <- terra::rast(terra::sds(merged_rasters))
-  
+
   if (isTRUE(crop)) {
     if (verbose) {
       if (is.null(filename)) {
@@ -233,7 +240,7 @@
     }
     res <- writeRaster(res, filename = filename, datatype = datatype, ...)
   }
-  
+
   res
 }
 
