@@ -1,16 +1,37 @@
 citHeader("To cite rapr in publications use:")
 
-
 citEntry(
   entry    = "Manual",
   title    = "rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products",
-  author   = "Andrew Brown",
+  author   = "Brown, A.",
+  year     = "2025",
   url      = "http://github.com/brownag/rapr",
   textVersion = paste(
-  "Andrew Brown (2022). rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products. R package version 0.1.0. http://github.com/brownag/rapr"
+  "Brown, A. (2025). rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products. R package version 1.0.0. http://github.com/brownag/rapr"
   )
 )
 
+citEntry(
+  entry = "Article",
+  title = "Estimating rangeland fractional cover and canopy gap size class with Sentinel-2 imagery",
+  author = "Allred, B.W., S.E. McCord, T.J. Assal, B.T. Bestelmeyer, C.S. Boyd, A.C. Brooks,
+S.M. Cady, S.D. Fuhlendorf, S.A. Green, G.R. Harrison, E.R. Jensen, E.J.
+Kachergis, C.M. Mattilio, B.A. Mealor, D.E. Naugle, D. O'Leary, P.J. Olsoy, E.S.
+Peirce, J.R. Reinhardt, R.K. Shriver, J.T. Smith, J.D. Tack, A.M. Tanner, E.P.
+Tanner, D. Twidwell, N.P. Webb, Morford, S.L.",
+  journal = "bioRxiv",
+  year = "2025",
+  url = "https://doi.org/10.1101/2025.03.13.643073",
+  textVersion = paste(
+  "Allred, B.W., S.E. McCord, T.J. Assal, B.T. Bestelmeyer, C.S. Boyd, A.C. Brooks,
+S.M. Cady, S.D. Fuhlendorf, S.A. Green, G.R. Harrison, E.R. Jensen, E.J.
+Kachergis, C.M. Mattilio, B.A. Mealor, D.E. Naugle, D. O'Leary, P.J. Olsoy, E.S.
+Peirce, J.R. Reinhardt, R.K. Shriver, J.T. Smith, J.D. Tack, A.M. Tanner, E.P.
+Tanner, D. Twidwell, N.P. Webb, and S.L. Morford. 2025. Estimating rangeland
+fractional cover and canopy gap size class with Sentinel-2 imagery. bioRxiv.
+https://doi.org/10.1101/2025.03.13.643073"
+  )
+)
 
 citEntry(
   entry    = "Article",
@@ -29,26 +50,6 @@ Estimates for the Western United States. Rangeland Ecology & Management
 77:112-117. http://dx.doi.org/10.1016/j.rama.2021.04.003"
   )
 )
-
-
-citEntry(
-  entry    = "Article",
-  title    = "Rangeland productivity partitioned to sub-pixel plant functional
-types.",
-  author   = "Robinson, N. P., M. O. Jones, A. Moreno, T. A. Erickson, D. E. Naugle, and B. W.
-Allred.",
-  journal  = "Remote Sensing",
-  year     = "2019",
-  volume   = "11",
-  number   = "1427",
-  url      = "http://dx.doi.org/10.3390/rs11121427",
-  textVersion = paste(
-"Robinson, N. P., M. O. Jones, A. Moreno, T. A. Erickson, D. E. Naugle, and B. W.
-Allred. 2019. Rangeland productivity partitioned to sub-pixel plant functional
-types. Remote Sensing 11:1427. http://dx.doi.org/10.3390/rs11121427"
-  )
-)
-
 
 citEntry(
   entry    = "Article",
@@ -69,4 +70,22 @@ Starns, D. Twidwell, and D. R. Uden. 2021. Improving Landsat predictions of
 rangeland fractional cover with multitask learning and uncertainty.
 Methods in Ecology and Evolution. http://dx.doi.org/10.1111/2041-210x.13564")
 )
+citEntry(
+  entry    = "Article",
+  title    = "Rangeland productivity partitioned to sub-pixel plant functional
+types.",
+  author   = "Robinson, N. P., M. O. Jones, A. Moreno, T. A. Erickson, D. E. Naugle, and B. W.
+Allred.",
+  journal  = "Remote Sensing",
+  year     = "2019",
+  volume   = "11",
+  number   = "1427",
+  url      = "http://dx.doi.org/10.3390/rs11121427",
+  textVersion = paste(
+"Robinson, N. P., M. O. Jones, A. Moreno, T. A. Erickson, D. E. Naugle, and B. W.
+Allred. 2019. Rangeland productivity partitioned to sub-pixel plant functional
+types. Remote Sensing 11:1427. http://dx.doi.org/10.3390/rs11121427"
+  )
+)
+
 

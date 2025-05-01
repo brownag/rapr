@@ -1,8 +1,8 @@
 ---
-title: "Accessing Rangeland Analysis Platform (RAP) Gridded Products with R"
+title: "Accessing Rangeland Analysis Platform (RAP) Products with R"
 knit: litedown:::knit
 vignette: >
-  %\VignetteIndexEntry{Accessing Rangeland Analysis Platform (RAP) Gridded Products with R}
+  %\VignetteIndexEntry{Accessing Rangeland Analysis Platform (RAP) Products with R}
   %\VignetteEngine{litedown::vignette}
   %\VignetteEncoding{UTF-8}
 ---
