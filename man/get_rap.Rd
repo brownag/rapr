@@ -12,8 +12,8 @@ get_rap(
   ...,
   source = "rap-30m",
   version = "v3",
-  legacy = TRUE,
-  progress = NULL
+  legacy = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -22,8 +22,9 @@ numeric vector containing \code{xmin}, \code{ymax}, \code{xmax}, \code{ymin} in 
 degrees (longitude/latitude, \code{"EPSG:4326"}).}
 
 \item{years}{\emph{integer}. Year(s) to query. Products are available from 1986
-(\code{source="rap-30m"}) or 2018 (\code{source="rap-10m"}) up to the year prior to the current
-year, based on availability of the Landsat and Sentinel 2 source data.}
+(\code{source="rap-30m"}) or 2018 (\code{source="rap-10m"}) up to the year prior to
+the current year, based on availability of the Landsat and Sentinel 2
+source data.}
 
 \item{product}{Target data: \code{"vegetation-biomass"}, \code{"vegetation-cover"},
 and/or \code{"vegetation-npp"} for \code{source="rap-30m"}; \code{"pft"} (plant functional
@@ -46,8 +47,8 @@ Currently ignored for \code{source="rap-10m"}.}
 \item{legacy}{\emph{logical}. Use legacy (gdal_translate) method? Default: \code{TRUE}
 (applies only to \code{source="rap-30m"}).}
 
-\item{progress}{logical. Show progress bar? Default: missing (\code{NULL}) will
-use progress bar when three or more layers are requested.}
+\item{verbose}{logical. Print messages indicating progress? Default: \code{TRUE}. For
+\code{legacy=TRUE} progress is shown using \code{\link[utils:txtProgressBar]{utils::txtProgressBar()}}.}
 }
 \value{
 a \emph{SpatRaster} containing the requested product layers by year.

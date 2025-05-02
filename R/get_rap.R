@@ -13,8 +13,9 @@
 #'   numeric vector containing `xmin`, `ymax`, `xmax`, `ymin` in WGS84 decimal
 #'   degrees (longitude/latitude, `"EPSG:4326"`).
 #' @param years _integer_. Year(s) to query. Products are available from 1986
-#'   (`source="rap-30m"`) or 2018 (`source="rap-10m"`) up to the year prior to the current
-#'   year, based on availability of the Landsat and Sentinel 2 source data.
+#'   (`source="rap-30m"`) or 2018 (`source="rap-10m"`) up to the year prior to
+#'   the current year, based on availability of the Landsat and Sentinel 2
+#'   source data.
 #' @param product Target data: `"vegetation-biomass"`, `"vegetation-cover"`,
 #'   and/or `"vegetation-npp"` for `source="rap-30m"`; `"pft"` (plant functional
 #'   type cover), `"gap"` (canopy gap), `"arte"` (Artemisia spp. cover), `"iag"`
@@ -29,11 +30,11 @@
 #' @param version Target version: `"v3"` and/or `"v2"` (for `"rap-30m`).
 #'   Currently ignored for `source="rap-10m"`.
 #' @param legacy _logical_. Use legacy (gdal_translate) method? Default: `TRUE`
-#'   (applies only to `source="rap-30m"`).
-#' @param progress logical. Show progress bar? Default: missing (`NULL`) will
-#'   use progress bar when three or more layers are requested.
+#' (applies only to `source="rap-30m"`).
+#' @param verbose logical. Print messages indicating progress? Default: `TRUE`. For
+#'   `legacy=TRUE` progress is shown using [utils::txtProgressBar()].
 #' @details
-#'
+#' 
 #' ## Sources, Products, and Band Information
 #'
 #' For `"rap-30m"` you can query several Landsat derived annual biomass,
@@ -100,15 +101,15 @@
 #' ```
 #' ## Native Resolution and Projection Systems
 #'
-#' Native cell resolution of `"rap-30m"` is approximately 30m x 30m in WGS84
-#' geographic coordinate system (longitude, latitude). Native cell resolution of
-#' `"rap-10m"` is 10m x 10m in the local (projected) WGS84 Universal Transverse
-#' Mercator (UTM) system.
+#'   Native cell resolution of `"rap-30m"` is approximately 30m x 30m in WGS84
+#'   geographic coordinate system (longitude, latitude). Native cell resolution of
+#'   `"rap-10m"` is 10m x 10m in the local (projected) WGS84 Universal Transverse
+#'   Mercator (UTM) system.
 #'
-#' For `"rap-10m"` requests spanning _multiple_ UTM zones, either pass a
-#' _SpatRaster_ object as `x` or specify `template` argument. In lieu of a
-#' user-specified grid system for multi-zone requests, a default CONUS Albers
-#' Equal Area projection (`"EPSG:5070"`) with 10 m resolution will be used.
+#'   For `"rap-10m"` requests spanning _multiple_ UTM zones, either pass a
+#'   _SpatRaster_ object as `x` or specify `template` argument. In lieu of a
+#'   user-specified grid system for multi-zone requests, a default CONUS Albers
+#'   Equal Area projection (`"EPSG:5070"`) with 10 m resolution will be used.
 #'
 #' @return a _SpatRaster_ containing the requested product layers by year.
 #'
@@ -123,8 +124,8 @@ get_rap <- function(x,
                     ...,
                     source = "rap-30m",
                     version = "v3",
-                    legacy = TRUE,
-                    progress = NULL) {
+                    legacy = FALSE,
+                    verbose = TRUE) {
 
   source <- match.arg(tolower(source), choices = c("rap-30m", "rap-10m"))
 
@@ -138,34 +139,55 @@ get_rap <- function(x,
            current_year - 1)
     }
 
-    product <- match.arg(tolower(product), choices = c("pft", "gap", "arte", "iag", "pj"), several.ok = TRUE)
-
-    # TODO: implement progress bar? verbose argument is similar but provides more info
+    product <- match.arg(
+      tolower(product),
+      choices = c("pft", "gap", "arte", "iag", "pj"),
+      several.ok = TRUE
+    )
+    
     .get_rap_internal(
       x,
       years = years,
       source = source,
       product = product,
       filename = filename,
-      ...
+      ...,
+      verbose = verbose
     )
-  } else if (source == "rap-30m" && isTRUE(legacy)) {
-    # RAP 30m through old interface
-    version <- match.arg(tolower(version), choices = c("v3", "v2"), several.ok = TRUE)
-
-    product <- match.arg(tolower(product), choices = c("vegetation-biomass", "vegetation-cover", "vegetation-npp"), several.ok = TRUE)
-
-    .get_rap_30m_legacy(
-      x,
-      years = years,
-      product = product,
-      filename = filename,
-      version = version,
-      progress = progress
+  } else if (source == "rap-30m") {
+    version <- match.arg(tolower(version),
+                         choices = c("v3", "v2"),
+                         several.ok = TRUE)
+    
+    product <- match.arg(
+      tolower(product),
+      choices = c("vegetation-biomass", "vegetation-cover", "vegetation-npp"),
+      several.ok = TRUE
     )
-  } else {
-    # RAP 30m through new interface
-    stop("RAP 30m data can only be accessed through the legacy interface at this time. Please set `legacy=TRUE`", call. = FALSE)
+    
+    if (isFALSE(legacy)) {
+      # RAP 30m through new interface
+      .get_rap_internal(
+        x,
+        years = years,
+        source = source,
+        product = product,
+        filename = filename,
+        ...,
+        verbose = verbose
+      )
+    } else if (isTRUE(legacy)) {
+      # RAP 30m through old interface
+      .get_rap_30m_legacy(
+        x,
+        years = years,
+        product = product,
+        filename = filename,
+        version = version,
+        progress = verbose
+      )
+    } else {
+      stop("`legacy` argument must be TRUE or FALSE", call. = FALSE)
+    }
   }
-
 }
