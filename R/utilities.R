@@ -9,7 +9,7 @@
 #' @return _numeric_. Vector of UTM zone numbers.
 #' @keywords internal 
 #' @noRd
-get_utm_zones <- function(x) {
+.get_utm_zones <- function(x) {
   
   if (inherits(x, 'sf')) {
     x <- terra::vect(x)
@@ -26,9 +26,84 @@ get_utm_zones <- function(x) {
   seq(from = min(res), to = max(res))
 }
 
-#' gdal_utils options
+
+#' Get Band Names by Product Name
+#' @param product _character_ one of "vegetation-biomass", "vegetation-cover",
+#'   "vegetation-npp", "pft", "gap", "arte", "iag", "pj"
+#' @return _character_ vector of band names
+#' @keywords internal
+#' @noRd
+.get_band_names <- function(product, replacement = "_") {
+  gsub(" ", replacement, switch(
+    as.character(product),
+    "vegetation-biomass" = c(
+      "annual forb and grass", 
+      "perennial forb and grass"
+    ),
+    "vegetation-cover" = c(
+      "annual forb and grass",
+      "bare ground",
+      "litter",
+      "perennial forb and grass",
+      "shrub",
+      "tree"
+    ),
+    "vegetation-npp" = c(
+      "annual forb and grass",
+      "perennial forb and grass",
+      "shrub",
+      "tree"
+    ),
+    "pft" = c(
+      "annual forb and grass",
+      "bare ground",
+      "litter",
+      "perennial forb and grass",
+      "shrub",
+      "tree"
+    ),
+    "gap" = c(
+      "gaps 25to50 cm",
+      "gaps 51to100 cm",
+      "gaps 100to200 cm",
+      "gaps gt200 cm"
+    ),
+    "arte" = "artemisia spp",
+    "iag" = "invasive annual grasses",
+    "pj" = "pinyon juniper"
+  ))
+}
+
+
+#' Fetch and parse rap-10m tile metadata
+#' 
+#' @param base_url Source URL
+#' @param years Years of interest
 #'
-#' Used in `.get_rap_year_legacy()` `gdal_translate` call``
+#' @return data.frame containing tile file information
+#' @keywords internal
+#' @noRd
+fetch_tiles_metadata <- function(base_url, years) {
+  response <- httr::GET(base_url)
+  content <- strsplit(httr::content(response, "text"), "\n")[[1]]
+  file_names <- gsub(".*>(\\w+-\\d{4}-\\d{2}-\\d{6}-\\d{7}\\.tif)<.*|.*", "\\1", content)
+  m <- regexec("(\\w+)-(\\d{4})-(\\d{2})-(\\d{6})-(\\d{7})\\.tif", file_names)
+  coords <- t(sapply(regmatches(file_names, m), `[`, 2:6))
+  res <- data.frame(
+    file_name = file_names,
+    group = coords[, 1],
+    year = as.numeric(coords[, 2]),
+    utm_zone = as.numeric(coords[, 3]),
+    lower_left_x = as.numeric(coords[, 4]),
+    lower_left_y = as.numeric(coords[, 5]),
+    stringsAsFactors = FALSE
+  )
+  subset(res, res$year %in% years)
+}
+
+#' Format gdal_utils options
+#'
+#' Used in `.get_rap_year_legacy()` `gdal_translate` call
 #' 
 #' @param x named list of GDAL options with format `list("-flag" = "value")`
 #' @return character vector of option flags and values

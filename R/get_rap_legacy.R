@@ -109,11 +109,9 @@
   
   r <- terra::rast(filename)
   
-  band_names <- switch(as.character(product),
-                       "vegetation-biomass" = c("annual forb and grass", "perennial forb and grass"),
-                       "vegetation-cover"   = c("annual forb and grass", "bare ground", "litter",
-                                                "perennial forb and grass", "shrub", "tree"))
-  names(r) <- paste(gsub(" ", "_", band_names),
+  band_names <- .get_band_names(product)
+  
+  names(r) <- paste(band_names,
                     sub("vegetation-", "", product),
                     year, version, sep = "_")
   r

@@ -38,7 +38,7 @@
     x <- terra::as.polygons(x, ext = TRUE)
   }
 
-  zones <- get_utm_zones(x)
+  zones <- .get_utm_zones(x)
 
   # default grid system for CONUS Albers Equal Area
   # extent limits rounded to units of 5/10/30
@@ -229,10 +229,14 @@
         # set time metadata
         # TODO: units
         nband <- terra::nlyr(merged_rasters[[key]])
+        names(merged_rasters[[key]]) <- .get_band_names(combo_df$group[i])
         # terra::longnames(merged_rasters[[key]]) <- paste(rep(combo_df$group[i], nband), names(merged_rasters[[key]]))
         terra::time(merged_rasters[[key]], tstep = "years") <- rep(combo_df$year[i], nband)
       }
   } else {
+    for (i in seq_len(nrow(grd))) {
+      names(raster_list[[i]]) <- .get_band_names(grd$group[i])
+    }
     merged_rasters <- raster_list
   }
 
@@ -265,31 +269,4 @@
   }
 
   res
-}
-
-# Helper function to fetch and parse tile metadata from the server
-fetch_tiles_metadata <- function(base_url, years) {
-  response <- httr::GET(base_url)
-  content <- strsplit(httr::content(response, "text"), "\n")[[1]]
-  file_names <- gsub(".*>(\\w+-\\d{4}-\\d{2}-\\d{6}-\\d{7}\\.tif)<.*|.*", "\\1", content)
-  m <- regexec("(\\w+)-(\\d{4})-(\\d{2})-(\\d{6})-(\\d{7})\\.tif", file_names)
-  coords <- t(sapply(regmatches(file_names, m), `[`, 2:6))
-  res <- data.frame(
-    file_name = file_names,
-    group = coords[, 1],
-    year = as.numeric(coords[, 2]),
-    utm_zone = as.numeric(coords[, 3]),
-    lower_left_x = as.numeric(coords[, 4]),
-    lower_left_y = as.numeric(coords[, 5]),
-    stringsAsFactors = FALSE
-  )
-  subset(res, res$year %in% years)
-}
-
-# Helper function to determine the UTM zone(s) of an ROI
-get_utm_zones <- function(roi) {
-  roi_wgs84 <- terra::project(roi, "EPSG:4326")
-  lon <- terra::crds(roi_wgs84)[, 1]
-  res <- floor((lon + 180) / 6) + 1
-  seq(from = min(res), to = max(res))
 }
