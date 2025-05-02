@@ -140,7 +140,7 @@ get_rap <- function(x,
 
     # version currently ignored for RAP 10m data
     valid_years <- 2018:(as.integer(format(Sys.Date(), "%Y")) - 1)
-    if (any(!years %in% valid_years)) {
+    if (!all(years %in% valid_years)) {
       stop("Invalid years provided. Acceptable years are from 2018 to ",
            current_year - 1)
     }

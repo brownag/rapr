@@ -33,31 +33,31 @@
     x <- sf::st_as_sf(x)
   }
   
-  if (!is.numeric(x) && inherits(x, c('sf', 'sfc', 'wk_rcrd','SpatVector', 
-                                      'SpatRaster', 'RasterLayer',
-                                      'RasterStack', 'RasterBrick'))) {
-    if (requireNamespace("sf")) {
-      x <- as.numeric(sf::st_bbox(sf::st_transform(sf::st_as_sf(
-        data.frame(geometry = sf::st_as_sfc(sf::st_bbox(x)))
-      ), crs = 'EPSG:4326')))[c(1, 4, 3, 2)]
-    }
+  if (!is.numeric(x) 
+      && inherits(x, c('sf', 'sfc', 'wk_rcrd','SpatVector', 
+                       'SpatRaster', 'RasterLayer', 'RasterStack', 'RasterBrick'))
+      && requireNamespace("sf")) {
+    x <- as.numeric(sf::st_bbox(sf::st_transform(sf::st_as_sf(
+      data.frame(geometry = sf::st_as_sfc(sf::st_bbox(x)))
+    ), crs = 'EPSG:4326')))[c(1, 4, 3, 2)]
   }
   
   mat <- expand.grid(year = years,
                      product = product,
                      version = version)
   
-  if (missing(progress) || is.null(progress)) {
-    if (nrow(mat) > 2) {
-      progress <- TRUE
-    } else progress <- FALSE
+  if ((missing(progress) || is.null(progress)) &&
+      nrow(mat) > 2) {
+    progress <- TRUE
+  } else {
+    progress <- FALSE
   }
   
   if (progress) {
     pb <- utils::txtProgressBar(style = 3)
   }
   
-  res <- terra::rast(lapply(1:nrow(mat), function (i){
+  res <- terra::rast(lapply(seq_len(nrow(mat)), function (i){
     if (progress) {
       utils::setTxtProgressBar(pb, value = i / nrow(mat))
     }
@@ -90,7 +90,7 @@
 #' @importFrom sf gdal_utils
 #' @importFrom terra rast
 .get_rap_year_legacy <- function(x, year, product, version,
-                                 filename = tempfile(pattern = paste0(year, product, version, sep = "_"),
+                                 filename = tempfile(pattern = paste(year, product, version, sep = "_"),
                                                      fileext = '.tif')) {
   
   uri <- sprintf("/vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-%s/%s/%s-%s-%s.tif",

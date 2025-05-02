@@ -20,7 +20,7 @@ res <- get_rap(
 
 expect_true(inherits(res, 'SpatRaster'))
 
-expect_equal(terra::nlyr(res), 16)
+expect_equivalent(terra::nlyr(res), 16)
 
 expect_true("perennial_forb_and_grass_biomass_2021_v3" %in% names(res))
 
@@ -39,7 +39,7 @@ expect_true(file.exists(tf))
 
 expect_true(inherits(res, 'SpatRaster'))
 
-expect_equal(terra::nlyr(res), 8)
+expect_equivalent(terra::nlyr(res), 8)
 
 expect_true("perennial_forb_and_grass_biomass_1986_v3" %in% names(res))
 
@@ -58,6 +58,6 @@ res <- get_rap(
 
 expect_true(inherits(res, 'SpatRaster'))
 
-expect_equal(terra::nlyr(res), 8)
+expect_equivalent(terra::nlyr(res), 8)
 
 expect_true("perennial_forb_and_grass_biomass_1986_v3" %in% names(res))

@@ -240,6 +240,7 @@
     merged_rasters <- raster_list
   }
 
+  # TODO: return SpatRasterDataset if multiple products requested?
   res <- terra::rast(terra::sds(merged_rasters))
 
   if (isTRUE(crop)) {
