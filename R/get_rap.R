@@ -132,12 +132,19 @@ get_rap <- function(x,
     # RAP 10m through new interface
 
     # version currently ignored for RAP 10m data
+    valid_years <- 2018:(as.integer(format(Sys.Date(), "%Y")) - 1)
+    if (any(!years %in% valid_years)) {
+      stop("Invalid years provided. Acceptable years are from 2018 to ",
+           current_year - 1)
+    }
+
     product <- match.arg(tolower(product), choices = c("pft", "gap", "arte", "iag", "pj"), several.ok = TRUE)
 
     # TODO: implement progress bar? verbose argument is similar but provides more info
     .get_rap_internal(
       x,
       years = years,
+      source = source,
       product = product,
       filename = filename,
       ...

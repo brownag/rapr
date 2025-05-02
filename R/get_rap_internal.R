@@ -7,6 +7,7 @@
 .get_rap_internal <- function(x,
                               years,
                               product,
+                              source,
                               filename = NULL,
                               template = NULL,
                               method = "bilinear",
@@ -15,22 +16,9 @@
                               crop = TRUE,
                               mask = TRUE,
                               verbose = TRUE,
-                              base_url = "http://rangeland.ntsg.umt.edu/data/rangeland-s2/") {
-
-  valid_years <- 2018:(as.integer(format(Sys.Date(), "%Y")) - 1)
-  valid_groups <- c("pft", "gap", "arte", "iag", "pj")
-
-  if (any(!years %in% valid_years)) {
-    stop("Invalid years provided. Acceptable years are from 2018 to ",
-         current_year - 1)
-  }
-
-  if (any(!product %in% valid_groups)) {
-    stop(
-      "Invalid groups provided. Acceptable groups are: ",
-      paste(valid_groups, collapse = ", ")
-    )
-  }
+                              base_url = ifelse(source == "rap-10m",
+                                                yes = "http://rangeland.ntsg.umt.edu/data/rangeland-s2/",
+                                                no = "http://rangeland.ntsg.umt.edu/data/rap/")) {
 
   if (inherits(x, "sf")) {
     x <- terra::vect(x)
