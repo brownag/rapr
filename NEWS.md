@@ -5,6 +5,7 @@
  - Added `template` argument for setting target grid for projection of result. 
    - Default behavior (`template=NULL`) will return a SpatRaster in the native grid system of requested RAP source.
    - For a large area of interest (that spans multiple UTM zones and `source="rap-10m"`) standard "EPSG:5070" grid system will be used when `template` is not set by the user
+ - Added `vrt` argument. When `vrt=TRUE` the merging/resampling process is bypassed and a GDAL VRT file is generated to reference the source directly.
  - Added `legacy` argument. Default (`legacy=FALSE`) behavior is to use GDAL via terra for all raster and vector data processing. Set `legacy=TRUE` to use sf `gdal_translate` implementation from rapr 0.1.x.
  - **Breaking changes**:
     - Default behavior is to use GDAL via terra for all raster data processing. Set `legacy=TRUE` to use sf `gdal_translate` implementation from rapr 0.1.x.
