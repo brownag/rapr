@@ -12,6 +12,7 @@ get_rap(
   ...,
   source = "rap-30m",
   version = "v3",
+  vrt = FALSE,
   legacy = FALSE,
   verbose = TRUE
 )
@@ -36,7 +37,7 @@ type cover), \code{"gap"} (canopy gap), \code{"arte"} (Artemisia spp. cover), \c
 or in memory, see \code{terra::tmpFiles()})}
 
 \item{...}{Additional arguments passed to internal query function and
-\verb{[terra::writeRaster()]}}
+\code{\link[terra:writeRaster]{terra::writeRaster()}} (or \code{\link[terra:vrt]{terra::vrt()}} when \code{vrt=TRUE})}
 
 \item{source}{Grid sources. Options include \code{"rap-30m"} (default; Landsat)
 and \code{"rap-10m"} (Sentinel 2).}
@@ -44,11 +45,17 @@ and \code{"rap-10m"} (Sentinel 2).}
 \item{version}{Target version: \code{"v3"} and/or \code{"v2"} (for \verb{"rap-30m}).
 Currently ignored for \code{source="rap-10m"}.}
 
+\item{vrt}{\emph{logical}. Short circuit to return Virtual Raster Dataset (VRT)
+for selected grids via \code{\link[terra:vrt]{terra::vrt()}}. Default: \code{FALSE}. Note:
+\code{gdalbuildvrt} does not support heterogeneous projection systems, so this
+option is not compatible with \code{source="rap-10m"} over multiple UTM zone
+areas of interest.}
+
 \item{legacy}{\emph{logical}. Use legacy (gdal_translate) method? Default: \code{TRUE}
 (applies only to \code{source="rap-30m"}).}
 
-\item{verbose}{logical. Print messages indicating progress? Default: \code{TRUE}. For
-\code{legacy=TRUE} progress is shown using \code{\link[utils:txtProgressBar]{utils::txtProgressBar()}}.}
+\item{verbose}{logical. Print messages indicating progress? Default: \code{TRUE}.
+For \code{legacy=TRUE} progress is shown using \code{\link[utils:txtProgressBar]{utils::txtProgressBar()}}.}
 }
 \value{
 a \emph{SpatRaster} containing the requested product layers by year.

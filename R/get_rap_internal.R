@@ -16,6 +16,7 @@
                               ...,
                               crop = TRUE,
                               mask = TRUE,
+                              vrt = FALSE,
                               verbose = TRUE,
                               base_url = ifelse(source == "rap-10m",
                                                 yes = "http://rangeland.ntsg.umt.edu/data/rangeland-s2/",
@@ -135,6 +136,11 @@
         base_url, product, version, product, version, years
       )
     )
+  }
+  
+  # TODO: short-circuit for VRT output
+  if (isTRUE(vrt)) {
+    return(terra::vrt(paste0("/vsicurl/", grd$url), filename = filename, ...))
   }
   
   # Step 8: Download and crop rasters to ROI

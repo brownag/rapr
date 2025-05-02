@@ -24,15 +24,20 @@
 #' @param filename Output filename (optional; default stores in temporary file
 #'   or in memory, see `terra::tmpFiles()`)
 #' @param ... Additional arguments passed to internal query function and
-#'   `[terra::writeRaster()]`
+#'   [terra::writeRaster()] (or [terra::vrt()] when `vrt=TRUE`)
 #' @param source Grid sources. Options include `"rap-30m"` (default; Landsat)
-#' and `"rap-10m"` (Sentinel 2).
+#'   and `"rap-10m"` (Sentinel 2).
 #' @param version Target version: `"v3"` and/or `"v2"` (for `"rap-30m`).
 #'   Currently ignored for `source="rap-10m"`.
+#' @param vrt _logical_. Short circuit to return Virtual Raster Dataset (VRT)
+#'   for selected grids via [terra::vrt()]. Default: `FALSE`. Note:
+#'   `gdalbuildvrt` does not support heterogeneous projection systems, so this
+#'   option is not compatible with `source="rap-10m"` over multiple UTM zone
+#'   areas of interest.
 #' @param legacy _logical_. Use legacy (gdal_translate) method? Default: `TRUE`
-#' (applies only to `source="rap-30m"`).
-#' @param verbose logical. Print messages indicating progress? Default: `TRUE`. For
-#'   `legacy=TRUE` progress is shown using [utils::txtProgressBar()].
+#'   (applies only to `source="rap-30m"`).
+#' @param verbose logical. Print messages indicating progress? Default: `TRUE`.
+#'   For `legacy=TRUE` progress is shown using [utils::txtProgressBar()].
 #' @details
 #' 
 #' ## Sources, Products, and Band Information
@@ -124,6 +129,7 @@ get_rap <- function(x,
                     ...,
                     source = "rap-30m",
                     version = "v3",
+                    vrt = FALSE,
                     legacy = FALSE,
                     verbose = TRUE) {
 
@@ -151,6 +157,7 @@ get_rap <- function(x,
       source = source,
       product = product,
       filename = filename,
+      vrt = vrt,
       ...,
       verbose = verbose
     )
@@ -174,6 +181,7 @@ get_rap <- function(x,
         version = version,
         product = product,
         filename = filename,
+        vrt = vrt,
         ...,
         verbose = verbose
       )
