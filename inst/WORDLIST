@@ -4,6 +4,7 @@ Bromus
 CMD
 CONUS
 Codecov
+EPSG
 Eremopyrum
 GDAL
 Juniperus
@@ -15,6 +16,7 @@ Schismus
 SpatRaster
 SpatVector
 Taeniatherum
+VRT
 Ventenata
 WGS
 arbuscula
@@ -26,16 +28,21 @@ edulis
 gdal
 gifski
 hordeaceus
+knitr
+litedown
 monophylla
 monosperma
 occidentalis
 osteosperma
+rmarkdown
 rubens
 scopulorum
 sp
 spp
 tectorum
 terra
+testthat
+tinytest
 tridentata
 tripartita
 triticeum

@@ -7,7 +7,7 @@
 #' `"rap-10m"`, is Sentinel 2-derived and has 10 meter resolution in the local
 #' WGS84 UTM zone (`"EPSG:326XX"`, where XX is the two digit UTM zone number).
 #' See Details for the products and bands available for the different
-#' resolutions and source data.
+#' resolutions and sources. 
 #'
 #' @param x Target extent. Derived from an sf, terra, raster or sp object or
 #'   numeric vector containing `xmin`, `ymax`, `xmax`, `ymin` in WGS84 decimal
@@ -27,7 +27,7 @@
 #'   [terra::writeRaster()] (or [terra::vrt()] when `vrt=TRUE`)
 #' @param source Grid sources. Options include `"rap-30m"` (default; Landsat)
 #'   and `"rap-10m"` (Sentinel 2).
-#' @param version Target version: `"v3"` and/or `"v2"` (for `"rap-30m`).
+#' @param version Target version: `"v3"` and/or `"v2"` (for `"rap-30m"`).
 #'   Currently ignored for `source="rap-10m"`.
 #' @param vrt _logical_. Short circuit to return Virtual Raster Dataset (VRT)
 #'   for selected grids via [terra::vrt()]. Default: `FALSE`. Note:
@@ -63,23 +63,23 @@
 #'
 #'    - `product = "pft"` returns fractional cover estimates of plant functional types:
 #'
-#'      - 6 Bands: `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"`
+#'      - 6 Bands: `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"`  (**% cover**)
 #'
 #'    - `product = "gap"` returns canopy gap estimates for four canopy gap size classes:
 #'
-#'      - 4 Bands: `"Gaps 25-50 cm"`, `"Gaps 51-100 cm"`, `"Gaps 100-200 cm"`, `"Gaps >200 cm"`
+#'      - 4 Bands: `"Gaps 25-50 cm"`, `"Gaps 51-100 cm"`, `"Gaps 100-200 cm"`, `"Gaps >200 cm"`  (**% cover**)
 #'
 #'    - `product = "arte"` returns cover estimates of Artemisia species, including A. arbuscula, A. cana, A. nova, A. tridentata, and A. tripartita.
 #'
-#'      - 1 Band: `"Artemisia spp."`
+#'      - 1 Band: `"Artemisia spp."` (**% cover**)
 #'
 #'    - `product = "iag"` returns fractional cover estimates of Bromus tectorum, B. arvensis, B. rubens, B. hordeaceus, Eremopyrum triticeum, Schismus spp., Taeniatherum caput-medusae, and Ventenata dubia.
 #'
-#'      - 1 Band: `"invasive annual grass"`
+#'      - 1 Band: `"invasive annual grass"` (**% cover**)
 #'
 #'    - `product = "pj"` returns fractional cover estimates of Juniperus monosperma, J. occidentalis, J. osteosperma, J. scopulorum, Pinus edulis, and P. monophylla.
 #'
-#'      - 1 Band: `"pinyon-juniper"`
+#'      - 1 Band: `"pinyon-juniper"` (**% cover**)
 #'
 #' ## Temporary Files
 #'

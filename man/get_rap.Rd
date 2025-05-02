@@ -42,7 +42,7 @@ or in memory, see \code{terra::tmpFiles()})}
 \item{source}{Grid sources. Options include \code{"rap-30m"} (default; Landsat)
 and \code{"rap-10m"} (Sentinel 2).}
 
-\item{version}{Target version: \code{"v3"} and/or \code{"v2"} (for \verb{"rap-30m}).
+\item{version}{Target version: \code{"v3"} and/or \code{"v2"} (for \code{"rap-30m"}).
 Currently ignored for \code{source="rap-10m"}.}
 
 \item{vrt}{\emph{logical}. Short circuit to return Virtual Raster Dataset (VRT)
@@ -68,7 +68,7 @@ that has been used in the rapr package since 2022. A newer source (2025),
 \code{"rap-10m"}, is Sentinel 2-derived and has 10 meter resolution in the local
 WGS84 UTM zone (\code{"EPSG:326XX"}, where XX is the two digit UTM zone number).
 See Details for the products and bands available for the different
-resolutions and source data.
+resolutions and sources.
 }
 \details{
 \subsection{Sources, Products, and Band Information}{
@@ -95,23 +95,23 @@ resolution from 2018 to present:
 \itemize{
 \item \code{product = "pft"} returns fractional cover estimates of plant functional types:
 \itemize{
-\item 6 Bands: \code{"annual forb and grass"}, \code{"bare ground"}, \code{"litter"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"}
+\item 6 Bands: \code{"annual forb and grass"}, \code{"bare ground"}, \code{"litter"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"}  (\strong{\% cover})
 }
 \item \code{product = "gap"} returns canopy gap estimates for four canopy gap size classes:
 \itemize{
-\item 4 Bands: \code{"Gaps 25-50 cm"}, \code{"Gaps 51-100 cm"}, \code{"Gaps 100-200 cm"}, \code{"Gaps >200 cm"}
+\item 4 Bands: \code{"Gaps 25-50 cm"}, \code{"Gaps 51-100 cm"}, \code{"Gaps 100-200 cm"}, \code{"Gaps >200 cm"}  (\strong{\% cover})
 }
 \item \code{product = "arte"} returns cover estimates of Artemisia species, including A. arbuscula, A. cana, A. nova, A. tridentata, and A. tripartita.
 \itemize{
-\item 1 Band: \code{"Artemisia spp."}
+\item 1 Band: \code{"Artemisia spp."} (\strong{\% cover})
 }
 \item \code{product = "iag"} returns fractional cover estimates of Bromus tectorum, B. arvensis, B. rubens, B. hordeaceus, Eremopyrum triticeum, Schismus spp., Taeniatherum caput-medusae, and Ventenata dubia.
 \itemize{
-\item 1 Band: \code{"invasive annual grass"}
+\item 1 Band: \code{"invasive annual grass"} (\strong{\% cover})
 }
 \item \code{product = "pj"} returns fractional cover estimates of Juniperus monosperma, J. occidentalis, J. osteosperma, J. scopulorum, Pinus edulis, and P. monophylla.
 \itemize{
-\item 1 Band: \code{"pinyon-juniper"}
+\item 1 Band: \code{"pinyon-juniper"} (\strong{\% cover})
 }
 }
 }
