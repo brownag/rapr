@@ -7,6 +7,7 @@
 .get_rap_internal <- function(x,
                               years,
                               product,
+                              version = NULL,
                               source,
                               filename = NULL,
                               template = NULL,
@@ -42,7 +43,7 @@
   # extent limits rounded to units of 5/10/30
   # TODO: helper function for selecting reasonable grid systems
   default_grid <- terra::rast(
-    res = 10,
+    res = ifelse(source == "rap-10m", 10, 30),
     crs =  "EPSG:5070",
     extent = terra::ext(-2356155, 2263815, 270015, 3172635)
   )
@@ -58,7 +59,11 @@
       )
       .grid <- default_grid
     } else {
-      .grid <- paste0("EPSG:326", zones)
+      if (source == "rap-10m") {
+        .grid <- paste0("EPSG:326", zones)
+      } else {
+        .grid <- "EPSG:4326"
+      }
     }
   # } else if (template == "WGS 84 / Equi7 North America") {
   #   TODO: more standard options for equal-area templates
@@ -68,58 +73,70 @@
     }
     .grid <- template
   }
-
-  all_tiles_df <- fetch_tiles_metadata(paste0(base_url, product[1], "/"), years)
-
-  # Step 5: Build tile bounding boxes (75x75km with 250m overlap)
-  tile_size <- 75000
-  tile_overlap <- 250
-
-  tiles_grid <- terra::vect(lapply(zones, function(utm) {
-    tf <- subset(all_tiles_df, all_tiles_df$utm_zone == utm)
-    tf$xmin <- tf$lower_left_x - tile_overlap
-    tf$ymin <- tf$lower_left_y - tile_overlap
-    tf$xmax <- tf$lower_left_x + tile_size + tile_overlap
-    tf$ymax <- tf$lower_left_y + tile_size + tile_overlap
-
-    xm <- apply(tf[c("xmin", "xmax", "ymin", "ymax")], MARGIN = 1, function(x) {
-      terra::as.polygons(terra::ext(x), crs = paste0("EPSG:326", utm))
-    })
-    res <- terra::project(x = terra::vect(xm), terra::crs(.grid))
-    res <- cbind(res, tf)
-  }))
-
-  x <- terra::project(x, terra::crs(tiles_grid))
-
-  overlapping_tiles <- terra::intersect(tiles_grid, x)
-  overlapping_tiles$tile_x = as.integer(gsub(
-    ".*(\\d{6})-\\d{7}\\.tif",
-    "\\1",
-    overlapping_tiles$file_name
-  ))
-  overlapping_tiles$tile_y = as.integer(gsub(
-    ".*\\d{6}-(\\d{7})\\.tif",
-    "\\1",
-    overlapping_tiles$file_name
-  ))
-
-  lgrd <- vector("list", length(product))
-  for (i in seq_along(product)) {
-    lgrd[[i]] <- overlapping_tiles
-    lgrd[[i]]$group <- product[i]
+  
+  if (source == "rap-10m"){
+    all_tiles_df <- fetch_tiles_metadata(paste0(base_url, product[1], "/"), years)
+  
+    # build tile bounding boxes (75x75km with 250m overlap)
+    tile_size <- 75000
+    tile_overlap <- 250
+  
+    tiles_grid <- terra::vect(lapply(zones, function(utm) {
+      tf <- subset(all_tiles_df, all_tiles_df$utm_zone == utm)
+      tf$xmin <- tf$lower_left_x - tile_overlap
+      tf$ymin <- tf$lower_left_y - tile_overlap
+      tf$xmax <- tf$lower_left_x + tile_size + tile_overlap
+      tf$ymax <- tf$lower_left_y + tile_size + tile_overlap
+  
+      xm <- apply(tf[c("xmin", "xmax", "ymin", "ymax")], MARGIN = 1, function(x) {
+        terra::as.polygons(terra::ext(x), crs = paste0("EPSG:326", utm))
+      })
+      res <- terra::project(x = terra::vect(xm), terra::crs(.grid))
+      res <- cbind(res, tf)
+    }))
+  
+    x <- terra::project(x, terra::crs(tiles_grid))
+  
+    overlapping_tiles <- terra::intersect(tiles_grid, x)
+    overlapping_tiles$tile_x = as.integer(gsub(
+      ".*(\\d{6})-\\d{7}\\.tif",
+      "\\1",
+      overlapping_tiles$file_name
+    ))
+    overlapping_tiles$tile_y = as.integer(gsub(
+      ".*\\d{6}-(\\d{7})\\.tif",
+      "\\1",
+      overlapping_tiles$file_name
+    ))
+  
+    lgrd <- vector("list", length(product))
+    for (i in seq_along(product)) {
+      lgrd[[i]] <- overlapping_tiles
+      lgrd[[i]]$group <- product[i]
+    }
+    grd <- do.call('rbind', lgrd)
+  
+    # Construct download URLs for each group/tile/year combo
+    grd$url <- paste0(
+      base_url,
+      grd$group, "/", grd$group, "-",
+      grd$year, "-",
+      grd$utm_zone, "-",
+      sprintf("%06d", grd$tile_x), "-",
+      sprintf("%07d", grd$tile_y), ".tif"
+    )
+  } else {
+    grd <- data.frame(
+      group = product,
+      version = version,
+      year = years,
+      url = sprintf(
+        "%srap-%s/%s/%s-%s-%s.tif",
+        base_url, product, version, product, version, years
+      )
+    )
   }
-  grd <- do.call('rbind', lgrd)
-
-  # Step 7: Construct download URLs for each group/tile/year combo
-  grd$url <- paste0(
-    base_url,
-    grd$group, "/", grd$group, "-",
-    grd$year, "-",
-    grd$utm_zone, "-",
-    sprintf("%06d", grd$tile_x), "-",
-    sprintf("%07d", grd$tile_y), ".tif"
-   )
-
+  
   # Step 8: Download and crop rasters to ROI
   raster_list <- list()
 
@@ -129,16 +146,22 @@
     }
 
     raster_data <- terra::rast(paste0("/vsicurl/", grd$url[i]))
-
-    name <- paste0(grd$group[i], "_",
-                   grd$year[i], "_",
-                   grd$tile_x[i], "_",
-                   grd$tile_y[i])
-
+   
+    if (source == "rap-10m"){
+      name <- paste0(grd$group[i], "_",
+                     grd$year[i], "_",
+                     grd$tile_x[i], "_",
+                     grd$tile_y[i])
+    } else {
+      name <- paste0(grd$group[i], "_",
+                     grd$version[i], "_",
+                     grd$year[i])
+    }
+    
     # crop tile to AOI
     raster_crp <- terra::crop(
       raster_data,
-      terra::project(x, raster_data),
+      terra::project(x, raster_data), 
       filename = tempfile(
         pattern = paste0("spat_rapr_crp_", name, "_"),
         fileext = ".tif"
@@ -172,35 +195,39 @@
     names(raster_prj) <- names(raster_data)
     raster_list[[name]] <- raster_prj
   }
-
-  # Step 9: Merge tiles by group and year
-  merged_rasters <- list()
-  combo_df <- unique(data.frame(group = grd$group, year = grd$year))
-  combo_keys <- paste(combo_df$group, combo_df$year, sep = "_")
-
-  for (i in seq_len(nrow(combo_df))) {
-    key <- combo_keys[i]
-    if (verbose) {
-      message("Merging: ", key)
-    }
-    matched_rasters <- raster_list[grepl(paste0("^", key, "_"), names(raster_list))]
-    if (length(matched_rasters) > 1) {
-      merged_rasters[[key]] <- terra::merge(terra::sprc(matched_rasters),
-                                            ...,
-                                            datatype = datatype,
-                                            filename = tempfile(
-                                              pattern = paste0("spat_rapr_mrg_", key, "_"),
-                                              fileext = ".tif"
-                                            ))
-    } else {
-      merged_rasters[[key]] <- matched_rasters[[1]]
-    }
-
-    # set time metadata
-    # TODO: units
-    nband <- terra::nlyr(merged_rasters[[key]])
-    # terra::longnames(merged_rasters[[key]]) <- paste(rep(combo_df$group[i], nband), names(merged_rasters[[key]]))
-    terra::time(merged_rasters[[key]], tstep = "years") <- rep(combo_df$year[i], nband)
+    
+  if (source == "rap-10m") {
+      # Merge tiles by group and year
+      merged_rasters <- list()
+      combo_df <- unique(data.frame(group = grd$group, year = grd$year))
+      combo_keys <- paste(combo_df$group, combo_df$year, sep = "_")
+    
+      for (i in seq_len(nrow(combo_df))) {
+        key <- combo_keys[i]
+        if (verbose) {
+          message("Merging: ", key)
+        }
+        matched_rasters <- raster_list[grepl(paste0("^", key, "_"), names(raster_list))]
+        if (length(matched_rasters) > 1) {
+          merged_rasters[[key]] <- terra::merge(terra::sprc(matched_rasters),
+                                                ...,
+                                                datatype = datatype,
+                                                filename = tempfile(
+                                                  pattern = paste0("spat_rapr_mrg_", key, "_"),
+                                                  fileext = ".tif"
+                                                ))
+        } else {
+          merged_rasters[[key]] <- matched_rasters[[1]]
+        }
+    
+        # set time metadata
+        # TODO: units
+        nband <- terra::nlyr(merged_rasters[[key]])
+        # terra::longnames(merged_rasters[[key]]) <- paste(rep(combo_df$group[i], nband), names(merged_rasters[[key]]))
+        terra::time(merged_rasters[[key]], tstep = "years") <- rep(combo_df$year[i], nband)
+      }
+  } else {
+    merged_rasters <- raster_list
   }
 
   res <- terra::rast(terra::sds(merged_rasters))
@@ -214,14 +241,16 @@
       }
       message("Cropping and writing result to ", fn)
     }
+    
     res <- terra::crop(
       res,
-      x,
+      terra::project(x, res), 
       mask = mask,
       filename = filename,
       datatype = datatype,
       ...
     )
+    
   } else if (!is.null(filename)) {
     if (verbose) {
       message("Writing result to ", filename)
