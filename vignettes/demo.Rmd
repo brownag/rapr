@@ -87,10 +87,14 @@ makeplot <- function() {
 Using the {gifski} package `save_gif()` function we can easily create an animated graphic of the RAP predictions:
 
 ```{r, eval=(EVAL && requireNamespace("gifski", quietly=FALSE))}
+try({
+  
 library(gifski) 
 gifski::save_gif(makeplot(), 
                  gif_file = "annual_forb_and_grass_biomass.gif", 
                  delay = 0.5)
+
+})
 ```
 
 ```{r, echo=FALSE, results='asis'}
