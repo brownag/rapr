@@ -2,15 +2,13 @@
 #'
 #' Provides `gdal_translate` functionality through 'sf' package. This routine
 #' was used in the rapr package v0.1.x (from February 2022 to April 2025).
-#' 
+#'
 #' @param x Target extent. Derived from an sf, terra, raster, or sp object or
 #'   numeric vector containing xmin, ymax, xmax, ymin in WGS84
 #'   longitude/latitude decimal degrees (EPSG:4326).
 #' @param years integer. Year(s) to query.
-#' @param product Target data: `"vegetation-biomass"` and/or
-#'   `"vegetation-cover"` (for `"rap-30m"`) and `"pft"` (plant functional type
-#'   cover), `"gap"` (canopy gap), `"arte"` (Artemisia spp. cover), `"iag"`
-#'   (invasive annual grass cover), `"pj"` (pinyon juniper cover))
+#' @param product Target data: `"vegetation-biomass"`, `"vegetation-cover"`, or
+#'   `"vegetation-npp"`
 #' @param version Target version: `"v3"` and/or `"v2"` (for `"rap-30m`). Ignored
 #'   for `"rap-10m"`.
 #' @param filename Output filename (optional; default stores in temporary files,

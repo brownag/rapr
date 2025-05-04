@@ -2,16 +2,17 @@
 #'
 #' This function provides several "standard" projected Coordinate Reference
 #' Systems that are suitable for representing Rangeland Analysis Platform
-#' products across the Contiguous United States at the specified resolution (in
-#' meters).
-#'  
+#' products across the contiguous (lower 487) United States at the specified
+#' resolution (in meters).
+#' @seealso [get_rap()]
 #' @details
 #'
 #' Currently there are three pre-calculated grid systems that have their extent
 #' designed to align at 1, 5, 10, 30, 100, and 300 meter resolutions.
 #' 
 #' `"CONUS_AEA"` is the default template used with `get_rap(source="rap-10m")`
-#' and data spanning multiple UTM zones are requested.
+#' when data spanning multiple UTM zones are requested, unless user specifies
+#' their own template via SpatRaster object as `x` or `template` argument.
 #' 
 #' ## Grid Specifications
 #' 

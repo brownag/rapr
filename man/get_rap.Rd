@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_rap.R
 \name{get_rap}
 \alias{get_rap}
-\title{Get Rangeland Analysis Platform (RAP) Grids}
+\title{Get 'Rangeland Analysis Platform' (RAP) Grids}
 \usage{
 get_rap(
   x,
@@ -68,13 +68,13 @@ a \emph{SpatRaster} containing the requested product layers by year. If
 product (possibly with multiple years)
 }
 \description{
-Two sets of Rangeland Analysis Platform products are available (see \code{source}
-argument). \code{"rap-30m"} is Landsat-derived and has approximately 30 meter
-resolution in WGS84 decimal degrees (\code{"EPSG:4326"}). This is the data source
-that has been used in the rapr package since 2022. A newer source (2025),
-\code{"rap-10m"}, is Sentinel 2-derived and has 10 meter resolution in the local
-WGS84 UTM zone (\code{"EPSG:326XX"}, where XX is the two digit UTM zone number).
-See Details for the products and bands available for the different
+Two sets of 'Rangeland Analysis Platform' (RAP) products are available (see
+\code{source} argument). \code{"rap-30m"} is Landsat-derived and has approximately 30
+meter resolution in WGS84 decimal degrees (\code{"EPSG:4326"}). This is the data
+source that has been used in the 'rapr' package since 2022. A newer source
+(2025), \code{"rap-10m"}, is Sentinel 2-derived and has 10 meter resolution in the
+local WGS84 UTM zone (\code{"EPSG:326XX"}, where XX is the two digit UTM zone
+number). See Details for the products and bands available for the different
 resolutions and sources.
 }
 \details{
@@ -158,10 +158,14 @@ Mercator (UTM) system.
 For \code{"rap-10m"} requests spanning \emph{multiple} UTM zones, either pass a
 \emph{SpatRaster} object as \code{x} or specify \code{template} argument. In lieu of a
 user-specified grid system for multi-zone requests, a default CONUS Albers
-Equal Area projection (\code{"EPSG:5070"}) with 10 m resolution will be used.
+Equal Area projection (\code{"EPSG:5070"}) with 10 m resolution will be used. See
+\code{\link[=rap_projection]{rap_projection()}} for options and details.
 }
 }
 \references{
 See \code{citation("rapr")} for all references related to Rangeland
 Analysis Platform products.
+}
+\seealso{
+\code{\link[=rap_projection]{rap_projection()}}
 }

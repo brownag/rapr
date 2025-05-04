@@ -1,14 +1,14 @@
-#' Get Rangeland Analysis Platform (RAP) Grids
+#' Get 'Rangeland Analysis Platform' (RAP) Grids
 #'
-#' Two sets of Rangeland Analysis Platform products are available (see `source`
-#' argument). `"rap-30m"` is Landsat-derived and has approximately 30 meter
-#' resolution in WGS84 decimal degrees (`"EPSG:4326"`). This is the data source
-#' that has been used in the rapr package since 2022. A newer source (2025),
-#' `"rap-10m"`, is Sentinel 2-derived and has 10 meter resolution in the local
-#' WGS84 UTM zone (`"EPSG:326XX"`, where XX is the two digit UTM zone number).
-#' See Details for the products and bands available for the different
-#' resolutions and sources. 
-#'
+#' Two sets of 'Rangeland Analysis Platform' (RAP) products are available (see
+#' `source` argument). `"rap-30m"` is Landsat-derived and has approximately 30
+#' meter resolution in WGS84 decimal degrees (`"EPSG:4326"`). This is the data
+#' source that has been used in the 'rapr' package since 2022. A newer source
+#' (2025), `"rap-10m"`, is Sentinel 2-derived and has 10 meter resolution in the
+#' local WGS84 UTM zone (`"EPSG:326XX"`, where XX is the two digit UTM zone
+#' number). See Details for the products and bands available for the different
+#' resolutions and sources.
+#' 
 #' @param x Target extent. Derived from an sf, terra, raster or sp object or
 #'   numeric vector containing `xmin`, `ymax`, `xmax`, `ymin` in WGS84 decimal
 #'   degrees (longitude/latitude, `"EPSG:4326"`).
@@ -117,11 +117,14 @@
 #'   For `"rap-10m"` requests spanning _multiple_ UTM zones, either pass a
 #'   _SpatRaster_ object as `x` or specify `template` argument. In lieu of a
 #'   user-specified grid system for multi-zone requests, a default CONUS Albers
-#'   Equal Area projection (`"EPSG:5070"`) with 10 m resolution will be used.
+#'   Equal Area projection (`"EPSG:5070"`) with 10 m resolution will be used. See
+#'   [rap_projection()] for options and details.
 #'
-#' @return a _SpatRaster_ containing the requested product layers by year. If
+#' @returns a _SpatRaster_ containing the requested product layers by year. If
 #'   `sds=TRUE` a SpatRasterDataset where each SpatRaster contains only one
 #'   product (possibly with multiple years)
+#' 
+#' @seealso [rap_projection()]
 #' 
 #' @references See `citation("rapr")` for all references related to Rangeland
 #'   Analysis Platform products.
@@ -153,6 +156,11 @@ get_rap <- function(x,
     # RAP 10m through new interface
 
     # version currently ignored for RAP 10m data
+    if (!missing(version)) {
+      message("`version` argument is ignored for `source='rap-10m'`")
+    }
+    
+    # validate years 
     current_year <- as.integer(format(Sys.Date(), "%Y")) - 1
     valid_years <- seq(from = 2018, to = current_year)
     if (!all(years %in% valid_years)) {
@@ -160,6 +168,7 @@ get_rap <- function(x,
            current_year - 1)
     }
 
+    # validate products 
     product <- match.arg(
       tolower(product),
       choices = c("pft", "gap", "arte", "iag", "pj"),
