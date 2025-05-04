@@ -132,9 +132,9 @@
     )
   }
   
-  # TODO: short-circuit for VRT output
+  # short-circuit for VRT output (uses source band names)
   if (isTRUE(vrt)) {
-    return(terra::vrt(paste0("/vsicurl/", grd$url), filename = filename, ...))
+    return(terra::vrt(paste0("/vsicurl/", grd$url), set_names = TRUE, filename = filename, ...))
   }
   
   # Step 8: Download and crop rasters to ROI
