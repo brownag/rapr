@@ -41,14 +41,7 @@
 
   zones <- .get_utm_zones(x)
 
-  # default grid system for CONUS Albers Equal Area
-  # extent limits rounded to units of 5/10/30
-  # TODO: helper function for selecting reasonable grid systems
-  default_grid <- terra::rast(
-    res = ifelse(source == "rap-10m", 10, 30),
-    crs =  "EPSG:5070",
-    extent = terra::ext(-2356155, 2263815, 270015, 3172635)
-  )
+  default_grid <- rap_projection("CONUS_AEA", ifelse(source == "rap-10m", 10, 30))
 
   if (isTRUE(template)) {
     .grid <- default_grid

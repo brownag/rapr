@@ -24,7 +24,6 @@ system.time({
     product = c("pft", "gap"),
     years = 2023,
     template = equi7na_conus,
-    sds = TRUE,
     filename = "yuma-kofa-2023-div4.tif",
     overwrite = TRUE
   )
