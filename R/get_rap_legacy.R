@@ -20,8 +20,6 @@
 #' @return A SpatRaster object in WGS84 geographic coordinate system
 #' 
 #' @importFrom terra rast writeRaster sources
-#' @importFrom sf st_bbox st_transform st_crs st_as_sf st_as_sfc
-#' @importFrom utils txtProgressBar setTxtProgressBar
 #' @noRd
 .get_rap_30m_legacy <- function(x, years, product, version, filename, progress) {
   
@@ -87,7 +85,6 @@
   res
 }
 
-#' @importFrom sf gdal_utils
 #' @importFrom terra rast
 .get_rap_year_legacy <- function(x, year, product, version,
                                  filename = tempfile(pattern = paste(year, product, version, sep = "_"),

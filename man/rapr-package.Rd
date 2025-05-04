@@ -4,7 +4,7 @@
 \name{rapr-package}
 \alias{rapr}
 \alias{rapr-package}
-\title{rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products}
+\title{rapr: Interface to 'Rangeland Analysis Platform' (RAP) Products}
 \description{
 Provides access to 'Rangeland Analysis Platform' (RAP) products \url{https://rangelands.app/products} for arbitrary extents via 'GDAL' virtual file system.
 }

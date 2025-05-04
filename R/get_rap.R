@@ -125,6 +125,8 @@
 #' 
 #' @references See `citation("rapr")` for all references related to Rangeland
 #'   Analysis Platform products.
+#'   
+#' @importFrom terra rast vect ext as.polygons vrt writeRaster time units merge crop intersect crs nlyr sds project crds
 #'
 #' @export
 get_rap <- function(x,

@@ -45,19 +45,24 @@ expect_true("perennial_forb_and_grass_biomass_1986_v3" %in% names(res))
 
 unlink(tf)
 
-res <- get_rap(
-  sf::as_Spatial(sf::st_as_sf(data.frame(
-    geometry = sf::st_as_sfc("POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))")
-  ), crs = "EPSG:4326")),
-  product = c("vegetation-biomass", "vegetation-cover"),
-  version = "v3",
-  year = 1986,
-  legacy = TRUE,
-  progress = FALSE
-)
-
-expect_true(inherits(res, 'SpatRaster'))
-
-expect_equivalent(terra::nlyr(res), 8)
-
-expect_true("perennial_forb_and_grass_biomass_1986_v3" %in% names(res))
+# test legacy sp interface via sf
+if (requireNamespace("sf")) {
+  res <- get_rap(
+    sf::as_Spatial(sf::st_as_sf(
+      data.frame(
+        geometry = sf::st_as_sfc("POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))")
+      ), crs = "EPSG:4326"
+    )),
+    product = c("vegetation-biomass", "vegetation-cover"),
+    version = "v3",
+    year = 1986,
+    legacy = TRUE,
+    progress = FALSE
+  )
+  
+  expect_true(inherits(res, 'SpatRaster'))
+  
+  expect_equivalent(terra::nlyr(res), 8)
+  
+  expect_true("perennial_forb_and_grass_biomass_1986_v3" %in% names(res))
+}
