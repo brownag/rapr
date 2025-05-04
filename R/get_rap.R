@@ -141,6 +141,12 @@ get_rap <- function(x,
 
   source <- match.arg(tolower(source), choices = c("rap-30m", "rap-10m"))
 
+  overwrite <- list(...)[["overwrite"]]
+  if ((is.null(overwrite) || isFALSE(overwrite)) && 
+       (!is.null(filename) && file.exists(filename))) {
+    stop("File '", filename, "' exists. You can use 'overwrite=TRUE' to overwrite it.", call. = FALSE)
+  }
+  
   if (source == "rap-10m") {
     # RAP 10m through new interface
 
