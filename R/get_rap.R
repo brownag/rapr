@@ -34,6 +34,9 @@
 #'   `gdalbuildvrt` does not support heterogeneous projection systems, so this
 #'   option is not compatible with `source="rap-10m"` over multiple UTM zone
 #'   areas of interest.
+#' @param sds _logical_. Return data as a SpatRasterDataset? Helpful for results
+#'   containing multiple years and products. Default `FALSE` returns a
+#'   SpatRaster object.
 #' @param legacy _logical_. Use legacy (gdal_translate) method? Default: `TRUE`
 #'   (applies only to `source="rap-30m"`).
 #' @param verbose logical. Print messages indicating progress? Default: `TRUE`.
@@ -116,8 +119,10 @@
 #'   user-specified grid system for multi-zone requests, a default CONUS Albers
 #'   Equal Area projection (`"EPSG:5070"`) with 10 m resolution will be used.
 #'
-#' @return a _SpatRaster_ containing the requested product layers by year.
-#'
+#' @return a _SpatRaster_ containing the requested product layers by year. If
+#'   `sds=TRUE` a SpatRasterDataset where each SpatRaster contains only one
+#'   product (possibly with multiple years)
+#' 
 #' @references See `citation("rapr")` for all references related to Rangeland
 #'   Analysis Platform products.
 #'
@@ -130,6 +135,7 @@ get_rap <- function(x,
                     source = "rap-30m",
                     version = "v3",
                     vrt = FALSE,
+                    sds = FALSE,
                     legacy = FALSE,
                     verbose = TRUE) {
 
@@ -158,6 +164,7 @@ get_rap <- function(x,
       product = product,
       filename = filename,
       vrt = vrt,
+      sds = sds,
       ...,
       verbose = verbose
     )
@@ -182,6 +189,7 @@ get_rap <- function(x,
         product = product,
         filename = filename,
         vrt = vrt,
+        sds = sds,
         ...,
         verbose = verbose
       )

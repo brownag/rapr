@@ -17,6 +17,7 @@
                               crop = TRUE,
                               mask = TRUE,
                               vrt = FALSE,
+                              sds = FALSE,
                               verbose = TRUE,
                               base_url = ifelse(source == "rap-10m",
                                                 yes = "http://rangeland.ntsg.umt.edu/data/rangeland-s2/",
@@ -226,12 +227,17 @@
           merged_rasters[[key]] <- matched_rasters[[1]]
         }
     
-        # set time metadata
         # TODO: units
         nband <- terra::nlyr(merged_rasters[[key]])
+        
+        # set readable band names
         names(merged_rasters[[key]]) <- .get_band_names(combo_df$group[i])
-        # terra::longnames(merged_rasters[[key]]) <- paste(rep(combo_df$group[i], nband), names(merged_rasters[[key]]))
+
+        # set time metadata
         terra::time(merged_rasters[[key]], tstep = "years") <- rep(combo_df$year[i], nband)
+        
+        # set unit metadata
+        
       }
   } else {
     for (i in seq_len(nrow(grd))) {
@@ -240,10 +246,14 @@
     merged_rasters <- raster_list
   }
 
-  # TODO: return SpatRasterDataset if multiple products requested?
-  res <- terra::rast(terra::sds(merged_rasters))
+  res <- terra::sds(merged_rasters)
+ 
+  # return SpatRasterDataset 
+  if (isFALSE(sds)) {
+    res <- terra::rast(res)
+  }
 
-  if (isTRUE(crop)) {
+  if (isTRUE(crop) && isFALSE(sds)) {
     if (verbose) {
       if (is.null(filename)) {
         fn <- "memory or temporary file"
@@ -262,7 +272,7 @@
       ...
     )
     
-  } else if (!is.null(filename)) {
+  } else if (!is.null(filename) && isFALSE(sds)) {
     if (verbose) {
       message("Writing result to ", filename)
     }

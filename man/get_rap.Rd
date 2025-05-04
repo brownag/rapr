@@ -13,6 +13,7 @@ get_rap(
   source = "rap-30m",
   version = "v3",
   vrt = FALSE,
+  sds = FALSE,
   legacy = FALSE,
   verbose = TRUE
 )
@@ -51,6 +52,10 @@ for selected grids via \code{\link[terra:vrt]{terra::vrt()}}. Default: \code{FAL
 option is not compatible with \code{source="rap-10m"} over multiple UTM zone
 areas of interest.}
 
+\item{sds}{\emph{logical}. Return data as a SpatRasterDataset? Helpful for results
+containing multiple years and products. Default \code{FALSE} returns a
+SpatRaster object.}
+
 \item{legacy}{\emph{logical}. Use legacy (gdal_translate) method? Default: \code{TRUE}
 (applies only to \code{source="rap-30m"}).}
 
@@ -58,7 +63,9 @@ areas of interest.}
 For \code{legacy=TRUE} progress is shown using \code{\link[utils:txtProgressBar]{utils::txtProgressBar()}}.}
 }
 \value{
-a \emph{SpatRaster} containing the requested product layers by year.
+a \emph{SpatRaster} containing the requested product layers by year. If
+\code{sds=TRUE} a SpatRasterDataset where each SpatRaster contains only one
+product (possibly with multiple years)
 }
 \description{
 Two sets of Rangeland Analysis Platform products are available (see \code{source}

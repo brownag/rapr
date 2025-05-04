@@ -16,8 +16,18 @@ equi7na_conus <- rast(
 )
 res(equi7na_conus) <- 10
 
+
 system.time({
-  res <- get_rap(p2, source = "rap-10m", product = c("pft", "iag", "pj"), years = 2023, template = equi7na_conus, filename = "yuma-kofa-2023-div4.tif")
+  res <- get_rap(
+    p2,
+    source = "rap-10m",
+    product = c("pft", "gap"),
+    years = 2023,
+    template = equi7na_conus,
+    sds = TRUE,
+    filename = "yuma-kofa-2023-div4.tif",
+    overwrite = TRUE
+  )
 })
 plot(res)
 
