@@ -11,8 +11,8 @@ Provides access to 'Rangeland Analysis Platform' (RAP) products \url{https://ran
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/brownag/rapr}
-  \item \url{https://humus.rocks/rapr}
+  \item \url{https://github.com/brownag/rapr/}
+  \item \url{https://humus.rocks/rapr/}
   \item Report bugs at \url{https://github.com/brownag/rapr/issues}
 }
 

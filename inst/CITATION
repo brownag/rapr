@@ -1,18 +1,18 @@
 citHeader("To cite rapr in publications use:")
 
-citEntry(
-  entry    = "Manual",
+bibentry(
+  bibtype  = "Manual",
   title    = "rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products",
   author   = "Brown, A.",
   year     = "2025",
-  url      = "http://github.com/brownag/rapr",
+  url      = "https://github.com/brownag/rapr/",
   textVersion = paste(
   "Brown, A. (2025). rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products. R package version 1.0.0. http://github.com/brownag/rapr"
   )
 )
 
-citEntry(
-  entry = "Article",
+bibentry(
+  bibtype = "Article",
   title = "Estimating rangeland fractional cover and canopy gap size class with Sentinel-2 imagery",
   author = "Allred, B.W., S.E. McCord, T.J. Assal, B.T. Bestelmeyer, C.S. Boyd, A.C. Brooks,
 S.M. Cady, S.D. Fuhlendorf, S.A. Green, G.R. Harrison, E.R. Jensen, E.J.
@@ -33,8 +33,8 @@ https://doi.org/10.1101/2025.03.13.643073"
   )
 )
 
-citEntry(
-  entry    = "Article",
+bibentry(
+  bibtype  = "Article",
   title    = "Annual and 16-Day Rangeland Production Estimates for the Western United States.",
   author   = "Jones, M.O., N.P. Robinson, D.E. Naugle, J.D. Maestas, M.C. Reeves, R.W.
 Lankston, and B.W. Allred.",
@@ -51,8 +51,8 @@ Estimates for the Western United States. Rangeland Ecology & Management
   )
 )
 
-citEntry(
-  entry    = "Article",
+bibentry(
+  bibtype  = "Article",
   title    = "Improving Landsat predictions of
 rangeland fractional cover with multitask learning and uncertainty.
 Methods in Ecology and Evolution.",
@@ -70,8 +70,9 @@ Starns, D. Twidwell, and D. R. Uden. 2021. Improving Landsat predictions of
 rangeland fractional cover with multitask learning and uncertainty.
 Methods in Ecology and Evolution. http://dx.doi.org/10.1111/2041-210x.13564")
 )
-citEntry(
-  entry    = "Article",
+
+bibentry(
+  bibtype  = "Article",
   title    = "Rangeland productivity partitioned to sub-pixel plant functional
 types.",
   author   = "Robinson, N. P., M. O. Jones, A. Moreno, T. A. Erickson, D. E. Naugle, and B. W.

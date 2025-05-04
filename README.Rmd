@@ -17,27 +17,108 @@ knitr::opts_chunk$set(
 # rapr
 
 <!-- badges: start -->
-[![Codecov-test-coverage](https://codecov.io/gh/brownag/rapr/branch/main/graph/badge.svg)](https://codecov.io/gh/brownag/rapr?branch=main)
 [![html-docs](https://img.shields.io/badge/docs-HTML-informational)](https://humus.rocks/rapr/)
 [![R-CMD-check](https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/brownag/rapr/branch/main/graph/badge.svg)](https://app.codecov.io/gh/brownag/rapr?branch=main)
 <!-- badges: end -->
 
-The goal of {rapr} is to provide a simple R interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products. See https://rangelands.app/products and `citation("rapr")` for more information on these products.
+The goal of {rapr} is to provide a simple **R** interface to 'Rangeland Analysis
+Platform' (RAP) products. See https://rangelands.app/products and
+`citation("rapr")` for more information.
 
-You can query annual biomass and cover (versions 2 and 3) for the years 1986 to present. 
+Two sets of RAP products are available (see `get_rap()` `source` argument).
 
- - `product = "vegetation-biomass"` returns two layers for each year: 
- 
-   - `"annual forb and grass"`, `"perennial forb and grass"` (**lbs / acre**).
-   
- - `product = "vegetation-cover"` returns six layers for each year:
- 
-   - `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
+ - `"rap-30m"` is Landsat-derived and has approximately 30 meter resolution in WGS84 decimal degrees (`"EPSG:4326"`). This is the data source that has been used in the 'rapr' package since 2022.
 
+ - `"rap-10m"` is Sentinel 2-derived and has 10 meter resolution in the local WGS84 UTM zone (`"EPSG:326XX"`, where XX is the two digit UTM zone number). It is a newer (2025) data source.
+
+## Sources, Products, and Band Information
+
+For `"rap-30m"` you can query several Landsat derived annual biomass, cover, and
+Net Primary Productivity products from 1986 to present:
+
+  - `product = "vegetation-biomass"` returns [two layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README) per year:
+
+    - 2 Bands:`"annual forb and grass"`, `"perennial forb and grass"` (**lbs / acre**)
+
+  - `product = "vegetation-cover"` returns [six layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README) per year:
+
+    - 6 Bands: `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
+
+  - `product = "vegetation-npp"` returns [four layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README) per year:
+
+    - 4 Bands: `"annual forb and grass"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (NPP; kg*C/m^2)
+
+For `"rap-10m"` you can query several [Sentinel 2 derived cover
+products](http://rangeland.ntsg.umt.edu/data/rangeland-s2/README) at 10 meter
+resolution from 2018 to present:
+
+   - `product = "pft"` returns fractional cover estimates of plant functional types:
+
+     - 6 Bands: `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"`  (**% cover**)
+
+   - `product = "gap"` returns canopy gap estimates for four canopy gap size classes:
+
+     - 4 Bands: `"Gaps 25-50 cm"`, `"Gaps 51-100 cm"`, `"Gaps 100-200 cm"`, `"Gaps >200 cm"`  (**% cover**)
+
+   - `product = "arte"` returns cover estimates of Artemisia species, including A. arbuscula, A. cana, A. nova, A. tridentata, and A. tripartita.
+
+     - 1 Band: `"Artemisia spp."` (**% cover**)
+
+   - `product = "iag"` returns fractional cover estimates of Bromus tectorum, B. arvensis, B. rubens, B. hordeaceus, Eremopyrum triticeum, Schismus spp., Taeniatherum caput-medusae, and Ventenata dubia.
+
+     - 1 Band: `"invasive annual grass"` (**% cover**)
+
+   - `product = "pj"` returns fractional cover estimates of Juniperus monosperma, J. occidentalis, J. osteosperma, J. scopulorum, Pinus edulis, and P. monophylla.
+
+     - 1 Band: `"pinyon-juniper"` (**% cover**)
+
+## Temporary Files
+
+  Large requests may generate intermediate objects that will be stored as
+  temporary files. See `terra::tmpFiles()` to view the file paths. These
+  files will be removed when an **R** session ends.
+
+## Alternate Specification of Area of Interest
+
+  In lieu of a spatial object from \{terra\}, \{raster\}, \{sf\} or \{sp\}
+  packages you may specify a bounding box using a numeric vector containing
+  the top-left and bottom-right coordinates (`xmin`, `ymax`, `xmax`, `ymin`)
+  in WGS84 longitude/latitude decimal degrees. This corresponds to the
+  conventional order used in the `gdal_translate` `-projwin` option. e.g.
+  `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
+
+```
+(1: xmin, 2: ymax)--------------------------|
+        |                                   |
+        |         TARGET EXTENT             |
+        |  x = c(xmin, ymax, xmax, ymin)    |
+        |                                   |
+        |---------------------------(3: xmax, 4: ymin)
+```
+## Native Resolution and Projection Systems
+
+  Native cell resolution of `"rap-30m"` is approximately 30m x 30m in WGS84
+  geographic coordinate system (longitude, latitude). Native cell resolution of
+  `"rap-10m"` is 10m x 10m in the local (projected) WGS84 Universal Transverse
+  Mercator (UTM) system.
+
+  For `"rap-10m"` requests spanning _multiple_ UTM zones, either pass a
+  _SpatRaster_ object as `x` or specify `template` argument. In lieu of a
+  user-specified grid system for multi-zone requests, a default CONUS Albers
+  Equal Area projection (`"EPSG:5070"`) with 10 m resolution will be used. See
+  [rap_projection()] for options and details.
+  
 ## Installation
 
-You can install the development version of {rapr} from [GitHub](https://github.com/brownag/rapr) with:
+You can install {rapr} from CRAN:
+
+``` r
+install.packages("rapr")
+```
+
+You can install the development version of {rapr} from
+[GitHub](https://github.com/brownag/rapr) with:
 
 ``` r
 # install.packages("remotes")
@@ -46,9 +127,16 @@ remotes::install_github("brownag/rapr")
 
 ## Example
 
-This example shows how to use a {[terra](https://github.com/rspatial/terra)} SpatVector containing a rectangular polygon with `rapr::get_rap()` to obtain RAP grids for the corresponding extent. 
-
-{[terra](https://cran.r-project.org/package=terra)}, {[raster](https://cran.r-project.org/package=raster)}, {[sf](https://cran.r-project.org/package=sf)} and {[sp](https://cran.r-project.org/package=sp)} objects are all supported input types. Any spatial object used should have its Coordinate Reference System defined, as the input coordinates will be projected to the source data Coordinate Reference System of the RAP grids (WGS84 decimal degrees / `"EPSG:4326"`).
+This example shows how to use a {[terra](https://github.com/rspatial/terra)}
+SpatVector containing a rectangular polygon with `rapr::get_rap()` to obtain RAP
+grids for the corresponding extent.
+{[terra](https://cran.r-project.org/package=terra)},
+{[raster](https://cran.r-project.org/package=raster)},
+{[sf](https://cran.r-project.org/package=sf)} and
+{[sp](https://cran.r-project.org/package=sp)} objects are all supported input
+types. Any spatial object used should have its Coordinate Reference System
+defined, as the input coordinates will be projected to the source data grid
+system.
 
 ```{r example}
 library(terra)
@@ -58,8 +146,9 @@ res <- get_rap(
   vect("POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))",
        crs = "EPSG:4326"), 
   version = "v3",
-  year = c(1986, 1996, 2006, 2016),
-  progress = FALSE
+  product = "vegetation-cover",
+  years = c(1986, 1996, 2006, 2016),
+  verbose = TRUE
 )
 
 res
@@ -67,11 +156,11 @@ res
 plot(res)
 ```
 
-When a `filename` argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with `unlink(terra::sources(<SpatRaster>))`.
- 
-When a `filename` _is_ specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.
-
-In lieu of a spatial object from {terra}, {raster}, {sf} or {sp} packages you may specify a bounding box using a numeric vector containing `xmin`, `ymax`, `xmax`, `ymin` in WGS84 longitude/latitude decimal degrees (corresponding to order used in `gdal_translate` `-projwin` option). e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
+In lieu of a spatial object from {terra}, {raster}, {sf} or {sp} packages you
+may specify a bounding box using a numeric vector containing `xmin`, `ymax`,
+`xmax`, `ymin` in WGS84 longitude/latitude decimal degrees (corresponding to
+order used in `gdal_translate` `-projwin` option). e.g. `get_rap(x = c(-120, 37,
+-119.99, 36.99), ...)`.
 
 ```
 (1: xmin, 2: ymax)--------------------------|
