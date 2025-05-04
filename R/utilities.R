@@ -74,6 +74,25 @@
   ))
 }
 
+#' Get Band Units by Product Name
+#' @param product _character_ one of "vegetation-biomass", "vegetation-cover",
+#'   "vegetation-npp", "pft", "gap", "arte", "iag", "pj"
+#' @return _character_ vector of band units
+#' @keywords internal
+#' @noRd
+.get_band_units <- function(product, replacement = "_") {
+  switch(
+    as.character(product),
+    "vegetation-biomass" = "lbs/acre",
+    "vegetation-cover" =  "% cover",
+    "vegetation-npp" = "kg*C/m^2",
+    "pft" = "% cover",
+    "gap" = "% cover",
+    "arte" = "% cover",
+    "iag" = "% cover",
+    "pj" = "% cover"
+  )
+}
 
 #' Fetch and parse rap-10m tile metadata
 #' 

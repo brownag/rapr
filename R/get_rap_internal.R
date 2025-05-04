@@ -227,7 +227,6 @@
           merged_rasters[[key]] <- matched_rasters[[1]]
         }
     
-        # TODO: units
         nband <- terra::nlyr(merged_rasters[[key]])
         
         # set readable band names
@@ -237,11 +236,21 @@
         terra::time(merged_rasters[[key]], tstep = "years") <- rep(combo_df$year[i], nband)
         
         # set unit metadata
-        
+        terra::units(merged_rasters[[key]]) <- rep(.get_band_units(combo_df$group[i]), nband)
       }
   } else {
     for (i in seq_len(nrow(grd))) {
+      
+      nband <- terra::nlyr(raster_list[[i]])
+      
+      # set readable band names
       names(raster_list[[i]]) <- .get_band_names(grd$group[i])
+      
+      # set time metadata
+      terra::time(raster_list[[i]], tstep = "years") <- rep(grd$year[i], nband)
+      
+      # set unit metadata
+      terra::units(raster_list[[i]]) <- rep(.get_band_units(grd$group[i]), nband)
     }
     merged_rasters <- raster_list
   }
