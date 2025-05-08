@@ -3,9 +3,11 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^docs$
+^misc$
 ^.github$
 ^.gitattributes$
 ^_pkgdown\.yml$
 ^pkgdown$
 ^\.github$
 ^codecov\.yml$
+^.*\.tif$

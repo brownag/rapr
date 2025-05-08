@@ -2,54 +2,142 @@
 % Please edit documentation in R/get_rap.R
 \name{get_rap}
 \alias{get_rap}
-\title{Get Rangeland Analysis Platform (RAP) Grids}
+\title{Get 'Rangeland Analysis Platform' (RAP) Grids}
 \usage{
 get_rap(
   x,
-  years = c(1986, 1996, 2006, 2016),
+  years,
+  product,
   filename = NULL,
-  product = c("vegetation-biomass", "vegetation-cover"),
+  ...,
+  source = "rap-30m",
   version = "v3",
-  progress = NULL
+  vrt = FALSE,
+  sds = FALSE,
+  legacy = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
-\item{x}{Target extent. Derived from an sf, terra, raster or sp object or numeric vector containing xmin, ymax, xmax, ymin in WGS84 longitude/latitude decimal degrees (EPSG:4326).}
+\item{x}{Target extent. Derived from an sf, terra, raster or sp object or
+numeric vector containing \code{xmin}, \code{ymax}, \code{xmax}, \code{ymin} in WGS84 decimal
+degrees (longitude/latitude, \code{"EPSG:4326"}).}
 
-\item{years}{integer. Year(s) to query}
+\item{years}{\emph{integer}. Year(s) to query. Products are available from 1986
+(\code{source="rap-30m"}) or 2018 (\code{source="rap-10m"}) up to the year prior to
+the current year, based on availability of the Landsat and Sentinel 2
+source data.}
 
-\item{filename}{Output filename (optional; default stores in temporary files, see \code{terra::sources()})}
+\item{product}{Target data: \code{"vegetation-biomass"}, \code{"vegetation-cover"},
+and/or \code{"vegetation-npp"} for \code{source="rap-30m"}; \code{"pft"} (plant functional
+type cover), \code{"gap"} (canopy gap), \code{"arte"} (Artemisia spp. cover), \code{"iag"}
+(invasive annual grass cover), or \code{"pj"} (pinyon juniper cover) for
+\code{source="rap-10m"}.}
 
-\item{product}{Target data: \code{"vegetation-biomass"} and/or \code{"vegetation-cover"}}
+\item{filename}{Output filename (optional; default stores in temporary file
+or in memory, see \code{terra::tmpFiles()})}
 
-\item{version}{Target version: \code{"v3"} and/or \code{"v2"}}
+\item{...}{Additional arguments passed to internal query function and
+\code{\link[terra:writeRaster]{terra::writeRaster()}} (or \code{\link[terra:vrt]{terra::vrt()}} when \code{vrt=TRUE})}
 
-\item{progress}{logical. Show progress bar? Default: missing (\code{NULL}) will use progress bar when three or more layers are requested.}
+\item{source}{Grid sources. Options include \code{"rap-30m"} (default; Landsat)
+and \code{"rap-10m"} (Sentinel 2).}
+
+\item{version}{Target version: \code{"v3"} and/or \code{"v2"} (for \code{"rap-30m"}).
+Currently ignored for \code{source="rap-10m"}.}
+
+\item{vrt}{\emph{logical}. Short circuit to return Virtual Raster Dataset (VRT)
+for selected grids via \code{\link[terra:vrt]{terra::vrt()}}. Default: \code{FALSE}. Note:
+\code{gdalbuildvrt} does not support heterogeneous projection systems, so this
+option is not compatible with \code{source="rap-10m"} over multiple UTM zone
+areas of interest.}
+
+\item{sds}{\emph{logical}. Return data as a SpatRasterDataset? Helpful for results
+containing multiple years and products. Default \code{FALSE} returns a
+SpatRaster object.}
+
+\item{legacy}{\emph{logical}. Use legacy (gdal_translate) method? Default: \code{TRUE}
+(applies only to \code{source="rap-30m"}).}
+
+\item{verbose}{logical. Print messages indicating progress? Default: \code{TRUE}.
+For \code{legacy=TRUE} progress is shown using \code{\link[utils:txtProgressBar]{utils::txtProgressBar()}}.}
 }
 \value{
-a SpatRaster containing the requested vegetation-biomass and/or vegetation-cover layers by year. Native cell resolution is ~30m x 30m in WGS84 decimal degrees.
+a \emph{SpatRaster} containing the requested product layers by year. If
+\code{sds=TRUE} a SpatRasterDataset where each SpatRaster contains only one
+product (possibly with multiple years)
 }
 \description{
-Get Rangeland Analysis Platform (RAP) Grids
+Two sets of 'Rangeland Analysis Platform' (RAP) products are available (see
+\code{source} argument). \code{"rap-30m"} is Landsat-derived and has approximately 30
+meter resolution in WGS84 decimal degrees (\code{"EPSG:4326"}). This is the data
+source that has been used in the 'rapr' package since 2022. A newer source
+(2025), \code{"rap-10m"}, is Sentinel 2-derived and has 10 meter resolution in the
+local WGS84 UTM zone (\code{"EPSG:326XX"}, where XX is the two digit UTM zone
+number). See Details for the products and bands available for the different
+resolutions and sources.
 }
 \details{
-You can query annual biomass and cover (versions 2 and 3) from 1986 to present
+\subsection{Sources, Products, and Band Information}{
+
+For \code{"rap-30m"} you can query several Landsat derived annual biomass,
+cover, and Net Primary Productivity products from 1986 to present:
 \itemize{
-\item \code{product = "vegetation-biomass"} returns two layers per year:
+\item \code{product = "vegetation-biomass"} returns \href{http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README}{two layers} per year:
 \itemize{
-\item \code{"annual forb and grass"}, \code{"perennial forb and grass"} (\strong{lbs / acre})
+\item 2 Bands:\code{"annual forb and grass"}, \code{"perennial forb and grass"} (\strong{lbs / acre})
 }
-\item \code{product = "vegetation-cover"} returns six layers per year:
+\item \code{product = "vegetation-cover"} returns \href{http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README}{six layers} per year:
 \itemize{
-\item \code{"annual forb and grass"}, \code{"bare ground"}, \code{"litter"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"} (\strong{\% cover})
+\item 6 Bands: \code{"annual forb and grass"}, \code{"bare ground"}, \code{"litter"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"} (\strong{\% cover})
+}
+\item \code{product = "vegetation-npp"} returns \href{http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README}{four layers} per year:
+\itemize{
+\item 4 Bands: \code{"annual forb and grass"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"} (NPP; kg*C/m^2)
 }
 }
 
-When a \code{filename} argument is not specified, unique temporary files will be generated. The resulting SpatRaster object will retain reference to these files, and you can remove them manually with \verb{unlink(terra::sources(<SpatRaster))}.
+For \code{"rap-10m"} you can query several \href{http://rangeland.ntsg.umt.edu/data/rangeland-s2/README}{Sentinel 2 derived cover products} at 10 meter
+resolution from 2018 to present:
+\itemize{
+\item \code{product = "pft"} returns fractional cover estimates of plant functional types:
+\itemize{
+\item 6 Bands: \code{"annual forb and grass"}, \code{"bare ground"}, \code{"litter"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"}  (\strong{\% cover})
+}
+\item \code{product = "gap"} returns canopy gap estimates for four canopy gap size classes:
+\itemize{
+\item 4 Bands: \code{"Gaps 25-50 cm"}, \code{"Gaps 51-100 cm"}, \code{"Gaps 100-200 cm"}, \code{"Gaps >200 cm"}  (\strong{\% cover})
+}
+\item \code{product = "arte"} returns cover estimates of Artemisia species, including A. arbuscula, A. cana, A. nova, A. tridentata, and A. tripartita.
+\itemize{
+\item 1 Band: \code{"Artemisia spp."} (\strong{\% cover})
+}
+\item \code{product = "iag"} returns fractional cover estimates of Bromus tectorum, B. arvensis, B. rubens, B. hordeaceus, Eremopyrum triticeum, Schismus spp., Taeniatherum caput-medusae, and Ventenata dubia.
+\itemize{
+\item 1 Band: \code{"invasive annual grass"} (\strong{\% cover})
+}
+\item \code{product = "pj"} returns fractional cover estimates of Juniperus monosperma, J. occidentalis, J. osteosperma, J. scopulorum, Pinus edulis, and P. monophylla.
+\itemize{
+\item 1 Band: \code{"pinyon-juniper"} (\strong{\% cover})
+}
+}
+}
 
-When a \code{filename} \emph{is} specified, temporary files will be removed after the result (often a multi- year/layer/product) SpatRaster is written to new file.
+\subsection{Temporary Files}{
 
-In lieu of a spatial object from \{terra\}, \{raster\}, \{sf\} or \{sp\}  packages you may specify a bounding box using a numeric vector containing \code{xmin}, \code{ymax}, \code{xmax}, \code{ymin} in WGS84 longitude/latitude decimal degrees (corresponding to order used in \code{gdal_translate} \code{-projwin} option). e.g. \code{get_rap(x = c(-120, 37, -119.99, 36.99), ...)}.
+Large requests may generate intermediate objects that will be stored as
+temporary files. See \code{\link[terra:tmpFile]{terra::tmpFiles()}} to view the file paths. These
+files will be removed when an \strong{R} session ends.
+}
+
+\subsection{Alternate Specification of Area of Interest}{
+
+In lieu of a spatial object from \{terra\}, \{raster\}, \{sf\} or \{sp\}
+packages you may specify a bounding box using a numeric vector containing
+the top-left and bottom-right coordinates (\code{xmin}, \code{ymax}, \code{xmax}, \code{ymin})
+in WGS84 longitude/latitude decimal degrees. This corresponds to the
+conventional order used in the \code{gdal_translate} \code{-projwin} option. e.g.
+\code{get_rap(x = c(-120, 37, -119.99, 36.99), ...)}.
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{(1: xmin, 2: ymax)--------------------------|
         |                                   |
@@ -58,4 +146,26 @@ In lieu of a spatial object from \{terra\}, \{raster\}, \{sf\} or \{sp\}  packag
         |                                   |
         |---------------------------(3: xmax, 4: ymin)
 }\if{html}{\out{</div>}}
+}
+
+\subsection{Native Resolution and Projection Systems}{
+
+Native cell resolution of \code{"rap-30m"} is approximately 30m x 30m in WGS84
+geographic coordinate system (longitude, latitude). Native cell resolution of
+\code{"rap-10m"} is 10m x 10m in the local (projected) WGS84 Universal Transverse
+Mercator (UTM) system.
+
+For \code{"rap-10m"} requests spanning \emph{multiple} UTM zones, either pass a
+\emph{SpatRaster} object as \code{x} or specify \code{template} argument. In lieu of a
+user-specified grid system for multi-zone requests, a default CONUS Albers
+Equal Area projection (\code{"EPSG:5070"}) with 10 m resolution will be used. See
+\code{\link[=rap_projection]{rap_projection()}} for options and details.
+}
+}
+\references{
+See \code{citation("rapr")} for all references related to Rangeland
+Analysis Platform products.
+}
+\seealso{
+\code{\link[=rap_projection]{rap_projection()}}
 }
