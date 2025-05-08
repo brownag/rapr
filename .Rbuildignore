@@ -12,3 +12,4 @@
 ^codecov\.yml$
 ^.*\.tif$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$
