@@ -11,3 +11,4 @@
 ^\.github$
 ^codecov\.yml$
 ^.*\.tif$
+^cran-comments\.md$

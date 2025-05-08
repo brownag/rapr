@@ -6,3 +6,4 @@
 *.zip
 inst/doc
 docs
+cran-comments.md
