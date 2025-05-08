@@ -70,7 +70,7 @@ over them, and plot. We are symbolizing with a common range of `[0,500]` pounds
 per acre so the color scheme is consistent from year to year.
 We write this iteration into a function called `makeplot()` and use {gifski} to
 render an animated GIF file from the R plot graphics output in each year for a
-total of `r length(grep("annual_forb_and_grass", names(rap))` layers.
+total of `r length(grep("annual_forb_and_grass", names(rap)))` layers.
 
 ```{r}
 makeplot <- function() {
