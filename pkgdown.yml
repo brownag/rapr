@@ -3,7 +3,7 @@ pkgdown: 2.1.2
 pkgdown_sha: ~
 articles:
   demo: demo.html
-last_built: 2025-05-08T22:43Z
+last_built: 2025-05-08T23:21Z
 urls:
   reference: https://humus.rocks/rapr/reference
   article: https://humus.rocks/rapr/articles
