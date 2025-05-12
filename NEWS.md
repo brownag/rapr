@@ -1,4 +1,5 @@
-# rapr 1.0.0 (development)
+# rapr 1.0.0 (2025-05-12)
+* Initial CRAN release!
 * Major `get_rap()` interface updates
   - Added `source` argument to toggle between RAP 30m (`"rap-30m"`; Landsat) and RAP 10m (`"rap-10m"`; Sentinel 2) products
      - For details on new RAP 10m products see: http://rangeland.ntsg.umt.edu/data/rangeland-s2/README and `citation("rapr")`
