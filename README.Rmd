@@ -107,7 +107,7 @@ resolution from 2018 to present:
   _SpatRaster_ object as `x` or specify `template` argument. In lieu of a
   user-specified grid system for multi-zone requests, a default CONUS Albers
   Equal Area projection (`"EPSG:5070"`) with 10 m resolution will be used. See
-  [rap_projection()] for options and details.
+  `rap_projection()` for options and details.
   
 ## Installation
 

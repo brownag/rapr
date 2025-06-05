@@ -56,7 +56,7 @@ areas of interest.}
 containing multiple years and products. Default \code{FALSE} returns a
 SpatRaster object.}
 
-\item{legacy}{\emph{logical}. Use legacy (gdal_translate) method? Default: \code{TRUE}
+\item{legacy}{\emph{logical}. Use legacy (gdal_translate) method? Default: \code{FALSE}
 (applies only to \code{source="rap-30m"}).}
 
 \item{verbose}{logical. Print messages indicating progress? Default: \code{TRUE}.
@@ -161,6 +161,28 @@ user-specified grid system for multi-zone requests, a default CONUS Albers
 Equal Area projection (\code{"EPSG:5070"}) with 10 m resolution will be used. See
 \code{\link[=rap_projection]{rap_projection()}} for options and details.
 }
+}
+\examples{
+\dontshow{if (requireNamespace("terra") && isTRUE(as.logical(Sys.getenv("R_RAPR_EXTENDED_EXAMPLES", unset=FALSE)))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+library(rapr)    # access RAP products
+library(terra)   # spatial data handling
+
+p <- buffer(terra::vect(
+  data.frame(x = -105.97133, y = 32.73437),
+  geom = c("x", "y"),
+  crs = "OGC:CRS84"
+), width = 1000)
+
+rap <- get_rap(
+  p,
+  product = "vegetation-biomass",
+  years = 2020:2024,
+  verbose = FALSE
+)
+
+plot(rap)
+\dontshow{\}) # examplesIf}
 }
 \references{
 See \code{citation("rapr")} for all references related to Rangeland

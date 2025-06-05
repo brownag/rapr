@@ -18,7 +18,7 @@ resolution and projected Coordinate Reference System.
 \description{
 This function provides several "standard" projected Coordinate Reference
 Systems that are suitable for representing Rangeland Analysis Platform
-products across the contiguous (lower 487) United States at the specified
+products across the contiguous (lower 48) United States at the specified
 resolution (in meters).
 }
 \details{

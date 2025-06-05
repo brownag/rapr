@@ -119,7 +119,7 @@ For `"rap-10m"` requests spanning *multiple* UTM zones, either pass a
 *SpatRaster* object as `x` or specify `template` argument. In lieu of a
 user-specified grid system for multi-zone requests, a default CONUS
 Albers Equal Area projection (`"EPSG:5070"`) with 10 m resolution will
-be used. See \[rap_projection()\] for options and details.
+be used. See `rap_projection()` for options and details.
 
 ## Installation
 
@@ -153,7 +153,7 @@ the source data grid system.
 
 ``` r
 library(terra)
-#> terra 1.8.42
+#> terra 1.8.54
 library(rapr)
 
 res <- get_rap(
@@ -172,16 +172,16 @@ res <- get_rap(
 
 res
 #> class       : SpatRaster 
-#> dimensions  : 37, 37, 24  (nrow, ncol, nlyr)
+#> size        : 37, 37, 24  (nrow, ncol, nlyr)
 #> resolution  : 0.0002694946, 0.0002694946  (x, y)
 #> extent      : -120, -119.99, 36.99002, 36.99999  (xmin, xmax, ymin, ymax)
 #> coord. ref. : lon/lat WGS 84 (EPSG:4326) 
 #> source(s)   : memory
-#> names       : veget~grass, veget~round, veget~itter, veget~grass, veget~shrub, veget~_tree, ... 
-#> min values  :           0,           0,           0,           0,           0,           0, ... 
-#> max values  :          80,          26,          33,          74,          13,           9, ... 
-#> unit        :     % cover,     % cover,     % cover,     % cover,     % cover,     % cover, ... 
-#> time (years): 1986 to 2016 (2 steps)
+#> names       : veget~grass, veget~round, veget~itter, veget~grass, veget~shrub, veget~_tree,     ... 
+#> min values  :           0,           0,           0,           0,           0,           0,     ... 
+#> max values  :          80,          26,          33,          74,          13,           9,     ... 
+#> unit        : % cover 
+#> time (years): 1986 to 2016 (4 steps)
 
 plot(res)
 ```

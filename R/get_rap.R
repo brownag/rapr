@@ -37,7 +37,7 @@
 #' @param sds _logical_. Return data as a SpatRasterDataset? Helpful for results
 #'   containing multiple years and products. Default `FALSE` returns a
 #'   SpatRaster object.
-#' @param legacy _logical_. Use legacy (gdal_translate) method? Default: `TRUE`
+#' @param legacy _logical_. Use legacy (gdal_translate) method? Default: `FALSE`
 #'   (applies only to `source="rap-30m"`).
 #' @param verbose logical. Print messages indicating progress? Default: `TRUE`.
 #'   For `legacy=TRUE` progress is shown using [utils::txtProgressBar()].
@@ -132,6 +132,26 @@
 #' @importFrom terra rast vect ext as.polygons vrt writeRaster time units merge crop intersect crs nlyr sds project crds
 #'
 #' @export
+#' @examplesIf requireNamespace("terra") && isTRUE(as.logical(Sys.getenv("R_RAPR_EXTENDED_EXAMPLES", unset=FALSE)))
+#' 
+#' library(rapr)    # access RAP products
+#' library(terra)   # spatial data handling
+#' 
+#' p <- buffer(terra::vect(
+#'   data.frame(x = -105.97133, y = 32.73437),
+#'   geom = c("x", "y"),
+#'   crs = "OGC:CRS84"
+#' ), width = 1000)
+#' 
+#' rap <- get_rap(
+#'   p,
+#'   product = "vegetation-biomass",
+#'   years = 2020:2024,
+#'   verbose = FALSE
+#' )
+#' 
+#' plot(rap)
+#' 
 get_rap <- function(x,
                     years,
                     product,
