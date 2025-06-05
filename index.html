@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">rapr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -141,7 +141,7 @@
 <h2 id="native-resolution-and-projection-systems">Native Resolution and Projection Systems<a class="anchor" aria-label="anchor" href="#native-resolution-and-projection-systems"></a>
 </h2>
 <p>Native cell resolution of <code>"rap-30m"</code> is approximately 30m x 30m in WGS84 geographic coordinate system (longitude, latitude). Native cell resolution of <code>"rap-10m"</code> is 10m x 10m in the local (projected) WGS84 Universal Transverse Mercator (UTM) system.</p>
-<p>For <code>"rap-10m"</code> requests spanning <em>multiple</em> UTM zones, either pass a <em>SpatRaster</em> object as <code>x</code> or specify <code>template</code> argument. In lieu of a user-specified grid system for multi-zone requests, a default CONUS Albers Equal Area projection (<code>"EPSG:5070"</code>) with 10 m resolution will be used. See [rap_projection()] for options and details.</p>
+<p>For <code>"rap-10m"</code> requests spanning <em>multiple</em> UTM zones, either pass a <em>SpatRaster</em> object as <code>x</code> or specify <code>template</code> argument. In lieu of a user-specified grid system for multi-zone requests, a default CONUS Albers Equal Area projection (<code>"EPSG:5070"</code>) with 10 m resolution will be used. See <code><a href="reference/rap_projection.html">rap_projection()</a></code> for options and details.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -160,7 +160,7 @@
 <p>This example shows how to use a {<a href="https://github.com/rspatial/terra" class="external-link">terra</a>} SpatVector containing a rectangular polygon with <code><a href="reference/get_rap.html">rapr::get_rap()</a></code> to obtain RAP grids for the corresponding extent. {<a href="https://cran.r-project.org/package=terra" class="external-link">terra</a>}, {<a href="https://cran.r-project.org/package=raster" class="external-link">raster</a>}, {<a href="https://cran.r-project.org/package=sf" class="external-link">sf</a>} and {<a href="https://cran.r-project.org/package=sp" class="external-link">sp</a>} objects are all supported input types. Any spatial object used should have its Coordinate Reference System defined, as the input coordinates will be projected to the source data grid system.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; terra 1.8.42</span></span>
+<span><span class="co">#&gt; terra 1.8.54</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/brownag/rapr/" class="external-link">rapr</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_rap.html">get_rap</a></span><span class="op">(</span></span>
@@ -179,16 +179,16 @@
 <span></span>
 <span><span class="va">res</span></span>
 <span><span class="co">#&gt; class       : SpatRaster </span></span>
-<span><span class="co">#&gt; dimensions  : 37, 37, 24  (nrow, ncol, nlyr)</span></span>
+<span><span class="co">#&gt; size        : 37, 37, 24  (nrow, ncol, nlyr)</span></span>
 <span><span class="co">#&gt; resolution  : 0.0002694946, 0.0002694946  (x, y)</span></span>
 <span><span class="co">#&gt; extent      : -120, -119.99, 36.99002, 36.99999  (xmin, xmax, ymin, ymax)</span></span>
 <span><span class="co">#&gt; coord. ref. : lon/lat WGS 84 (EPSG:4326) </span></span>
 <span><span class="co">#&gt; source(s)   : memory</span></span>
-<span><span class="co">#&gt; names       : veget~grass, veget~round, veget~itter, veget~grass, veget~shrub, veget~_tree, ... </span></span>
-<span><span class="co">#&gt; min values  :           0,           0,           0,           0,           0,           0, ... </span></span>
-<span><span class="co">#&gt; max values  :          80,          26,          33,          74,          13,           9, ... </span></span>
-<span><span class="co">#&gt; unit        :     % cover,     % cover,     % cover,     % cover,     % cover,     % cover, ... </span></span>
-<span><span class="co">#&gt; time (years): 1986 to 2016 (2 steps)</span></span>
+<span><span class="co">#&gt; names       : veget~grass, veget~round, veget~itter, veget~grass, veget~shrub, veget~_tree,     ... </span></span>
+<span><span class="co">#&gt; min values  :           0,           0,           0,           0,           0,           0,     ... </span></span>
+<span><span class="co">#&gt; max values  :          80,          26,          33,          74,          13,           9,     ... </span></span>
+<span><span class="co">#&gt; unit        : % cover </span></span>
+<span><span class="co">#&gt; time (years): 1986 to 2016 (4 steps)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" width="100%"></p>
@@ -292,7 +292,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
