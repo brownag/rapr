@@ -29,10 +29,11 @@
     x <- sf::st_as_sf(x)
   }
   
-  if (!is.numeric(x) 
-      && inherits(x, c('sf', 'sfc', 'wk_rcrd','SpatVector', 
-                       'SpatRaster', 'RasterLayer', 'RasterStack', 'RasterBrick'))
-      && requireNamespace("sf")) {
+  if (!is.numeric(x) &&
+      inherits(x, c('sf', 'sfc', 'wk_rcrd',
+                    'SpatVector', 'SpatRaster',
+                    'RasterLayer', 'RasterStack', 'RasterBrick')) &&
+      requireNamespace("sf")) {
     x <- as.numeric(sf::st_bbox(sf::st_transform(sf::st_as_sf(
       data.frame(geometry = sf::st_as_sfc(sf::st_bbox(x)))
     ), crs = 'EPSG:4326')))[c(1, 4, 3, 2)]

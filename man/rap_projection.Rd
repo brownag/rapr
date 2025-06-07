@@ -12,7 +12,7 @@ rap_projection(x, res)
 \item{res}{\emph{integer}. Resolution in meters.}
 }
 \value{
-A \emph{SpatRaster} object using a standard extent (xmin,ymax,xmax,ymin),
+An empty \emph{SpatRaster} object with a standard extent (xmin,ymax,xmax,ymin),
 resolution and projected Coordinate Reference System.
 }
 \description{
@@ -58,11 +58,12 @@ their own template via SpatRaster object as \code{x} or \code{template} argument
 }
 }
 \examples{
+\dontshow{if (requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 rap_projection("CONUS_AEA", 10)
 
 rap_projection("CONUS_IGH", 100)
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=get_rap]{get_rap()}}

@@ -60,8 +60,6 @@
         .grid <- "EPSG:4326"
       }
     }
-  # } else if (template == "WGS 84 / Equi7 North America") {
-  #   TODO: more standard options for equal-area templates
   } else {
     if (!inherits(template, "SpatRaster")) {
       stop("template should be a SpatRaster object to define the target grid system")
@@ -69,7 +67,7 @@
     .grid <- template
   }
   
-  if (source == "rap-10m"){
+  if (source == "rap-10m") {
     all_tiles_df <- fetch_tiles_metadata(paste0(base_url, product[1], "/"), years)
   
     # build tile bounding boxes (75x75km with 250m overlap)
@@ -147,7 +145,7 @@
 
     raster_data <- terra::rast(paste0("/vsicurl/", grd$url[i]))
    
-    if (source == "rap-10m"){
+    if (source == "rap-10m") {
       name <- paste0(grd$group[i], "_",
                      grd$year[i], "_",
                      grd$tile_x[i], "_",

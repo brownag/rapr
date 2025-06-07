@@ -4,6 +4,7 @@
 #' Systems that are suitable for representing Rangeland Analysis Platform
 #' products across the contiguous (lower 48) United States at the specified
 #' resolution (in meters).
+#'
 #' @seealso [get_rap()]
 #' @details
 #'
@@ -40,17 +41,18 @@
 #' @param x _character_. One of `"CONUS_AEA"`, `"CONUS_EQUI7"`, `"CONUS_IGH"`
 #' @param res _integer_. Resolution in meters.
 #'
-#' @returns A _SpatRaster_ object using a standard extent (xmin,ymax,xmax,ymin),
+#' @returns An empty _SpatRaster_ object with a standard extent (xmin,ymax,xmax,ymin),
 #'   resolution and projected Coordinate Reference System.
 #' @export
 #'
-#' @examples
+#' @examplesIf requireNamespace("terra")
 #' 
 #' rap_projection("CONUS_AEA", 10)
 #' 
 #' rap_projection("CONUS_IGH", 100)
 #' 
 rap_projection <- function(x, res) {
+  
   switch(toupper(gsub(" ", "_", x)), 
          "CONUS_AEA" =  terra::rast(
            res = res,
@@ -76,5 +78,6 @@ rap_projection <- function(x, res) {
            ymin = 2480600,
            crs = "+proj=igh"
          ),
-         stop("Unknown projection identifier, choose one of: CONUS_AEA, CONUS_EQUI7, CONUS_IGH or specify your own custom `template` argument"))
+         stop("Unknown projection identifier, choose one of:\n
+               CONUS_AEA, CONUS_EQUI7, CONUS_IGH or specify your own custom `template` argument"))
 }
