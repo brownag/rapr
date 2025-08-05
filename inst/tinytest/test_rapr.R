@@ -85,7 +85,7 @@ expect_true("perennial_forb_and_grass_biomass_1986_v3" %in% names(res))
 unlink(tf)
 
 # test legacy sp interface via sf
-if (requireNamespace("sf")) {
+if (requireNamespace("sf") && requireNamespace("sp", quietly = TRUE)) {
   res <- get_rap(
     sf::as_Spatial(sf::st_as_sf(
       data.frame(
