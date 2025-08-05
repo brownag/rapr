@@ -13,3 +13,4 @@
 ^.*\.tif$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^rapr\.Rproj$

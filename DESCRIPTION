@@ -18,6 +18,7 @@ Imports:
     terra
 Suggests: 
     sf,
+    sp,
     httr,
     leaflet,
     gifski,
