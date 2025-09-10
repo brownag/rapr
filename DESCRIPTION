@@ -15,10 +15,12 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Language: en-US
 Imports: 
+    utils,
     terra
 Suggests: 
     sf,
     httr,
+    jsonlite,
     leaflet,
     gifski,
     litedown,

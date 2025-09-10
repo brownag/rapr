@@ -1,4 +1,4 @@
-library(tinytest)  
+library(tinytest)
 
 is_cran <- function() {
   !interactive() && !isTRUE(as.logical(Sys.getenv("NOT_CRAN", unset = "TRUE")))
@@ -23,9 +23,10 @@ expect_equivalent(terra::nlyr(res), 10)
 
 expect_true("iag_2020_invasive_annual_grasses" %in% names(res))
 
+poly <- terra::vect("POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))", crs = "EPSG:4326")
 tf <- tempfile(fileext = ".tif")
 res <- get_rap(
-  terra::vect("POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))", crs = "EPSG:4326"),
+  poly,
   product = c("vegetation-biomass", "vegetation-cover"),
   version = "v3",
   year = 1986,
@@ -45,6 +46,12 @@ expect_equivalent(terra::nlyr(res), 8)
 expect_true("vegetation-cover_v3_1986_perennial_forb_and_grass" %in% names(res))
 
 unlink(tf)
+
+res <- get_rap_16day(poly)
+
+expect_equivalent(ncol(res), 7)
+expect_equivalent(res[1, 4], NA_real_)
+expect_equivalent(colnames(res), c("date", "year", "doy", "AFG", "PFG", "HER", "feature"))
 
 # test legacy interface
 res <- get_rap(
@@ -98,10 +105,10 @@ if (requireNamespace("sf") && requireNamespace("sp", quietly = TRUE)) {
     legacy = TRUE,
     progress = FALSE
   )
-  
+
   expect_true(inherits(res, 'SpatRaster'))
-  
+
   expect_equivalent(terra::nlyr(res), 8)
-  
+
   expect_true("perennial_forb_and_grass_biomass_1986_v3" %in% names(res))
 }
