@@ -214,9 +214,9 @@ e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
 
     #> To cite rapr in publications use:
     #> 
-    #>   Brown, A. (2025). rapr: Interface to Rangeland Analysis Platform
-    #>   (RAP) Vegetation Biomass and Cover Products. R package version 1.0.0.
-    #>   http://github.com/brownag/rapr
+    #>   Brown A (2025). _rapr: Interface to Rangeland Analysis Platform (RAP)
+    #>   Vegetation Biomass and Cover Products_. R package version 1.1.0,
+    #>   <https://CRAN.R-project.org/package=rapr>.
     #> 
     #>   Allred, B.W., S.E. McCord, T.J. Assal, B.T. Bestelmeyer, C.S. Boyd,
     #>   A.C. Brooks, S.M. Cady, S.D. Fuhlendorf, S.A. Green, G.R. Harrison,

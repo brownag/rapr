@@ -3,12 +3,15 @@ citHeader("To cite rapr in publications use:")
 bibentry(
   bibtype  = "Manual",
   title    = "rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products",
-  author   = "Brown, A.",
-  year     = "2025",
-  url      = "https://github.com/brownag/rapr/",
-  textVersion = paste(
-  "Brown, A. (2025). rapr: Interface to Rangeland Analysis Platform (RAP) Vegetation Biomass and Cover Products. R package version 1.0.0. http://github.com/brownag/rapr"
-  )
+  author   = person(given="Andrew", family="Brown"),
+  note = paste("R package version",
+               ifelse(requireNamespace("rapr", quietly=TRUE),
+                      paste(packageVersion("rapr"), collapse = "."),
+                      "x.x.x")),
+  url = "https://CRAN.R-project.org/package=rapr",
+  year = ifelse(requireNamespace("rapr", quietly=TRUE),
+                strftime(packageDate("rapr"), "%Y"),
+                "YYYY")
 )
 
 bibentry(
