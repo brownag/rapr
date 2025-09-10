@@ -5,6 +5,12 @@
 
 <!-- badges: start -->
 
+[![CRAN
+version](https://www.r-pkg.org/badges/version/rapr)](https://CRAN.R-project.org/package=rapr)
+[![CRAN
+status](https://badges.cranchecks.info/worst/rapr.svg)](https://cran.r-project.org/web/checks/check_results_rapr.html)
+[![Development
+Version](https://brownag.r-universe.dev/badges/rapr)](https://brownag.r-universe.dev/)
 [![html-docs](https://img.shields.io/badge/docs-HTML-informational)](https://humus.rocks/rapr/)
 [![R-CMD-check](https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/brownag/rapr/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
@@ -15,8 +21,27 @@ The goal of {rapr} is to provide a simple **R** interface to ‘Rangeland
 Analysis Platform’ (RAP) products. See <https://rangelands.app/products>
 and `citation("rapr")` for more information.
 
-Two sets of RAP products are available (see `get_rap()` `source`
-argument).
+## Installation
+
+You can install {rapr} from CRAN:
+
+``` r
+install.packages("rapr")
+```
+
+You can install the development version of {rapr} from
+[GitHub](https://github.com/brownag/rapr) with:
+
+``` r
+# install.packages("remotes")
+remotes::install_github("brownag/rapr")
+```
+
+## Sources, Products, and Band Information
+
+Two sets of gridded RAP products are available (see `get_rap()` `source`
+argument). Also, you can access the API endpoint for the 16-day
+production tabular data (see `get_rap_production16day_table()`).
 
 - `"rap-30m"` is Landsat-derived and has approximately 30 meter
   resolution in WGS84 decimal degrees (`"EPSG:4326"`). This is the data
@@ -25,8 +50,6 @@ argument).
 - `"rap-10m"` is Sentinel 2-derived and has 10 meter resolution in the
   local WGS84 UTM zone (`"EPSG:326XX"`, where XX is the two digit UTM
   zone number). It is a newer (2025) data source.
-
-## Sources, Products, and Band Information
 
 For `"rap-30m"` you can query several Landsat derived annual biomass,
 cover, and Net Primary Productivity products from 1986 to present:
@@ -121,22 +144,6 @@ user-specified grid system for multi-zone requests, a default CONUS
 Albers Equal Area projection (`"EPSG:5070"`) with 10 m resolution will
 be used. See `rap_projection()` for options and details.
 
-## Installation
-
-You can install {rapr} from CRAN:
-
-``` r
-install.packages("rapr")
-```
-
-You can install the development version of {rapr} from
-[GitHub](https://github.com/brownag/rapr) with:
-
-``` r
-# install.packages("remotes")
-remotes::install_github("brownag/rapr")
-```
-
 ## Example
 
 This example shows how to use a
@@ -153,7 +160,8 @@ the source data grid system.
 
 ``` r
 library(terra)
-#> terra 1.8.54
+#> Warning: package 'terra' was built under R version 4.5.1
+#> terra 1.8.56
 library(rapr)
 
 res <- get_rap(
