@@ -47,7 +47,8 @@ expect_true("vegetation-cover_v3_1986_perennial_forb_and_grass" %in% names(res))
 
 unlink(tf)
 
-res <- get_rap_16day(poly)
+# test 16-day production data tabular interface
+res <- get_rap_production16day_table(poly)
 
 expect_equivalent(ncol(res), 7)
 expect_equivalent(res[1, 4], NA_real_)

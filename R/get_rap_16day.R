@@ -41,22 +41,22 @@
 #'                    crs = "EPSG:4326")
 #'
 #' # all years (year=NULL)
-#' res <- get_rap_16day(aoi)
+#' res <- get_rap_production16day_table(aoi)
 #' str(res)
 #'
 #' # specific year
-#' res <- get_rap_16day(aoi, year = 1992)
+#' res <- get_rap_production16day_table(aoi, year = 1992)
 #' str(res)
 #'
 #' # multiple specific years
-#' res <- get_rap_16day(aoi, year = 1993:2003)
+#' res <- get_rap_production16day_table(aoi, year = 1993:2003)
 #' str(res)
 #'
 #' # 1 kilometer buffer around point
-#' res <- get_rap_16day(terra::buffer(aoi, 1000), year = 2004)
+#' res <- get_rap_production16day_table(terra::buffer(aoi, 1000), year = 2004)
 #' str(res)
 #'
-get_rap_16day <- function(aoi, year = NULL, mask = TRUE, nodata_flag = NA_real_) {
+get_rap_production16day_table <- function(aoi, year = NULL, mask = TRUE, nodata_flag = NA_real_) {
 
   if (!inherits(aoi, "SpatVector")) {
     aoi <- terra::vect(aoi)
