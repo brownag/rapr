@@ -1,3 +1,6 @@
+# rapr 1.1.0 (development)
+* Added `get_rap_production16day_table()` as an interface to the tabular 16-day production API
+
 # rapr 1.0.0 (2025-05-12)
 * Initial CRAN release!
 * Major `get_rap()` interface updates
