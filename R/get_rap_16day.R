@@ -99,7 +99,7 @@ get_rap_production16day_table <- function(aoi, year = NULL, mask = TRUE, nodata_
       type = "Feature",
       geometry = list(
         type = geom_type,
-        coordinates = na.omit(coords)
+        coordinates = coords[which(!is.na(coords))]
       )
     )
   })
