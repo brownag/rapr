@@ -90,7 +90,7 @@ get_rap_production16day_table <- function(aoi, year = NULL, mask = TRUE, nodata_
     coords <- unname(lapply(coords, function(part) {
       unname(lapply(as.data.frame(t(part)), as.numeric))
     }))
-    if (geom_type == "Point" && nrow(vi)== 1) {
+    if (geom_type == "Point" && nrow(vi) == 1) {
       coords <- unlist(unlist(coords, recursive = FALSE), recursive = FALSE)
     } else if (geom_type == "LineString" && nrow(vi) > 1) {
       coords <- unlist(coords, recursive = FALSE)
@@ -99,13 +99,13 @@ get_rap_production16day_table <- function(aoi, year = NULL, mask = TRUE, nodata_
       type = "Feature",
       geometry = list(
         type = geom_type,
-        coordinates = coords
+        coordinates = coords[which(!is.na(coords))]
       )
     )
   })
 
   # determine all combinations of input features and year
-  if (!is.null(year)){
+  if (!is.null(year)) {
     grd <- expand.grid(feature = seq_len(length(geojson_list)), year = year)
   } else {
     grd <- data.frame(feature = seq_len(length(geojson_list)))
@@ -127,6 +127,7 @@ get_rap_production16day_table <- function(aoi, year = NULL, mask = TRUE, nodata_
       auto_unbox = TRUE
     )
 
+    # message(json)
     rap_json <- httr::RETRY(verb = "POST",
                             url = "https://us-central1-rap-data-365417.cloudfunctions.net/production16dayV3",
                             config = httr::content_type_json(),
@@ -134,13 +135,18 @@ get_rap_production16day_table <- function(aoi, year = NULL, mask = TRUE, nodata_
 
     content <- httr::content(rap_json, as = "parsed", simplifyVector = TRUE)
 
-    prod <- content$properties$production16day
-    colnames(prod) <- prod[1, ]
-    prod <- prod[-1, ]
-    prod_df <- as.data.frame(prod, stringsAsFactors = FALSE)
-    prod_df[] <- lapply(prod_df, utils::type.convert, as.is = TRUE)
-    prod_df$feature <- grd$feature[i]
-    return(prod_df)
+    if (!is.null(content)) {
+      prod <- content$properties$production16day
+      colnames(prod) <- prod[1, ]
+      prod <- prod[-1, ]
+      prod_df <- as.data.frame(prod, stringsAsFactors = FALSE)
+      prod_df[] <- lapply(prod_df, utils::type.convert, as.is = TRUE)
+      prod_df$feature <- grd$feature[i]
+      return(prod_df)
+    } else {
+      warning("No results for for feature ID ", grd$feature[i], call. = FALSE)
+      return(NULL)
+    }
   })
 
   ## example geojson feature request
