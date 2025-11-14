@@ -8,7 +8,7 @@
 #' local WGS84 UTM zone (`"EPSG:326XX"`, where XX is the two digit UTM zone
 #' number). See Details for the products and bands available for the different
 #' resolutions and sources.
-#' 
+#'
 #' @param x Target extent. Derived from an sf, terra, raster or sp object or
 #'   numeric vector containing `xmin`, `ymax`, `xmax`, `ymin` in WGS84 decimal
 #'   degrees (longitude/latitude, `"EPSG:4326"`).
@@ -42,7 +42,7 @@
 #' @param verbose logical. Print messages indicating progress? Default: `TRUE`.
 #'   For `legacy=TRUE` progress is shown using [utils::txtProgressBar()].
 #' @details
-#' 
+#'
 #' ## Sources, Products, and Band Information
 #'
 #' For `"rap-30m"` you can query several Landsat derived annual biomass,
@@ -123,35 +123,57 @@
 #' @returns a _SpatRaster_ containing the requested product layers by year. If
 #'   `sds=TRUE` a SpatRasterDataset where each SpatRaster contains only one
 #'   product (possibly with multiple years)
-#' 
+#'
 #' @seealso [rap_projection()]
-#' 
+#'
 #' @references See `citation("rapr")` for all references related to Rangeland
 #'   Analysis Platform products.
-#'   
+#'
 #' @importFrom terra rast vect ext as.polygons vrt writeRaster time units merge crop intersect crs nlyr sds project crds
 #'
 #' @export
 #' @examplesIf requireNamespace("terra") && isTRUE(as.logical(Sys.getenv("R_RAPR_EXTENDED_EXAMPLES", unset=FALSE)))
-#' 
+#'
 #' library(rapr)    # access RAP products
 #' library(terra)   # spatial data handling
-#' 
+#'
 #' p <- buffer(terra::vect(
 #'   data.frame(x = -105.97133, y = 32.73437),
 #'   geom = c("x", "y"),
 #'   crs = "OGC:CRS84"
 #' ), width = 1000)
-#' 
+#'
 #' rap <- get_rap(
 #'   p,
 #'   product = "vegetation-biomass",
 #'   years = 2020:2024,
 #'   verbose = FALSE
 #' )
-#' 
-#' plot(rap)
-#' 
+#'
+#' plot(rap, type = "continuous")
+#'
+#' rap10m <- get_rap(
+#'   p,
+#'   product = "pft",
+#'   source = "rap-10m",
+#'   years = c(2020, 2024),
+#'   sds = TRUE,
+#'   verbose = FALSE
+#' )
+#'
+#' plot(
+#'   rap10m$pft_2020,
+#'   type = "continuous",
+#'   range = c(0, 100),
+#'   sub = "Year: 2020"
+#' )
+#'
+#' plot(
+#'   rap10m$pft_2024,
+#'   type = "continuous",
+#'   range = c(0, 100),
+#'   sub = "Year: 2024"
+#' )
 get_rap <- function(x,
                     years,
                     product,
@@ -167,11 +189,11 @@ get_rap <- function(x,
   source <- match.arg(tolower(source), choices = c("rap-30m", "rap-10m"))
 
   overwrite <- list(...)[["overwrite"]]
-  if ((is.null(overwrite) || isFALSE(overwrite)) && 
+  if ((is.null(overwrite) || isFALSE(overwrite)) &&
        (!is.null(filename) && file.exists(filename))) {
     stop("File '", filename, "' exists. You can use 'overwrite=TRUE' to overwrite it.", call. = FALSE)
   }
-  
+
   if (source == "rap-10m") {
     # RAP 10m through new interface
 
@@ -179,8 +201,8 @@ get_rap <- function(x,
     if (!missing(version)) {
       message("`version` argument is ignored for `source='rap-10m'`")
     }
-    
-    # validate years 
+
+    # validate years
     current_year <- as.integer(format(Sys.Date(), "%Y")) - 1
     valid_years <- seq(from = 2018, to = current_year)
     if (!all(years %in% valid_years)) {
@@ -188,13 +210,13 @@ get_rap <- function(x,
            current_year - 1)
     }
 
-    # validate products 
+    # validate products
     product <- match.arg(
       tolower(product),
       choices = c("pft", "gap", "arte", "iag", "pj"),
       several.ok = TRUE
     )
-    
+
     .get_rap_internal(
       x,
       years = years,
@@ -210,13 +232,13 @@ get_rap <- function(x,
     version <- match.arg(tolower(version),
                          choices = c("v3", "v2"),
                          several.ok = TRUE)
-    
+
     product <- match.arg(
       tolower(product),
       choices = c("vegetation-biomass", "vegetation-cover", "vegetation-npp"),
       several.ok = TRUE
     )
-    
+
     if (isFALSE(legacy)) {
       # RAP 30m through new interface
       .get_rap_internal(

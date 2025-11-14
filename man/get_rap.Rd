@@ -181,7 +181,30 @@ rap <- get_rap(
   verbose = FALSE
 )
 
-plot(rap)
+plot(rap, type = "continuous")
+
+rap10m <- get_rap(
+  p,
+  product = "pft",
+  source = "rap-10m",
+  years = c(2020, 2024),
+  sds = TRUE,
+  verbose = FALSE
+)
+
+plot(
+  rap10m$pft_2020,
+  type = "continuous",
+  range = c(0, 100),
+  sub = "Year: 2020"
+)
+
+plot(
+  rap10m$pft_2024,
+  type = "continuous",
+  range = c(0, 100),
+  sub = "Year: 2024"
+)
 \dontshow{\}) # examplesIf}
 }
 \references{
