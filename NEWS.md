@@ -1,4 +1,8 @@
-# rapr 1.1.0 (development)
+# rapr 1.1.1 (2025-11-14)
+* Fixed handling of empty geometries in `get_rap_production16day_table()` (#15)
+* More graceful handling of server-side HTTP errors (#17)
+
+# rapr 1.1.0 (2025-09-10)
 * Added `get_rap_production16day_table()` as an interface to the tabular 16-day production API
 
 # rapr 1.0.0 (2025-05-12)
