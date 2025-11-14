@@ -66,30 +66,30 @@
     }
     .grid <- template
   }
-  
+
   if (source == "rap-10m") {
     all_tiles_df <- fetch_tiles_metadata(paste0(base_url, product[1], "/"), years)
-  
+
     # build tile bounding boxes (75x75km with 250m overlap)
     tile_size <- 75000
     tile_overlap <- 250
-  
+
     tiles_grid <- terra::vect(lapply(zones, function(utm) {
       tf <- subset(all_tiles_df, all_tiles_df$utm_zone == utm)
       tf$xmin <- tf$lower_left_x - tile_overlap
       tf$ymin <- tf$lower_left_y - tile_overlap
       tf$xmax <- tf$lower_left_x + tile_size + tile_overlap
       tf$ymax <- tf$lower_left_y + tile_size + tile_overlap
-  
+
       xm <- apply(tf[c("xmin", "xmax", "ymin", "ymax")], MARGIN = 1, function(x) {
         terra::as.polygons(terra::ext(x), crs = paste0("EPSG:326", utm))
       })
       res <- terra::project(x = terra::vect(xm), terra::crs(.grid))
       res <- cbind(res, tf)
     }))
-  
+
     x <- terra::project(x, terra::crs(tiles_grid))
-  
+
     overlapping_tiles <- terra::intersect(tiles_grid, x)
     overlapping_tiles$tile_x = as.integer(gsub(
       ".*(\\d{6})-\\d{7}\\.tif",
@@ -101,14 +101,14 @@
       "\\1",
       overlapping_tiles$file_name
     ))
-  
+
     lgrd <- vector("list", length(product))
     for (i in seq_along(product)) {
       lgrd[[i]] <- overlapping_tiles
       lgrd[[i]]$group <- product[i]
     }
     grd <- do.call('rbind', lgrd)
-  
+
     # Construct download URLs for each group/tile/year combo
     grd$url <- paste0(
       base_url,
@@ -129,22 +129,43 @@
       )
     )
   }
-  
+
   # short-circuit for VRT output (uses source band names)
   if (isTRUE(vrt)) {
     return(terra::vrt(paste0("/vsicurl/", grd$url), set_names = TRUE, filename = filename, ...))
   }
-  
-  # Step 8: Download and crop rasters to ROI
-  raster_list <- list()
 
-  for (i in seq_len(nrow(grd))) {
+  # Step 8: Download and crop rasters to ROI
+  raster_list <- vector("list", length = nrow(grd))
+
+  ## for testing hard-to-reproduce file access errors
+  # grd$url[2] <- "http://example.com/foo.tif"
+
+  for (i in seq_along(raster_list)) {
     if (verbose) {
      message("Processing: ", grd$url[i])
     }
 
-    raster_data <- terra::rast(paste0("/vsicurl/", grd$url[i]))
-   
+    ntry <- 1
+    while (ntry <= 3){
+      raster_data <- try(terra::rast(paste0("/vsicurl/", grd$url[i])), silent = !verbose)
+
+      if (inherits(raster_data, 'try-error')) {
+        retry_seconds <- exp(ntry)
+        message("\t Attempting retry in ", round(retry_seconds), " seconds...")
+        Sys.sleep(retry_seconds/1000)
+        ntry <- ntry + 1
+        next
+      } else break
+    }
+
+    if (ntry >= 3) {
+      warning("Failed attempts access URL (", grd$url[i],
+              ") 3 times, skipping...",
+              immediate. = TRUE, call. = FALSE)
+      next
+    }
+
     if (source == "rap-10m") {
       name <- paste0(grd$group[i], "_",
                      grd$year[i], "_",
@@ -155,11 +176,11 @@
                      grd$version[i], "_",
                      grd$year[i])
     }
-    
+
     # crop tile to AOI
     raster_crp <- terra::crop(
       raster_data,
-      terra::project(x, raster_data), 
+      terra::project(x, raster_data),
       filename = tempfile(
         pattern = paste0("spat_rapr_crp_", name, "_"),
         fileext = ".tif"
@@ -191,64 +212,69 @@
       raster_prj <- raster_crp
     }
     names(raster_prj) <- names(raster_data)
-    raster_list[[name]] <- raster_prj
+    raster_list[[i]] <- raster_prj
+    names(raster_list)[i] <- name
   }
-    
+
   if (source == "rap-10m") {
       # Merge tiles by group and year
-      merged_rasters <- list()
       combo_df <- unique(data.frame(group = grd$group, year = grd$year))
       combo_keys <- paste(combo_df$group, combo_df$year, sep = "_")
-    
+      merged_rasters <- vector("list", nrow(combo_df))
+
       for (i in seq_len(nrow(combo_df))) {
         key <- combo_keys[i]
         if (verbose) {
           message("Merging: ", key)
         }
-        matched_rasters <- raster_list[grepl(paste0("^", key, "_"), names(raster_list))]
+        matched_rasters <- raster_list[key == paste0(combo_df$group, "_", combo_df$year)]
         if (length(matched_rasters) > 1) {
-          merged_rasters[[key]] <- terra::merge(terra::sprc(matched_rasters),
-                                                ...,
-                                                datatype = datatype,
-                                                filename = tempfile(
-                                                  pattern = paste0("spat_rapr_mrg_", key, "_"),
-                                                  fileext = ".tif"
-                                                ))
+          merged_rasters[[key]] <- terra::merge(
+            terra::sprc(matched_rasters[!sapply(matched_rasters, is.null)]),
+            ...,
+            datatype = datatype,
+            filename = tempfile(
+              pattern = paste0("spat_rapr_mrg_", key, "_"),
+              fileext = ".tif"
+            )
+          )
         } else {
           merged_rasters[[key]] <- matched_rasters[[1]]
         }
-    
-        nband <- terra::nlyr(merged_rasters[[key]])
-        
-        # set readable band names
-        names(merged_rasters[[key]]) <- .get_band_names(combo_df$group[i])
+        if (!is.null(merged_rasters[[key]])){
+          nband <- terra::nlyr(merged_rasters[[key]])
 
-        # set time metadata
-        terra::time(merged_rasters[[key]], tstep = "years") <- rep(combo_df$year[i], nband)
-        
-        # set unit metadata
-        terra::units(merged_rasters[[key]]) <- rep(.get_band_units(combo_df$group[i]), nband)
+          # set readable band names
+          names(merged_rasters[[key]]) <- .get_band_names(combo_df$group[i])
+
+          # set time metadata
+          terra::time(merged_rasters[[key]], tstep = "years") <- rep(combo_df$year[i], nband)
+
+          # set unit metadata
+          terra::units(merged_rasters[[key]]) <- rep(.get_band_units(combo_df$group[i]), nband)
+        }
       }
   } else {
-    for (i in seq_len(nrow(grd))) {
-      
-      nband <- terra::nlyr(raster_list[[i]])
-      
-      # set readable band names
-      names(raster_list[[i]]) <- .get_band_names(grd$group[i])
-      
-      # set time metadata
-      terra::time(raster_list[[i]], tstep = "years") <- rep(grd$year[i], nband)
-      
-      # set unit metadata
-      terra::units(raster_list[[i]]) <- rep(.get_band_units(grd$group[i]), nband)
+    for (i in seq_along(raster_list)) {
+      if (!is.null(raster_list[[i]])) {
+        nband <- terra::nlyr(raster_list[[i]])
+
+        # set readable band names
+        names(raster_list[[i]]) <- .get_band_names(grd$group[i])
+
+        # set time metadata
+        terra::time(raster_list[[i]], tstep = "years") <- rep(grd$year[i], nband)
+
+        # set unit metadata
+        terra::units(raster_list[[i]]) <- rep(.get_band_units(grd$group[i]), nband)
+      }
     }
     merged_rasters <- raster_list
   }
 
-  res <- terra::sds(merged_rasters)
- 
-  # return SpatRasterDataset 
+  res <- terra::sds(merged_rasters[!sapply(merged_rasters, is.null)])
+
+  # return SpatRasterDataset
   if (isFALSE(sds)) {
     res <- terra::rast(res)
   }
@@ -262,16 +288,16 @@
       }
       message("Cropping and writing result to ", fn)
     }
-    
+
     res <- terra::crop(
       res,
-      terra::project(x, res), 
+      terra::project(x, res),
       mask = mask,
       filename = filename,
       datatype = datatype,
       ...
     )
-    
+
   } else if (!is.null(filename) && isFALSE(sds)) {
     if (verbose) {
       message("Writing result to ", filename)
