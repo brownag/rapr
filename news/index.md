@@ -2,6 +2,8 @@
 
 ## rapr 1.1.1 (2025-11-14)
 
+CRAN release: 2025-11-14
+
 - Fixed handling of empty geometries in
   [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_production16day_table.md)
   ([\#15](https://github.com/brownag/rapr/issues/15),
