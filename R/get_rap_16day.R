@@ -144,7 +144,7 @@ get_rap_production16day_table <- function(aoi, year = NULL, mask = TRUE, nodata_
       prod_df$feature <- grd$feature[i]
       return(prod_df)
     } else {
-      warning("No results for for feature ID ", grd$feature[i], call. = FALSE)
+      warning("No results for for feature ID ", grd$feature[i], call. = FALSE, immediate. = TRUE)
       return(NULL)
     }
   })
