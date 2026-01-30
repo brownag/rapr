@@ -1,5 +1,14 @@
 # Changelog
 
+## rapr 1.1.2 (2026-01-30)
+
+CRAN release: 2026-01-30
+
+- Fix for CRAN check test skipping logic
+- [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_production16day_table.md)
+  now uses `immediate.=TRUE` to ensure warnings are displayed as soon as
+  they occur
+
 ## rapr 1.1.1 (2025-11-14)
 
 CRAN release: 2025-11-14
