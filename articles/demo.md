@@ -5,7 +5,7 @@ library(rapr)    # access RAP products
 library(terra)   # spatial data handling
 ```
 
-    ## terra 1.8.80
+    ## terra 1.8.93
 
 First, we buffer 1000 meters around a longitude/latitude coordinate
 (WGS84 decimal degrees) using the {terra} package.

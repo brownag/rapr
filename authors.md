@@ -11,9 +11,9 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/brownag/rapr/blob/1.1.1/inst/CITATION)
+[`inst/CITATION`](https://github.com/brownag/rapr/blob/main/inst/CITATION)
 
-Brown A (2025). *rapr: Interface to Rangeland Analysis Platform (RAP)
+Brown A (2026). *rapr: Interface to Rangeland Analysis Platform (RAP)
 Vegetation Biomass and Cover Products*. R package version 1.1.1,
 <https://CRAN.R-project.org/package=rapr>.
 
@@ -22,7 +22,7 @@ Vegetation Biomass and Cover Products*. R package version 1.1.1,
       author = {Andrew Brown},
       note = {R package version 1.1.1},
       url = {https://CRAN.R-project.org/package=rapr},
-      year = {2025},
+      year = {2026},
     }
 
 Allred, B.W., S.E. McCord, T.J. Assal, B.T. Bestelmeyer, C.S. Boyd, A.C.
