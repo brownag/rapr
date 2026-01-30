@@ -1,3 +1,7 @@
+# rapr 1.1.2 (2026-01-30)
+* Fix for CRAN check test skipping logic
+* `get_rap_production16day_table()` now uses `immediate.=TRUE` to ensure warnings are displayed as soon as they occur
+
 # rapr 1.1.1 (2025-11-14)
 * Fixed handling of empty geometries in `get_rap_production16day_table()` (#15, #16)
 * More graceful handling of server-side HTTP errors (#14, #17)
