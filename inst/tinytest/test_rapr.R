@@ -1,7 +1,7 @@
 library(tinytest)
 
 is_cran <- function() {
-  !interactive() && !isTRUE(as.logical(Sys.getenv("NOT_CRAN", unset = "TRUE")))
+  !interactive() && nchar(Sys.getenv("NOT_CRAN")) == 0
 }
 
 if (is_cran()) {
