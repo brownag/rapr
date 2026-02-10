@@ -58,7 +58,7 @@ their own template via SpatRaster object as \code{x} or \code{template} argument
 }
 }
 \examples{
-\dontshow{if (requireNamespace("terra")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("terra")) withAutoprint(\{ # examplesIf}
 
 rap_projection("CONUS_AEA", 10)
 
