@@ -1,10 +1,11 @@
-#' Query RAP Yearly Vegetation Cover Data
+#' Query RAP Tabular Data
 #'
-#' Retrieves remotely sensed production estimates from the Rangeland Analysis
-#' Platform (RAP) using the `coverV3` API endpoint. This function
+#' Retrieves remotely sensed production & cover estimates from the Rangeland 
+#' Analysis Platform (RAP) using the tabular data API endpoints. This function
 #' supports querying one or more spatial features (points, lines, or polygons)
 #' provided as a `terra` `SpatVector` in WGS84 longitude latitude
-#' (`"EPSG:4326"`).
+#' (`"EPSG:4326"`). See Details for the products and bands available for the 
+#' different sources.
 #'
 #' For each feature - year combination, a separate request is made to the RAP
 #' API, and results are returned as a combined `data.frame`. In the special case
@@ -21,16 +22,42 @@
 #'   the row index of the input feature from `aoi`.
 #' @param year integer. Optional. Numeric year or vector of years (1986 to last
 #'   full year). Default: `NULL` returns all available years.
+#' @param product Target data: `"cover"`, `"coverMeteorology"`, 
+#' `"production"`, and/or `"production16day"`.
+#' @param version Target version: `"v3"`. Currently ignored.
 #' @param mask logical. Exclude cropland, development, and water? Default:
 #'   `TRUE`.
 #' @param nodata_flag numeric. Value to use for missing data. The API encodes
 #'   "NODATA" as `-99`. Default: `NA_real_` replaces `-99` with `NA`.
+#' @details
+#'    
+#' ## Sources, Products, and Band Information
 #'
-#' @return A data.frame with yearly fractional cover data including the following
-#'   columns: `"year"` (cover estimate year), `"AFG"` (Annual Forb and Grass 
-#'   cover), `"PFG"` (Perennial Forb and Grass cover), `"SHR"` (Shrub cover), 
-#'   `"TRE"` (Tree cover), `"LTR"` (Litter cover), `"BGR"` (Bare Ground cover), 
-#'   `"feature"` (feature ID, row number from `aoi`)
+#' You can query several Landsat derived annual biomass, cover, and Net Primary 
+#' Productivity products from 1986 to present:
+#'
+#'   - `product = "cover"` returns [two layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README) per year:
+#'
+#'     - 2 Bands:`"annual forb and grass"`, `"perennial forb and grass"` (**lbs / acre**)
+#'
+#'   - `product = "coverMeteorology"` returns [six layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README) per year:
+#'
+#'     - 6 Bands: `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
+#'     
+#'   - `product = "production"` returns [six layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README) per year:
+#'
+#'     - 6 Bands: `"annual forb and grass"`, `"bare ground"`, `"litter"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
+#'
+#'   - `product = "production16day"` returns [four layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README) per year:
+#'
+#'     - 4 Bands: `"annual forb and grass"`, `"perennial forb and grass"`, `"shrub"`, `"tree"` (NPP; kg*C/m^2)
+#'
+#' @return A data.frame with requested data including the following
+#'   columns: `"date"` (production estimate date), `"year"` (production estimate
+#'   year), `"doy"` (production estimate Julian day of year), `"AFG"` (Annual
+#'   Forb and Grass production), `"PFG"` (Perennial Forb and Grass production),
+#'   `"HER"` (Herbaceous production), `"feature"` (feature ID, row number from
+#'   `aoi`)
 #' @export
 #' @importFrom utils type.convert
 #' @examplesIf requireNamespace("terra") && isTRUE(as.logical(Sys.getenv("R_RAPR_EXTENDED_EXAMPLES", unset=FALSE)))
@@ -40,22 +67,31 @@
 #'                    crs = "EPSG:4326")
 #'
 #' # all years (year=NULL)
-#' res <- get_rap_cover_table(aoi)
+#' res <- get_rap_table(aoi)
 #' str(res)
 #'
 #' # specific year
-#' res <- get_rap_cover_table(aoi, year = 1992)
+#' res <- get_rap_table(aoi, year = 1992)
 #' str(res)
 #'
 #' # multiple specific years
-#' res <- get_rap_cover_table(aoi, year = 1993:2003)
+#' res <- get_rap_table(aoi, year = 1993:2003)
 #' str(res)
 #'
 #' # 1 kilometer buffer around point
-#' res <- get_rap_cover_table(terra::buffer(aoi, 1000), year = 2004)
+#' res <- get_rap_table(terra::buffer(aoi, 1000), year = 2004)
 #' str(res)
-#'
-get_rap_cover_table <- function(aoi, year = NULL, mask = TRUE, nodata_flag = NA_real_) {
+#' 
+#' # all years (year=NULL) 16 day production data using dedicated function 
+#' res <- get_rap_production16day_table(aoi)
+#' str(res)
+#' 
+get_rap_production16day_table <- function(aoi, 
+                                          year = NULL, 
+                                          product,
+                                          version = "V3",
+                                          mask = TRUE, 
+                                          nodata_flag = NA_real_) {
 
   if (!inherits(aoi, "SpatVector")) {
     aoi <- terra::vect(aoi)
@@ -128,18 +164,17 @@ get_rap_cover_table <- function(aoi, year = NULL, mask = TRUE, nodata_flag = NA_
 
     # message(json)
     rap_json <- httr::RETRY(verb = "POST",
-                            url = "https://us-central1-rap-data-365417.cloudfunctions.net/coverV3",
+                            url = "https://us-central1-rap-data-365417.cloudfunctions.net/production16dayV3",
                             config = httr::content_type_json(),
                             body = json)
 
     content <- httr::content(rap_json, as = "parsed", simplifyVector = TRUE)
 
     if (!is.null(content)) {
-      prod <- content$properties$cover
+      prod <- content$properties$production16day
+      colnames(prod) <- prod[1, ]
+      prod <- prod[-1, ]
       prod_df <- as.data.frame(prod, stringsAsFactors = FALSE)
-      colnames(prod_df) <- prod_df[1, ]
-      prod_df <- prod_df[-1, ]
-      rownames(prod_df) <- NULL
       prod_df[] <- lapply(prod_df, utils::type.convert, as.is = TRUE)
       prod_df$feature <- grd$feature[i]
       return(prod_df)
