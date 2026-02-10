@@ -25,9 +25,10 @@ full year). Default: \code{NULL} returns all available years.}
 }
 \value{
 A data.frame with yearly fractional cover data including the following
-columns: \code{"year"} (cover estimate year), ``"AFG"\verb{(Annual Forb and Grass  cover),}"PFG"` (Perennial Forb and Grass cover), `"SHR"` (Shrub cover),
-`"TRE"` (Tree cover), `"LTR"` (Litter cover), `"BGR"` (Bare Ground cover),
-`"feature"` (feature ID, row number from `aoi`)
+columns: \code{"year"} (cover estimate year), \code{"AFG"} (Annual Forb and Grass
+cover), \code{"PFG"} (Perennial Forb and Grass cover), \code{"SHR"} (Shrub cover),
+\code{"TRE"} (Tree cover), \code{"LTR"} (Litter cover), \code{"BGR"} (Bare Ground cover),
+\code{"feature"} (feature ID, row number from \code{aoi})
 }
 \description{
 Retrieves remotely sensed production estimates from the Rangeland Analysis

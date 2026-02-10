@@ -25,8 +25,9 @@ full year). Default: \code{NULL} returns all available years.}
 }
 \value{
 A data.frame with yearly production data including the following
-columns: \code{"year"} (production estimate year), ``"AFG"\verb{(Annual Forb and  Grass production),}"PFG"` (Perennial Forb and Grass production), `"HER"`
-(Herbaceous production), `"feature"` (feature ID, row number from `aoi`)
+columns: \code{"year"} (production estimate year), \code{"AFG"} (Annual Forb and
+Grass production), \code{"PFG"} (Perennial Forb and Grass production), \code{"HER"}
+(Herbaceous production), \code{"feature"} (feature ID, row number from \code{aoi})
 }
 \description{
 Retrieves remotely sensed production estimates from the Rangeland Analysis

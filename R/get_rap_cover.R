@@ -27,7 +27,7 @@
 #'   "NODATA" as `-99`. Default: `NA_real_` replaces `-99` with `NA`.
 #'
 #' @return A data.frame with yearly fractional cover data including the following
-#'   columns: `"year"` (cover estimate year), ``"AFG"` (Annual Forb and Grass 
+#'   columns: `"year"` (cover estimate year), `"AFG"` (Annual Forb and Grass 
 #'   cover), `"PFG"` (Perennial Forb and Grass cover), `"SHR"` (Shrub cover), 
 #'   `"TRE"` (Tree cover), `"LTR"` (Litter cover), `"BGR"` (Bare Ground cover), 
 #'   `"feature"` (feature ID, row number from `aoi`)

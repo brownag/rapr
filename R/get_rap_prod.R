@@ -27,7 +27,7 @@
 #'   "NODATA" as `-99`. Default: `NA_real_` replaces `-99` with `NA`.
 #'
 #' @return A data.frame with yearly production data including the following
-#'   columns: `"year"` (production estimate year), ``"AFG"` (Annual Forb and 
+#'   columns: `"year"` (production estimate year), `"AFG"` (Annual Forb and 
 #'   Grass production), `"PFG"` (Perennial Forb and Grass production), `"HER"` 
 #'   (Herbaceous production), `"feature"` (feature ID, row number from `aoi`)
 #' @export
