@@ -235,7 +235,10 @@ get_rap_table <- function(aoi,
 #' @export
 #' @rdname get_rap_table
 get_rap_production16day_table <- function(aoi, years = NULL, mask = TRUE, nodata_flag = NA_real_, ...) {
-  if("year"%in%names(list(...))){years=list(...)$year}
+  .Deprecated(msg = "`get_rap_production16day_table()` is deprecated.\nPlease use `get_rap_table(product=...)` instead")
+  if ("year" %in% names(list(...))) {
+    years <- list(...)$year 
+  }
   get_rap_table(aoi=aoi,
                 years = years,
                 product = "production16day", 
