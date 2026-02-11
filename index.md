@@ -26,7 +26,7 @@ Two sets of gridded RAP products are available (see
 [`get_rap()`](https://humus.rocks/rapr/reference/get_rap.md) `source`
 argument). Also, you can access the API endpoint for the 16-day
 production tabular data (see
-[`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_production16day_table.md)).
+[`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_table.md)).
 
 - `"rap-30m"` is Landsat-derived and has approximately 30 meter
   resolution in WGS84 decimal degrees (`"EPSG:4326"`). This is the data

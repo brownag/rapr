@@ -5,7 +5,7 @@
 CRAN release: 2026-01-30
 
 - Fix for CRAN check test skipping logic
-- [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_production16day_table.md)
+- [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_table.md)
   now uses `immediate.=TRUE` to ensure warnings are displayed as soon as
   they occur
 
@@ -14,7 +14,7 @@ CRAN release: 2026-01-30
 CRAN release: 2025-11-14
 
 - Fixed handling of empty geometries in
-  [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_production16day_table.md)
+  [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_table.md)
   ([\#15](https://github.com/brownag/rapr/issues/15),
   [\#16](https://github.com/brownag/rapr/issues/16))
 - More graceful handling of server-side HTTP errors
@@ -24,7 +24,7 @@ CRAN release: 2025-11-14
 ## rapr 1.1.0 (2025-09-10)
 
 - Added
-  [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_production16day_table.md)
+  [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_table.md)
   as an interface to the tabular 16-day production API
 
 ## rapr 1.0.0 (2025-05-12)

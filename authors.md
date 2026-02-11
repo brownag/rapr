@@ -8,10 +8,13 @@
 - **Georgia Harrison**. Contributor.
   [](https://orcid.org/0000-0003-0544-4471)
 
+- **Scott Appleby**. Contributor.
+  [](https://orcid.org/0000-0002-2031-2752)
+
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/brownag/rapr/blob/1.1.2/inst/CITATION)
+[`inst/CITATION`](https://github.com/brownag/rapr/blob/main/inst/CITATION)
 
 Brown A (2026). *rapr: Interface to Rangeland Analysis Platform (RAP)
 Vegetation Biomass and Cover Products*. R package version 1.1.2,

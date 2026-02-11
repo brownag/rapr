@@ -23,3 +23,6 @@ Other contributors:
 
 - Georgia Harrison ([ORCID](https://orcid.org/0000-0003-0544-4471))
   \[contributor\]
+
+- Scott Appleby ([ORCID](https://orcid.org/0000-0002-2031-2752))
+  \[contributor\]
