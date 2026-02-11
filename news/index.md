@@ -1,5 +1,20 @@
 # Changelog
 
+## rapr 1.1.3 (2026-02-11)
+
+- Added
+  [`get_rap_table()`](https://humus.rocks/rapr/reference/get_rap_table.md)
+  interface to RAP tabular data APIs; thanks to Scott Appleby
+  ([@s-appleby](https://github.com/s-appleby)) for the contribution
+  ([\#20](https://github.com/brownag/rapr/issues/20))
+- This generalizes
+  [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_table.md)
+  to support other endpoints, including: `"cover"`,
+  `"coverMeteorology"`, `"production"`, and `"production16day"`
+- [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_table.md)
+  is now deprecated, use `get_rap_table(product="production16day")`
+  instead
+
 ## rapr 1.1.2 (2026-01-30)
 
 CRAN release: 2026-01-30
