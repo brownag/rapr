@@ -1,3 +1,8 @@
+# rapr 1.1.3 (2026-02-11)
+* Added `get_rap_table()` interface to RAP tabular data APIs; thanks to Scott Appleby (@s-appleby) for the contribution (#20)
+ * This generalizes `get_rap_production16day_table()` to support other endpoints, including: `"cover"`, `"coverMeteorology"`, `"production"`, and `"production16day"`
+ *  `get_rap_production16day_table()` is now deprecated, use `get_rap_table(product="production16day")` instead
+
 # rapr 1.1.2 (2026-01-30)
 * Fix for CRAN check test skipping logic
 * `get_rap_production16day_table()` now uses `immediate.=TRUE` to ensure warnings are displayed as soon as they occur
