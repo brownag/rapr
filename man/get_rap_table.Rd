@@ -47,8 +47,8 @@ full year). Default: \code{NULL} returns all available years.}
 A \emph{data.frame} with requested time-series data by year or 16-day
 production period. In addition to the columns described in Details above, all
 products include columns for \code{"year"} (production estimate year) and
-\code{"feature"} (feature ID, row number from \code{aoi}). Units are \emph{\% cover} for
-fractional cover and \emph{lbs / acre} for production.
+\code{"feature"} (feature ID, row number from \code{aoi}). Units are \strong{\% cover} for
+fractional cover and \strong{lbs / acre} for production.
 }
 \description{
 Retrieves remotely sensed production or cover estimates from the Rangeland
@@ -67,34 +67,38 @@ of (\code{years=NULL}) default, all available years are returned in a single que
 
 For more information on the API and data products, see the RAP API
 documentation: \url{https://rangelands.app/support/71-api-documentation}
-\subsection{Products Information}{
+\subsection{Products Overview}{
 
 You can query several Landsat derived biomass, cover, and meteorological
-products from 1986 to present, where \verb{product =}
+products from 1986 to present:
 \itemize{
 \item \code{"cover"} -- yearly fractional cover, including:
 \itemize{
-\item \code{"AFG"} (Annual Forb and Grass cover), \code{"PFG"} (Perennial Forb and Grass
-cover), \code{"SHR"} (Shrub cover), \code{"TRE"} (Tree cover), \code{"LTR"} (Litter cover),
-\code{"BGR"} (Bare Ground cover).
+\item \code{"AFG"} (Annual Forb and Grass cover)
+\item \code{"PFG"} (Perennial Forb and Grass cover)
+\item \code{"SHR"} (Shrub cover)
+\item \code{"TRE"} (Tree cover)
+\item \code{"LTR"} (Litter cover)
+\item \code{"BGR"} (Bare Ground cover)
 }
-\item \code{"coverMeteorology"} -- yearly fractional cover & meteorological data, including:
+\item \code{"coverMeteorology"} -- the same data provided by \code{"cover"} above, plus:
 \itemize{
-\item \code{"AFG"} (Annual Forb and Grass cover), \code{"PFG"} (Perennial Forb and Grass
-cover), \code{"SHR"} (Shrub cover), \code{"TRE"} (Tree cover), \code{"LTR"} (Litter cover),
-\code{"BGR"} (Bare Ground cover), \code{"annualTemp"} (Annual average temperature in
-degrees Fahrenheit), \code{"annualPrecip"} (Annual total precipitation in inches).
+\item \code{"annualTemp"} (Annual average temperature in degrees Fahrenheit)
+\item \code{"annualPrecip"} (Annual total precipitation in inches)
 }
 \item \code{"production"} -- annual production, including:
 \itemize{
-\item \code{"AFG"} (Annual Forb and Grass production), \code{"PFG"} (Perennial Forb and
-Grass production), \code{"HER"} (Herbaceous production).
+\item \code{"AFG"} (Annual Forb and Grass production)
+\item \code{"PFG"} (Perennial Forb and Grass production)
+\item \code{"HER"} (Herbaceous production)
 }
 \item \code{"production16day"} -- 16-day production, including:
 \itemize{
-\item \code{"date"} (production estimate date), \code{"doy"} (production estimate Julian
-day of year), \code{"AFG"} (Annual Forb and Grass production), \code{"PFG"}
-(Perennial Forb and Grass production), \code{"HER"} (Herbaceous production).
+\item \code{"date"} (production estimate date)
+\item \code{"doy"} (production estimate Julian day of year)
+\item \code{"AFG"} (Annual Forb and Grass production)
+\item \code{"PFG"} (Perennial Forb and Grass production)
+\item \code{"HER"} (Herbaceous production)
 }
 }
 }

@@ -30,36 +30,40 @@
 #'   "NODATA" as `-99`. Default: `NA_real_` replaces `-99` with `NA`.
 #' @details
 #'    
-#' ## Products Information
+#' ## Products Overview
 #'
 #' You can query several Landsat derived biomass, cover, and meteorological 
-#' products from 1986 to present, where `product =`
+#' products from 1986 to present:
 #'
 #'   - `"cover"` -- yearly fractional cover, including:
-#'     - `"AFG"` (Annual Forb and Grass cover), `"PFG"` (Perennial Forb and Grass 
-#'     cover), `"SHR"` (Shrub cover), `"TRE"` (Tree cover), `"LTR"` (Litter cover), 
-#'     `"BGR"` (Bare Ground cover).
+#'     - `"AFG"` (Annual Forb and Grass cover)
+#'     - `"PFG"` (Perennial Forb and Grass cover)
+#'     - `"SHR"` (Shrub cover)
+#'     - `"TRE"` (Tree cover) 
+#'     - `"LTR"` (Litter cover)  
+#'     - `"BGR"` (Bare Ground cover)
 #'
-#'   - `"coverMeteorology"` -- yearly fractional cover & meteorological data, including: 
-#'     - `"AFG"` (Annual Forb and Grass cover), `"PFG"` (Perennial Forb and Grass 
-#'     cover), `"SHR"` (Shrub cover), `"TRE"` (Tree cover), `"LTR"` (Litter cover), 
-#'     `"BGR"` (Bare Ground cover), `"annualTemp"` (Annual average temperature in 
-#'     degrees Fahrenheit), `"annualPrecip"` (Annual total precipitation in inches).
+#'   - `"coverMeteorology"` -- the same data provided by `"cover"` above, plus:
+#'     - `"annualTemp"` (Annual average temperature in degrees Fahrenheit) 
+#'     - `"annualPrecip"` (Annual total precipitation in inches)
 #'     
 #'   - `"production"` -- annual production, including: 
-#'     - `"AFG"` (Annual Forb and Grass production), `"PFG"` (Perennial Forb and 
-#'     Grass production), `"HER"` (Herbaceous production).
+#'     - `"AFG"` (Annual Forb and Grass production)
+#'     - `"PFG"` (Perennial Forb and Grass production) 
+#'     - `"HER"` (Herbaceous production)
 #'
 #'   - `"production16day"` -- 16-day production, including:
-#'     - `"date"` (production estimate date), `"doy"` (production estimate Julian 
-#'     day of year), `"AFG"` (Annual Forb and Grass production), `"PFG"` 
-#'     (Perennial Forb and Grass production), `"HER"` (Herbaceous production).
+#'     - `"date"` (production estimate date)
+#'     - `"doy"` (production estimate Julian day of year)
+#'     - `"AFG"` (Annual Forb and Grass production)
+#'     - `"PFG"` (Perennial Forb and Grass production) 
+#'     - `"HER"` (Herbaceous production)
 #'
 #' @returns  A _data.frame_ with requested time-series data by year or 16-day 
 #' production period. In addition to the columns described in Details above, all 
 #' products include columns for `"year"` (production estimate year) and 
-#' `"feature"` (feature ID, row number from `aoi`). Units are *% cover* for
-#' fractional cover and *lbs / acre* for production.
+#' `"feature"` (feature ID, row number from `aoi`). Units are **% cover** for
+#' fractional cover and **lbs / acre** for production.
 #' 
 #' @importFrom utils type.convert
 #' @name get_rap_table
