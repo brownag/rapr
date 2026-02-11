@@ -16,9 +16,10 @@ get_rap_table(
 
 get_rap_production16day_table(
   aoi,
-  year = NULL,
+  years = NULL,
   mask = TRUE,
-  nodata_flag = NA_real_
+  nodata_flag = NA_real_,
+  ...
 )
 }
 \arguments{
@@ -42,6 +43,9 @@ full year). Default: \code{NULL} returns all available years.}
 
 \item{nodata_flag}{numeric. Value to use for missing data. The API encodes
 "NODATA" as \code{-99}. Default: \code{NA_real_} replaces \code{-99} with \code{NA}.}
+
+\item{...}{allows backward compatibility with \code{year} argument in depreciated
+version of \code{get_rap_production16day_table()}.}
 }
 \value{
 A \emph{data.frame} with requested time-series data by year or 16-day

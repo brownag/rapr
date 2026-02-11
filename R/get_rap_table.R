@@ -229,12 +229,17 @@ get_rap_table <- function(aoi,
 #' `get_rap_production16day_table()` is depreciated, please use 
 #' `get_rap_table(product="production16day")` instead.
 #' 
+#' @param ... allows backward compatibility with `year` argument in depreciated
+#' version of `get_rap_production16day_table()`.
+#' 
 #' @export
 #' @rdname get_rap_table
-get_rap_production16day_table <- function(aoi, year = NULL, mask = TRUE, nodata_flag = NA_real_) {
-  get_rap_table(aoi=aoi, 
-                      years = year, 
-                      product = "production16day", 
-                      version = "V3", mask = mask, 
-                      nodata_flag = nodata_flag)
+get_rap_production16day_table <- function(aoi, years = NULL, mask = TRUE, nodata_flag = NA_real_, ...) {
+  if("year"%in%names(list(...))){years=list(...)$year}
+  get_rap_table(aoi=aoi,
+                years = years,
+                product = "production16day", 
+                version = "V3", 
+                mask = mask, 
+                nodata_flag = nodata_flag)
 }
