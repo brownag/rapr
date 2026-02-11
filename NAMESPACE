@@ -2,6 +2,7 @@
 
 export(get_rap)
 export(get_rap_production16day_table)
+export(get_rap_table)
 export(rap_projection)
 importFrom(terra,as.polygons)
 importFrom(terra,crds)

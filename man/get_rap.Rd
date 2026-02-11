@@ -163,7 +163,7 @@ Equal Area projection (\code{"EPSG:5070"}) with 10 m resolution will be used. Se
 }
 }
 \examples{
-\dontshow{if (requireNamespace("terra") && isTRUE(as.logical(Sys.getenv("R_RAPR_EXTENDED_EXAMPLES", unset=FALSE)))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("terra") && isTRUE(as.logical(Sys.getenv("R_RAPR_EXTENDED_EXAMPLES", unset=FALSE)))) withAutoprint(\{ # examplesIf}
 
 library(rapr)    # access RAP products
 library(terra)   # spatial data handling
