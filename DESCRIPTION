@@ -3,7 +3,8 @@ Type: Package
 Title: Interface to 'Rangeland Analysis Platform' (RAP) Products
 Version: 1.1.2
 Authors@R: c(person(given="Andrew", family="Brown", role = c("aut", "cre"), email = "andrew.g.brown@usda.gov", comment = c(ORCID="0000-0002-4565-533X")),
-             person(given="Georgia", family="Harrison", role = c("ctb"), comment = c(ORCID="0000-0003-0544-4471")))
+             person(given="Georgia", family="Harrison", role = c("ctb"), comment = c(ORCID="0000-0003-0544-4471")),
+             person(given="Scott", family="Appleby", role = c("ctb"), comment = c(ORCID="0000-0002-2031-2752")))
 Maintainer: Andrew Brown <andrew.g.brown@usda.gov>
 Description: Provides access to 'Rangeland Analysis Platform' (RAP) products <https://rangelands.app/products> for arbitrary extents via 'GDAL' virtual file system. 
 License: GPL (>= 3)

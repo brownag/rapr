@@ -2,6 +2,7 @@
 % Please edit documentation in R/get_rap_table.R
 \name{get_rap_table}
 \alias{get_rap_table}
+\alias{get_rap_production16day_table}
 \title{Query RAP Tabular Data}
 \usage{
 get_rap_table(
@@ -9,6 +10,13 @@ get_rap_table(
   years = NULL,
   product,
   version = "V3",
+  mask = TRUE,
+  nodata_flag = NA_real_
+)
+
+get_rap_production16day_table(
+  aoi,
+  year = NULL,
   mask = TRUE,
   nodata_flag = NA_real_
 )
@@ -25,9 +33,9 @@ the row index of the input feature from \code{aoi}.}
 full year). Default: \code{NULL} returns all available years.}
 
 \item{product}{Target data: \code{"cover"}, \code{"coverMeteorology"},
-\code{"production"}, and/or \code{"production16day"}.}
+\code{"production"}, or \code{"production16day"}.}
 
-\item{version}{Target version: \code{"v3"}. Currently ignored.}
+\item{version}{Target version: \code{"V3"}.}
 
 \item{mask}{logical. Exclude cropland, development, and water? Default:
 \code{TRUE}.}
@@ -37,86 +45,80 @@ full year). Default: \code{NULL} returns all available years.}
 }
 \value{
 A \emph{data.frame} with requested time-series data by year or 16-day
-production period. Columns included for each product option are described in
-Details above.
+production period. In addition to the columns described in Details above, all
+products include columns for \code{"year"} (production estimate year) and
+\code{"feature"} (feature ID, row number from \code{aoi}). Units are \emph{\% cover} for
+fractional cover and \emph{lbs / acre} for production.
 }
 \description{
-Retrieves remotely sensed production & cover estimates from the Rangeland
+Retrieves remotely sensed production or cover estimates from the Rangeland
 Analysis Platform (RAP) using the tabular data API endpoints. This function
 supports querying one or more spatial features (points, lines, or polygons)
 provided as a \code{terra} \code{SpatVector} object, or any spatial object that can be
 converted with \code{terra::vect()}. See Details for the products available.
+
+\code{get_rap_production16day_table()} is depreciated, please use
+\code{get_rap_table(product="production16day")} instead.
 }
 \details{
 For each feature - year combination, a separate request is made to the RAP
 API, and results are returned as a combined \code{data.frame}. In the special case
-of \code{years=NULL}) default all available years are returned in a single query.
+of (\code{years=NULL}) default, all available years are returned in a single query.
 
 For more information on the API and data products, see the RAP API
 documentation: \url{https://rangelands.app/support/71-api-documentation}
 \subsection{Products Information}{
 
-You can query several Landsat derived biomass, cover, and meteorological products from 1986 to present:
+You can query several Landsat derived biomass, cover, and meteorological
+products from 1986 to present, where \verb{product =}
 \itemize{
-\item \code{product = "cover"} returns a data.frame with yearly fractional cover data including the following columns:
+\item \code{"cover"} -- yearly fractional cover, including:
 \itemize{
-\item \code{"year"} (cover estimate year), \code{"AFG"} (Annual Forb and Grass cover),
-\code{"PFG"} (Perennial Forb and Grass cover), \code{"SHR"} (Shrub cover),
-\code{"TRE"} (Tree cover), \code{"LTR"} (Litter cover), \code{"BGR"} (Bare Ground cover),
-\code{"feature"} (feature ID, row number from \code{aoi}) (\strong{\% cover})
+\item \code{"AFG"} (Annual Forb and Grass cover), \code{"PFG"} (Perennial Forb and Grass
+cover), \code{"SHR"} (Shrub cover), \code{"TRE"} (Tree cover), \code{"LTR"} (Litter cover),
+\code{"BGR"} (Bare Ground cover).
 }
-\item \code{product = "coverMeteorology"} returns a data.frame with yearly fractional cover & meteorological data including the following columns:
-}
-
-\code{"year"} (cover estimate year), \code{"AFG"} (Annual Forb and Grass cover),
-\code{"PFG"} (Perennial Forb and Grass cover), \code{"SHR"} (Shrub cover),
-\code{"TRE"} (Tree cover), \code{"LTR"} (Litter cover), \code{"BGR"} (Bare Ground cover),
-\code{"annualTemp"} (Annual average temperature in degrees Fahrenheit),
-\code{"annualPrecip"} (Annual total precipitation in inches),
-\code{"feature"} (feature ID, row number from \code{aoi}) (\strong{\% cover})
+\item \code{"coverMeteorology"} -- yearly fractional cover & meteorological data, including:
 \itemize{
-\item \code{product = "production"} returns a data.frame with yearly production data including the following columns:
+\item \code{"AFG"} (Annual Forb and Grass cover), \code{"PFG"} (Perennial Forb and Grass
+cover), \code{"SHR"} (Shrub cover), \code{"TRE"} (Tree cover), \code{"LTR"} (Litter cover),
+\code{"BGR"} (Bare Ground cover), \code{"annualTemp"} (Annual average temperature in
+degrees Fahrenheit), \code{"annualPrecip"} (Annual total precipitation in inches).
 }
-
-\code{"year"} (production estimate year), \code{"AFG"} (Annual Forb and Grass production),
-\code{"PFG"} (Perennial Forb and Grass production), \code{"HER"} (Herbaceous production),
-\code{"feature"} (feature ID, row number from \code{aoi}) (\strong{lbs / acre})
+\item \code{"production"} -- annual production, including:
 \itemize{
-\item \code{product = "production16day"} returns a data.frame with 16-day production data including the following columns:
+\item \code{"AFG"} (Annual Forb and Grass production), \code{"PFG"} (Perennial Forb and
+Grass production), \code{"HER"} (Herbaceous production).
 }
-
-\code{"date"} (production estimate date), \code{"year"} (production estimate year),
-\code{"doy"} (production estimate Julian day of year), \code{"AFG"} (Annual Forb and
-Grass production), \code{"PFG"} (Perennial Forb and Grass production), \code{"HER"}
-(Herbaceous production), \code{"feature"} (feature ID, row number from \code{aoi})
-(\strong{lbs / acre})
+\item \code{"production16day"} -- 16-day production, including:
+\itemize{
+\item \code{"date"} (production estimate date), \code{"doy"} (production estimate Julian
+day of year), \code{"AFG"} (Annual Forb and Grass production), \code{"PFG"}
+(Perennial Forb and Grass production), \code{"HER"} (Herbaceous production).
+}
+}
 }
 }
 \examples{
 \dontshow{if (requireNamespace("terra") && isTRUE(as.logical(Sys.getenv("R_RAPR_EXTENDED_EXAMPLES", unset=FALSE)))) withAutoprint(\{ # examplesIf}
-
 aoi <- terra::vect(data.frame(x = -119.72330, y = 36.92204),
                    geom = c('x', 'y'),
                    crs = "EPSG:4326")
 
-# all years (years=NULL)
-res <- get_rap_table(aoi)
+# all years (years=NULL) fractional cover data
+res <- get_rap_table(aoi, product="cover")
 str(res)
 
-# specific year
-res <- get_rap_table(aoi, years = 1992)
+# specific year fractional cover and meteorological data 
+res <- get_rap_table(aoi, years = 1992, product="coverMeteorology")
 str(res)
 
-# multiple specific years
-res <- get_rap_table(aoi, years = 1993:2003)
+# multiple specific years above-ground production (annual)
+res <- get_rap_table(aoi, years = 1993:2003, product="production")
 str(res)
 
-# 1 kilometer buffer around point
-res <- get_rap_table(terra::buffer(aoi, 1000), years = 2004)
-str(res)
-
-# all years (years=NULL) 16 day production data using dedicated function 
-res <- get_rap_production16day_table(aoi)
+# 1 kilometer buffer around point, above-ground production (16 days) in 2004
+res <- get_rap_table(terra::buffer(aoi, 1000), years = 2004, product="production16day")
 str(res)
 \dontshow{\}) # examplesIf}
 }

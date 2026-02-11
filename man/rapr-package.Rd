@@ -23,6 +23,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Georgia Harrison (\href{https://orcid.org/0000-0003-0544-4471}{ORCID}) [contributor]
+  \item Scott Appleby (\href{https://orcid.org/0000-0002-2031-2752}{ORCID}) [contributor]
 }
 
 }
