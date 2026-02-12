@@ -129,7 +129,7 @@ Once the vegetation cover data has finished downloading, let's look at the table
 print(rap_tab)
 ```
 
-and let's plot mean `"PFG"` (Perennial Forb and Grass cover) over those 20 years:
+and plot mean `"PFG"` (Perennial Forb and Grass cover) over those 20 years:
 
 ```{r}
 plot(rap_tab$year, 
