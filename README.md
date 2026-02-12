@@ -40,8 +40,8 @@ remotes::install_github("brownag/rapr")
 ## Sources, Products, and Band Information
 
 Two sets of gridded RAP products are available (see `get_rap()` `source`
-argument). Also, you can access the API endpoint for the 16-day
-production tabular data (see `get_rap_production16day_table()`).
+argument). You can also access four time series API endpoints providing
+tabular data (see `get_rap_table()` `product` argument).
 
 - `"rap-30m"` is Landsat-derived and has approximately 30 meter
   resolution in WGS84 decimal degrees (`"EPSG:4326"`). This is the data
@@ -109,6 +109,39 @@ meter resolution from 2018 to present:
 
   - 1 Band: `"pinyon-juniper"` (**% cover**)
 
+The four time series API endpoints accessed through `get_rap_table()`
+return mean values for each period (annual or 16 days production) and
+area of interest for a number of vegetation metrics:
+
+- `product = "cover"` returns yearly fractional cover, including:
+  - `"AFG"` (Annual Forb and Grass cover)
+  - `"PFG"` (Perennial Forb and Grass cover)
+  - `"SHR"` (Shrub cover)
+  - `"TRE"` (Tree cover)
+  - `"LTR"` (Litter cover)  
+  - `"BGR"` (Bare Ground cover)
+- `product = "coverMeteorology"` returns the same data provided by
+  `"cover"` above, plus:
+  - `"annualTemp"` (Annual average temperature in degrees Fahrenheit)
+  - `"annualPrecip"` (Annual total precipitation in inches)
+- `product = "production"` returns annual production, including:
+  - `"AFG"` (Annual Forb and Grass production)
+  - `"PFG"` (Perennial Forb and Grass production)
+  - `"HER"` (Herbaceous production)
+- `product = "production16day"` returns 16-day production, including:
+  - `"date"` (production estimate date)
+  - `"doy"` (production estimate Julian day of year)
+  - `"AFG"` (Annual Forb and Grass production)
+  - `"PFG"` (Perennial Forb and Grass production)
+  - `"HER"` (Herbaceous production)
+
+Each of these time series is returened as a *data.frame* with requested
+time-series data by year or 16-day production period. In addition to the
+columns described above, all tables include columns for `"year"`
+(production estimate year) and `"feature"` (feature ID, row number from
+`aoi`). Units are **% cover** for fractional cover and **lbs / acre**
+for production.
+
 ## Temporary Files
 
 Large requests may generate intermediate objects that will be stored as
@@ -148,8 +181,8 @@ be used. See `rap_projection()` for options and details.
 
 This example shows how to use a
 {[terra](https://github.com/rspatial/terra)} SpatVector containing a
-rectangular polygon with `rapr::get_rap()` to obtain RAP grids for the
-corresponding extent.
+rectangular polygon with `rapr::get_rap()` to obtain RAP grids and a
+mean annual vegetation cover table for the corresponding extent.
 {[terra](https://cran.r-project.org/package=terra)},
 {[raster](https://cran.r-project.org/package=raster)},
 {[sf](https://cran.r-project.org/package=sf)} and
@@ -160,8 +193,7 @@ the source data grid system.
 
 ``` r
 library(terra)
-#> Warning: package 'terra' was built under R version 4.5.1
-#> terra 1.8.56
+#> terra 1.8.93
 library(rapr)
 
 res <- get_rap(
@@ -194,7 +226,25 @@ res
 plot(res)
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" alt="" width="100%" />
+
+``` r
+
+res_tab <- get_rap_table(
+  vect("POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))",
+       crs = "EPSG:4326"), 
+  product = "cover",
+  years = c(1989, 1999, 2009, 2019)
+)
+#> Loading required namespace: jsonlite
+
+res_tab
+#>   year      AFG       PFG      SHR      TRE       LTR      BGR feature
+#> 1 1989 36.01616 17.454813 5.338883 2.108970 14.982701 9.831511       1
+#> 2 1999 28.42868 17.714419 3.857973 3.043423 15.814780 8.038963       1
+#> 3 2009 27.65144  6.040328 1.537997 1.619856 13.777344 7.940900       1
+#> 4 2019 21.38089  4.805698 1.665103 1.265552  4.814131 2.878002       1
+```
 
 In lieu of a spatial object from {terra}, {raster}, {sf} or {sp}
 packages you may specify a bounding box using a numeric vector
@@ -214,8 +264,8 @@ e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
 
     #> To cite rapr in publications use:
     #> 
-    #>   Brown A (2025). _rapr: Interface to Rangeland Analysis Platform (RAP)
-    #>   Vegetation Biomass and Cover Products_. R package version 1.1.0,
+    #>   Brown A (2026). _rapr: Interface to Rangeland Analysis Platform (RAP)
+    #>   Vegetation Biomass and Cover Products_. R package version 1.1.2,
     #>   <https://CRAN.R-project.org/package=rapr>.
     #> 
     #>   Allred, B.W., S.E. McCord, T.J. Assal, B.T. Bestelmeyer, C.S. Boyd,
