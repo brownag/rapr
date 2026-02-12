@@ -109,3 +109,32 @@ if (file.exists("annual_forb_and_grass_biomass.gif")) {
   cat("![](annual_forb_and_grass_biomass.gif)")
 }
 ```
+
+## Tabular data
+
+Finally, we will use {rapr} to download mean fractional vegetation cover values 
+(% cover) from 1995 to 2025, again using the polygon `p` to define the area of interest.
+
+```{r}
+rap_tab <- get_rap_table(
+  p,
+  product = "cover",
+  years = 1995:2025
+)
+```
+
+Once the vegetation cover data has finished downloading, let's look at the table:
+
+```{r}
+print(rap_tab)
+```
+
+and let's plot mean `"PFG"` (Perennial Forb and Grass cover) over those 20 years:
+
+```{r}
+plot(rap_tab$year, 
+     rap_tab$PFG, 
+     xlab="Year", 
+     ylab="Perennial Forb and Grass cover (%)", 
+     type="l")
+```
