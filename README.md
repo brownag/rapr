@@ -110,8 +110,8 @@ meter resolution from 2018 to present:
   - 1 Band: `"pinyon-juniper"` (**% cover**)
 
 The four time series API endpoints accessed through `get_rap_table()`
-return mean values for each period (annual or 16 days production) and
-area of interest for a number of vegetation metrics:
+return mean values for each period and area of interest for a number of
+vegetation metrics:
 
 - `product = "cover"` returns yearly fractional cover, including:
   - `"AFG"` (Annual Forb and Grass cover)
@@ -135,12 +135,12 @@ area of interest for a number of vegetation metrics:
   - `"PFG"` (Perennial Forb and Grass production)
   - `"HER"` (Herbaceous production)
 
-Each of these time series is returened as a *data.frame* with requested
+Each of these time series is returned as a *data.frame* with requested
 time-series data by year or 16-day production period. In addition to the
 columns described above, all tables include columns for `"year"`
-(production estimate year) and `"feature"` (feature ID, row number from
-`aoi`). Units are **% cover** for fractional cover and **lbs / acre**
-for production.
+(production or cover estimate year) and `"feature"` (feature ID, row
+number from `aoi`). Units are **% cover** for fractional cover and **lbs
+/ acre** for production.
 
 ## Temporary Files
 
@@ -230,6 +230,7 @@ plot(res)
 
 ``` r
 
+# Mean fractional vegetation cover estimates
 res_tab <- get_rap_table(
   vect("POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))",
        crs = "EPSG:4326"), 
@@ -265,7 +266,7 @@ e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
     #> To cite rapr in publications use:
     #> 
     #>   Brown A (2026). _rapr: Interface to Rangeland Analysis Platform (RAP)
-    #>   Vegetation Biomass and Cover Products_. R package version 1.1.2,
+    #>   Vegetation Biomass and Cover Products_. R package version 1.1.3,
     #>   <https://CRAN.R-project.org/package=rapr>.
     #> 
     #>   Allred, B.W., S.E. McCord, T.J. Assal, B.T. Bestelmeyer, C.S. Boyd,
