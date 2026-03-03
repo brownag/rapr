@@ -14,6 +14,7 @@
 - [`get_rap_production16day_table()`](https://humus.rocks/rapr/reference/get_rap_table.md)
   is now deprecated, use `get_rap_table(product="production16day")`
   instead
+- Use HTTPS URLs for rangeland.ntsg.umt.edu
 
 ## rapr 1.1.2 (2026-01-30)
 
@@ -52,7 +53,7 @@ CRAN release: 2025-05-12
   - Added `source` argument to toggle between RAP 30m (`"rap-30m"`;
     Landsat) and RAP 10m (`"rap-10m"`; Sentinel 2) products
     - For details on new RAP 10m products see:
-      <http://rangeland.ntsg.umt.edu/data/rangeland-s2/README> and
+      <https://rangeland.ntsg.umt.edu/data/rangeland-s2/README> and
       `citation("rapr")`
   - Added `template` argument for setting target grid for projection of
     result.

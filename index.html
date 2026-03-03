@@ -80,25 +80,25 @@
 <p>For <code>"rap-30m"</code> you can query several Landsat derived annual biomass, cover, and Net Primary Productivity products from 1986 to present:</p>
 <ul>
 <li>
-<p><code>product = "vegetation-biomass"</code> returns <a href="http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README" class="external-link">two layers</a> per year:</p>
+<p><code>product = "vegetation-biomass"</code> returns <a href="https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README" class="external-link">two layers</a> per year:</p>
 <ul>
 <li>2 Bands:<code>"annual forb and grass"</code>, <code>"perennial forb and grass"</code> (<strong>lbs / acre</strong>)</li>
 </ul>
 </li>
 <li>
-<p><code>product = "vegetation-cover"</code> returns <a href="http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README" class="external-link">six layers</a> per year:</p>
+<p><code>product = "vegetation-cover"</code> returns <a href="https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README" class="external-link">six layers</a> per year:</p>
 <ul>
 <li>6 Bands: <code>"annual forb and grass"</code>, <code>"bare ground"</code>, <code>"litter"</code>, <code>"perennial forb and grass"</code>, <code>"shrub"</code>, <code>"tree"</code> (<strong>% cover</strong>)</li>
 </ul>
 </li>
 <li>
-<p><code>product = "vegetation-npp"</code> returns <a href="http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README" class="external-link">four layers</a> per year:</p>
+<p><code>product = "vegetation-npp"</code> returns <a href="https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README" class="external-link">four layers</a> per year:</p>
 <ul>
 <li>4 Bands: <code>"annual forb and grass"</code>, <code>"perennial forb and grass"</code>, <code>"shrub"</code>, <code>"tree"</code> (NPP; kg*C/m^2)</li>
 </ul>
 </li>
 </ul>
-<p>For <code>"rap-10m"</code> you can query several <a href="http://rangeland.ntsg.umt.edu/data/rangeland-s2/README" class="external-link">Sentinel 2 derived cover products</a> at 10 meter resolution from 2018 to present:</p>
+<p>For <code>"rap-10m"</code> you can query several <a href="https://rangeland.ntsg.umt.edu/data/rangeland-s2/README" class="external-link">Sentinel 2 derived cover products</a> at 10 meter resolution from 2018 to present:</p>
 <ul>
 <li>
 <p><code>product = "pft"</code> returns fractional cover estimates of plant functional types:</p>
@@ -131,7 +131,7 @@
 </ul>
 </li>
 </ul>
-<p>The four time series API endpoints accessed through <code><a href="reference/get_rap_table.html">get_rap_table()</a></code> return mean values for each period (annual or 16 days production) and area of interest for a number of vegetation metrics:</p>
+<p>The four time series API endpoints accessed through <code><a href="reference/get_rap_table.html">get_rap_table()</a></code> return mean values for each period and area of interest for a number of vegetation metrics:</p>
 <ul>
 <li>
 <code>product = "cover"</code> returns yearly fractional cover, including:
@@ -187,7 +187,7 @@
 </ul>
 </li>
 </ul>
-<p>Each of these time series is returened as a <em>data.frame</em> with requested time-series data by year or 16-day production period. In addition to the columns described above, all tables include columns for <code>"year"</code> (production estimate year) and <code>"feature"</code> (feature ID, row number from <code>aoi</code>). Units are <strong>% cover</strong> for fractional cover and <strong>lbs / acre</strong> for production.</p>
+<p>Each of these time series is returned as a <em>data.frame</em> with requested time-series data by year or 16-day production period. In addition to the columns described above, all tables include columns for <code>"year"</code> (production or cover estimate year) and <code>"feature"</code> (feature ID, row number from <code>aoi</code>). Units are <strong>% cover</strong> for fractional cover and <strong>lbs / acre</strong> for production.</p>
 </div>
 <div class="section level2">
 <h2 id="temporary-files">Temporary Files<a class="anchor" aria-label="anchor" href="#temporary-files"></a>
@@ -228,10 +228,10 @@
 <span>  years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1986</span>, <span class="fl">1996</span>, <span class="fl">2006</span>, <span class="fl">2016</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1986.tif</span></span>
-<span><span class="co">#&gt; Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1996.tif</span></span>
-<span><span class="co">#&gt; Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2006.tif</span></span>
-<span><span class="co">#&gt; Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2016.tif</span></span>
+<span><span class="co">#&gt; Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1986.tif</span></span>
+<span><span class="co">#&gt; Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1996.tif</span></span>
+<span><span class="co">#&gt; Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2006.tif</span></span>
+<span><span class="co">#&gt; Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2016.tif</span></span>
 <span><span class="co">#&gt; Cropping and writing result to memory or temporary file</span></span>
 <span></span>
 <span><span class="va">res</span></span>
@@ -251,6 +251,7 @@
 <p><img src="reference/figures/README-example-1.png" alt="" width="100%"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
+<span><span class="co"># Mean fractional vegetation cover estimates</span></span>
 <span><span class="va">res_tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/get_rap_table.html">get_rap_table</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="st">"POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))"</span>,</span>
 <span>       crs <span class="op">=</span> <span class="st">"EPSG:4326"</span><span class="op">)</span>, </span>
@@ -279,7 +280,7 @@
 <div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co">#&gt; To cite rapr in publications use:</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co">#&gt;   Brown A (2026). _rapr: Interface to Rangeland Analysis Platform (RAP)</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;   Vegetation Biomass and Cover Products_. R package version 1.1.2,</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt;   Vegetation Biomass and Cover Products_. R package version 1.1.3,</span></span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;   &lt;https://CRAN.R-project.org/package=rapr&gt;.</span></span>
 <span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;   Allred, B.W., S.E. McCord, T.J. Assal, B.T. Bestelmeyer, C.S. Boyd,</span></span>
