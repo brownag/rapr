@@ -55,28 +55,28 @@ For `"rap-30m"` you can query several Landsat derived annual biomass,
 cover, and Net Primary Productivity products from 1986 to present:
 
 - `product = "vegetation-biomass"` returns [two
-  layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README)
+  layers](https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README)
   per year:
 
   - 2 Bands:`"annual forb and grass"`, `"perennial forb and grass"`
     (**lbs / acre**)
 
 - `product = "vegetation-cover"` returns [six
-  layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README)
+  layers](https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README)
   per year:
 
   - 6 Bands: `"annual forb and grass"`, `"bare ground"`, `"litter"`,
     `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
 
 - `product = "vegetation-npp"` returns [four
-  layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README)
+  layers](https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README)
   per year:
 
   - 4 Bands: `"annual forb and grass"`, `"perennial forb and grass"`,
     `"shrub"`, `"tree"` (NPP; kg\*C/m^2)
 
 For `"rap-10m"` you can query several [Sentinel 2 derived cover
-products](http://rangeland.ntsg.umt.edu/data/rangeland-s2/README) at 10
+products](https://rangeland.ntsg.umt.edu/data/rangeland-s2/README) at 10
 meter resolution from 2018 to present:
 
 - `product = "pft"` returns fractional cover estimates of plant
@@ -204,10 +204,10 @@ res <- get_rap(
   years = c(1986, 1996, 2006, 2016),
   verbose = TRUE
 )
-#> Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1986.tif
-#> Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1996.tif
-#> Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2006.tif
-#> Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2016.tif
+#> Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1986.tif
+#> Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1996.tif
+#> Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2006.tif
+#> Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2016.tif
 #> Cropping and writing result to memory or temporary file
 
 res

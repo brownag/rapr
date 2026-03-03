@@ -89,7 +89,7 @@
                                  filename = tempfile(pattern = paste(year, product, version, sep = "_"),
                                                      fileext = '.tif')) {
   
-  uri <- sprintf("/vsicurl/http://rangeland.ntsg.umt.edu/data/rap/rap-%s/%s/%s-%s-%s.tif",
+  uri <- sprintf("/vsicurl/https://rangeland.ntsg.umt.edu/data/rap/rap-%s/%s/%s-%s-%s.tif",
                  product, version, product, version, year)
   # print(uri)
   

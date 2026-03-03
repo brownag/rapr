@@ -83,21 +83,21 @@ resolutions and sources.
 For \code{"rap-30m"} you can query several Landsat derived annual biomass,
 cover, and Net Primary Productivity products from 1986 to present:
 \itemize{
-\item \code{product = "vegetation-biomass"} returns \href{http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README}{two layers} per year:
+\item \code{product = "vegetation-biomass"} returns \href{https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README}{two layers} per year:
 \itemize{
 \item 2 Bands:\code{"annual forb and grass"}, \code{"perennial forb and grass"} (\strong{lbs / acre})
 }
-\item \code{product = "vegetation-cover"} returns \href{http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README}{six layers} per year:
+\item \code{product = "vegetation-cover"} returns \href{https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README}{six layers} per year:
 \itemize{
 \item 6 Bands: \code{"annual forb and grass"}, \code{"bare ground"}, \code{"litter"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"} (\strong{\% cover})
 }
-\item \code{product = "vegetation-npp"} returns \href{http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README}{four layers} per year:
+\item \code{product = "vegetation-npp"} returns \href{https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README}{four layers} per year:
 \itemize{
 \item 4 Bands: \code{"annual forb and grass"}, \code{"perennial forb and grass"}, \code{"shrub"}, \code{"tree"} (NPP; kg*C/m^2)
 }
 }
 
-For \code{"rap-10m"} you can query several \href{http://rangeland.ntsg.umt.edu/data/rangeland-s2/README}{Sentinel 2 derived cover products} at 10 meter
+For \code{"rap-10m"} you can query several \href{https://rangeland.ntsg.umt.edu/data/rangeland-s2/README}{Sentinel 2 derived cover products} at 10 meter
 resolution from 2018 to present:
 \itemize{
 \item \code{product = "pft"} returns fractional cover estimates of plant functional types:

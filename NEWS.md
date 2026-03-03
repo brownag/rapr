@@ -18,7 +18,7 @@
 * Initial CRAN release!
 * Major `get_rap()` interface updates
   - Added `source` argument to toggle between RAP 30m (`"rap-30m"`; Landsat) and RAP 10m (`"rap-10m"`; Sentinel 2) products
-     - For details on new RAP 10m products see: http://rangeland.ntsg.umt.edu/data/rangeland-s2/README and `citation("rapr")`
+     - For details on new RAP 10m products see: https://rangeland.ntsg.umt.edu/data/rangeland-s2/README and `citation("rapr")`
   - Added `template` argument for setting target grid for projection of result. 
     - Default behavior (`template=NULL`) will return a SpatRaster in the native grid system of requested RAP source.
     - For a large area of interest (that spans multiple UTM zones and `source="rap-10m"`) standard "EPSG:5070" grid system will be used when `template` is not set by the user
