@@ -2,7 +2,7 @@
 ## Original contribution by Georgia Harrison (April 17, 2025)
 
 ## see README file for rangeland-s2 for info about layers and how these data are stored:
-## http://rangeland.ntsg.umt.edu/data/rangeland-s2/README
+## https://rangeland.ntsg.umt.edu/data/rangeland-s2/README
 
 .get_rap_internal <- function(x,
                               years,
@@ -20,8 +20,8 @@
                               sds = FALSE,
                               verbose = TRUE,
                               base_url = ifelse(source == "rap-10m",
-                                                yes = "http://rangeland.ntsg.umt.edu/data/rangeland-s2/",
-                                                no = "http://rangeland.ntsg.umt.edu/data/rap/")) {
+                                                yes = "https://rangeland.ntsg.umt.edu/data/rangeland-s2/",
+                                                no = "https://rangeland.ntsg.umt.edu/data/rap/")) {
 
   if (inherits(x, "sf")) {
     x <- terra::vect(x)

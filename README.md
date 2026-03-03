@@ -55,28 +55,28 @@ For `"rap-30m"` you can query several Landsat derived annual biomass,
 cover, and Net Primary Productivity products from 1986 to present:
 
 - `product = "vegetation-biomass"` returns [two
-  layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README)
+  layers](https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-biomass/v3/README)
   per year:
 
   - 2 Bands:`"annual forb and grass"`, `"perennial forb and grass"`
     (**lbs / acre**)
 
 - `product = "vegetation-cover"` returns [six
-  layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README)
+  layers](https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/README)
   per year:
 
   - 6 Bands: `"annual forb and grass"`, `"bare ground"`, `"litter"`,
     `"perennial forb and grass"`, `"shrub"`, `"tree"` (**% cover**)
 
 - `product = "vegetation-npp"` returns [four
-  layers](http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README)
+  layers](https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-npp/v3/README)
   per year:
 
   - 4 Bands: `"annual forb and grass"`, `"perennial forb and grass"`,
     `"shrub"`, `"tree"` (NPP; kg\*C/m^2)
 
 For `"rap-10m"` you can query several [Sentinel 2 derived cover
-products](http://rangeland.ntsg.umt.edu/data/rangeland-s2/README) at 10
+products](https://rangeland.ntsg.umt.edu/data/rangeland-s2/README) at 10
 meter resolution from 2018 to present:
 
 - `product = "pft"` returns fractional cover estimates of plant
@@ -110,8 +110,8 @@ meter resolution from 2018 to present:
   - 1 Band: `"pinyon-juniper"` (**% cover**)
 
 The four time series API endpoints accessed through `get_rap_table()`
-return mean values for each period (annual or 16 days production) and
-area of interest for a number of vegetation metrics:
+return mean values for each period and area of interest for a number of
+vegetation metrics:
 
 - `product = "cover"` returns yearly fractional cover, including:
   - `"AFG"` (Annual Forb and Grass cover)
@@ -135,12 +135,12 @@ area of interest for a number of vegetation metrics:
   - `"PFG"` (Perennial Forb and Grass production)
   - `"HER"` (Herbaceous production)
 
-Each of these time series is returened as a *data.frame* with requested
+Each of these time series is returned as a *data.frame* with requested
 time-series data by year or 16-day production period. In addition to the
 columns described above, all tables include columns for `"year"`
-(production estimate year) and `"feature"` (feature ID, row number from
-`aoi`). Units are **% cover** for fractional cover and **lbs / acre**
-for production.
+(production or cover estimate year) and `"feature"` (feature ID, row
+number from `aoi`). Units are **% cover** for fractional cover and **lbs
+/ acre** for production.
 
 ## Temporary Files
 
@@ -204,10 +204,10 @@ res <- get_rap(
   years = c(1986, 1996, 2006, 2016),
   verbose = TRUE
 )
-#> Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1986.tif
-#> Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1996.tif
-#> Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2006.tif
-#> Processing: http://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2016.tif
+#> Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1986.tif
+#> Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-1996.tif
+#> Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2006.tif
+#> Processing: https://rangeland.ntsg.umt.edu/data/rap/rap-vegetation-cover/v3/vegetation-cover-v3-2016.tif
 #> Cropping and writing result to memory or temporary file
 
 res
@@ -230,6 +230,7 @@ plot(res)
 
 ``` r
 
+# Mean fractional vegetation cover estimates
 res_tab <- get_rap_table(
   vect("POLYGON ((-120 36.99,-119.99 37,-120 37,-120 36.99))",
        crs = "EPSG:4326"), 
@@ -265,7 +266,7 @@ e.g. `get_rap(x = c(-120, 37, -119.99, 36.99), ...)`.
     #> To cite rapr in publications use:
     #> 
     #>   Brown A (2026). _rapr: Interface to Rangeland Analysis Platform (RAP)
-    #>   Vegetation Biomass and Cover Products_. R package version 1.1.2,
+    #>   Vegetation Biomass and Cover Products_. R package version 1.1.3,
     #>   <https://CRAN.R-project.org/package=rapr>.
     #> 
     #>   Allred, B.W., S.E. McCord, T.J. Assal, B.T. Bestelmeyer, C.S. Boyd,

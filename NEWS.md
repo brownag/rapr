@@ -2,7 +2,8 @@
 * Added `get_rap_table()` interface to RAP tabular data APIs; thanks to Scott Appleby (@s-appleby) for the contribution (#20)
  * This generalizes `get_rap_production16day_table()` to support other endpoints, including: `"cover"`, `"coverMeteorology"`, `"production"`, and `"production16day"`
  *  `get_rap_production16day_table()` is now deprecated, use `get_rap_table(product="production16day")` instead
-
+ * Use HTTPS URLs for rangeland.ntsg.umt.edu
+ 
 # rapr 1.1.2 (2026-01-30)
 * Fix for CRAN check test skipping logic
 * `get_rap_production16day_table()` now uses `immediate.=TRUE` to ensure warnings are displayed as soon as they occur
@@ -18,7 +19,7 @@
 * Initial CRAN release!
 * Major `get_rap()` interface updates
   - Added `source` argument to toggle between RAP 30m (`"rap-30m"`; Landsat) and RAP 10m (`"rap-10m"`; Sentinel 2) products
-     - For details on new RAP 10m products see: http://rangeland.ntsg.umt.edu/data/rangeland-s2/README and `citation("rapr")`
+     - For details on new RAP 10m products see: https://rangeland.ntsg.umt.edu/data/rangeland-s2/README and `citation("rapr")`
   - Added `template` argument for setting target grid for projection of result. 
     - Default behavior (`template=NULL`) will return a SpatRaster in the native grid system of requested RAP source.
     - For a large area of interest (that spans multiple UTM zones and `source="rap-10m"`) standard "EPSG:5070" grid system will be used when `template` is not set by the user
