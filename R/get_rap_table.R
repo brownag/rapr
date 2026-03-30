@@ -226,10 +226,10 @@ get_rap_table <- function(aoi,
 
 #' Query RAP 16-day Production Data
 #' 
-#' `get_rap_production16day_table()` is depreciated, please use 
+#' `get_rap_production16day_table()` is deprecated, please use 
 #' `get_rap_table(product="production16day")` instead.
 #' 
-#' @param ... allows backward compatibility with `year` argument in depreciated
+#' @param ... allows backward compatibility with `year` argument in deprecated
 #' version of `get_rap_production16day_table()`.
 #' 
 #' @export

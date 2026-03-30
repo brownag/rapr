@@ -44,7 +44,7 @@ full year). Default: \code{NULL} returns all available years.}
 \item{nodata_flag}{numeric. Value to use for missing data. The API encodes
 "NODATA" as \code{-99}. Default: \code{NA_real_} replaces \code{-99} with \code{NA}.}
 
-\item{...}{allows backward compatibility with \code{year} argument in depreciated
+\item{...}{allows backward compatibility with \code{year} argument in deprecated
 version of \code{get_rap_production16day_table()}.}
 }
 \value{
@@ -61,7 +61,7 @@ supports querying one or more spatial features (points, lines, or polygons)
 provided as a \code{terra} \code{SpatVector} object, or any spatial object that can be
 converted with \code{terra::vect()}. See Details for the products available.
 
-\code{get_rap_production16day_table()} is depreciated, please use
+\code{get_rap_production16day_table()} is deprecated, please use
 \code{get_rap_table(product="production16day")} instead.
 }
 \details{
