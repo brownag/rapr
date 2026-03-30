@@ -8,7 +8,7 @@ spatial object that can be converted with
 [`terra::vect()`](https://rspatial.github.io/terra/reference/vect.html).
 See Details for the products available.
 
-`get_rap_production16day_table()` is depreciated, please use
+`get_rap_production16day_table()` is deprecated, please use
 `get_rap_table(product="production16day")` instead.
 
 ## Usage
@@ -70,7 +70,7 @@ get_rap_production16day_table(
 
 - ...:
 
-  allows backward compatibility with `year` argument in depreciated
+  allows backward compatibility with `year` argument in deprecated
   version of `get_rap_production16day_table()`.
 
 ## Value

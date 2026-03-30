@@ -222,7 +222,7 @@ Platform products.
 ``` r
 library(rapr)    # access RAP products
 library(terra)   # spatial data handling
-#> terra 1.8.93
+#> terra 1.9.11
 
 p <- buffer(terra::vect(
   data.frame(x = -105.97133, y = 32.73437),

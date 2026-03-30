@@ -2,6 +2,8 @@
 
 ## rapr 1.1.3 (2026-02-11)
 
+CRAN release: 2026-03-03
+
 - Added
   [`get_rap_table()`](https://humus.rocks/rapr/reference/get_rap_table.md)
   interface to RAP tabular data APIs; thanks to Scott Appleby
